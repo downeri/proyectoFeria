@@ -1,16 +1,16 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(534,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (LabCGeIHCC.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  practica7.cpp
+  main.cpp
 E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\Window.h(12,36): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
-  (compiling source file 'practica7.cpp')
+  (compiling source file 'main.cpp')
   
 E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\Window.h(13,37): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
-  (compiling source file 'practica7.cpp')
+  (compiling source file 'main.cpp')
   
-E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\practica7.cpp(382,15): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\practica7.cpp(384,33): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
+E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(382,15): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(384,33): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
   Generating code
-  39 of 914 functions ( 4.3%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
-    39 functions had inline decision re-evaluated but remain unchanged
+  385 of 914 functions (42.1%) were compiled, the rest were copied from previous compilation.
+    38 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   LabCGeIHCC.vcxproj -> E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\Release\Proyecto Feria.exe

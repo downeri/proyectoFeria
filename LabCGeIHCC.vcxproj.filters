@@ -104,7 +104,7 @@
     <ClCompile Include="Shader_light.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="practica7.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
