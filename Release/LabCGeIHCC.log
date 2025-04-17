@@ -6,11 +6,12 @@ E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\Window.h(12,36)
 E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\Window.h(13,37): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
   (compiling source file 'main.cpp')
   
-E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(382,15): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(384,33): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
+E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(280,15): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(282,33): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
+E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\LabCGeIHCC\main.cpp(314,18): warning C4805: '==': unsafe mix of type 'GLboolean' and type 'bool' in operation
   Generating code
-  385 of 914 functions (42.1%) were compiled, the rest were copied from previous compilation.
-    38 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+  1 of 922 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   LabCGeIHCC.vcxproj -> E:\Documentos\IngCompu\8. Octavo\Lab Grafica\Proyecto\Release\Proyecto Feria.exe

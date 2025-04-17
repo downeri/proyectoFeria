@@ -1,5 +1,5 @@
 /*
-Práctica 7: Iluminación 1 
+Prï¿½ctica 7: Iluminaciï¿½n 1 
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -28,12 +28,14 @@ Práctica 7: Iluminación 1
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminación
+//para iluminaciï¿½n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
+
+#include "test.h"
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
@@ -59,6 +61,13 @@ Model snoopyHouse;
 Model banca;
 Model basura;
 Model lampara;
+Model minos;
+Model idol;
+Model feedbacker;
+Model cerberus;
+Model venas;
+Model corazonMinos;
+Model terminal;
 
 Skybox skybox;
 
@@ -89,7 +98,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//función de calculo de normales por promedio de vértices 
+//funciï¿½n de calculo de normales por promedio de vï¿½rtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -148,26 +157,14 @@ void CreateObjects()
 		10.0f, 0.0f, 10.0f,		10.0f, 10.0f,	0.0f, -1.0f, 0.0f
 	};
 
-	unsigned int vegetacionIndices[] = {
-	   0, 1, 2,
-	   0, 2, 3,
-	   4,5,6,
-	   4,6,7
+	GLfloat calleVertices[] = {
+	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	5.0f, 0.0f,	0.0f, -1.0f, 0.0f,
+	-10.0f, 0.0f, 10.0f,	0.0f, 70.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, 10.0f,		5.0f, 70.0f,	0.0f, -1.0f, 0.0f
 	};
 
-	GLfloat vegetacionVertices[] = {
-		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
 
-		0.0f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.5f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.5f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, -0.5f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-
-
-	};
 	
 	Mesh *obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
@@ -182,12 +179,12 @@ void CreateObjects()
 	meshList.push_back(obj3);
 
 	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(vegetacionVertices, vegetacionIndices, 64, 12);
+	obj4->CreateMesh(calleVertices, floorIndices, 32, 6);
 	meshList.push_back(obj4);
 
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
 
-	calcAverageNormals(vegetacionIndices, 12, vegetacionVertices, 64, 8, 5);
+
 
 }
 
@@ -199,56 +196,6 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
-void CrearOctaedro() {
-	unsigned int  octaedroIndices[] = {
-		0, 3, 17, //Dado 2
-		7, 2, 18, //Dado 3
-		6, 1, 19, //Dado 4
-		5, 4, 16, //Dado 1
-
-		12, 13, 23, //Dado 8
-		8, 11, 20, //Dado 5
-		10, 15, 21, //Dado 6
-		9, 14, 22, //Dado 7
-
-	};
-
-	GLfloat octaedroVertices[] = {
-		0.5f,-0.5f,0.5f,	0.0029f,  0.3984f,		0.0f,	-1.0f,	-1.0f,		//A	0	Dado 2
-		0.5f,-0.5f,-0.5f,	0.6611f,  0.0049f,		0.0f,	-1.0f,	1.0f,		//B	1	Dado 4
-		-0.5f,-0.5f,-0.5f,	0.6611f,  0.3984f,		1.0f,	-1.0f,	0.0f,		//C	2	Dado 3
-		-0.5f,-0.5f,0.5f,	0.3330f,  0.5957f,		0.0f,	-1.0f,	-1.0f,		//D	3	Dado 2
-
-		0.5f,-0.5f,0.5f,	0.0029f,  0.3984f,		-1.0f,	-1.0f,	-1.0f,		//A	4	Dado 1
-		0.5f,-0.5f,-0.5f,	0.0039f,  0.0049f,		-1.0f,	-1.0f,	-1.0f,		//B	5	Dado 1
-		-0.5f,-0.5f,-0.5f,	0.6611f,  0.3984f,		0.0f,	-1.0f,	1.0f,		//C	6	Dado 4
-		-0.5f,-0.5f,0.5f,	0.3330f,  0.5957f,		1.0f,	-1.0f,	0.0f,		//D	7	Dado 3
-
-		0.5f,-0.5f,0.5f,	0.3369f,  0.9902f,		0.0f,	1.0f,	-1.0f,		//A	8	Dado 5
-		0.5f,-0.5f,-0.5f,	0.9922f,  0.5986f,		0.0f,	1.0f,	1.0f,		//B	9	Dado 7
-		-0.5f,-0.5f,-0.5f,	0.6641f,  0.4043f,		1.0f,	1.0f,	0.0f,		//C	10	Dado 6
-		-0.5f,-0.5f,0.5f,	0.3369f,  0.6094f,		0.0f,	1.0f,	-1.0f,		//D	11	Dado 5
-
-		0.5f,-0.5f,0.5f,	0.9961f,  0.6094f,		-1.0f,	1.0f,	-1.0f,		//A	12	Dado 8
-		0.5f,-0.5f,-0.5f,	0.9961f,  0.9932f,		-1.0f,	1.0f,	-1.0f,		//B	13	Dado 8
-		-0.5f,-0.5f,-0.5f,	0.6689f,  0.4043f,		0.0f,	1.0f,	1.0f,		//C	14	Dado 7
-		-0.5f,-0.5f,0.5f,	0.3418f,  0.5996f,		-1.0f,	1.0f,	0.0f,		//D	15	Dado 6
-
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		-1.0f,	-1.0f,	-1.0f,		//E	16 Dado 1
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		0.0f,	-1.0f,	-1.0f,		//E	17 Dado 2
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		1.0f,	-1.0f,	0.0f,		//E	18 Dado 3
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		0.0f,	-1.0f,	1.0f,		//E	19 Dado 4
-
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		0.0f,	1.0f,	-1.0f,		//F	20 Dado 5
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		1.0f,	1.0f,	0.0f,		//F	21 Dado 6
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		0.0f,	1.0f,	1.0f,		//F	22 Dado 7
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		-1.0f,	1.0f,	-1.0f,		//F	23 Dado 8
-
-	};
-	Mesh* octaedro = new Mesh();
-	octaedro->CreateMesh(octaedroVertices, octaedroIndices, 192, 24);
-	meshList.push_back(octaedro);
-}
 
 int main()
 {
@@ -258,20 +205,12 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
 
-	brickTexture = Texture("Textures/brick.png");
+	brickTexture = Texture("Textures/calle.jpg");
 	brickTexture.LoadTextureA();
-	dirtTexture = Texture("Textures/dirt.png");
-	dirtTexture.LoadTextureA();
-	plainTexture = Texture("Textures/plain.png");
-	plainTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture = Texture("Textures/grass.jpg");
 	pisoTexture.LoadTextureA();
-	AgaveTexture = Texture("Textures/Agave.tga");
-	AgaveTexture.LoadTextureA();
-	octaDadoTexture = Texture("Textures/octaDado.jpg");
-	octaDadoTexture.LoadTexture();
 
 
 	muro = Model();
@@ -283,7 +222,21 @@ int main()
 	banca = Model();
 	basura = Model();
 	lampara = Model();
+	minos = Model();
+	idol = Model();
+	feedbacker = Model();
+	cerberus = Model();
+	venas = Model();
+	corazonMinos = Model();
+	terminal = Model();
 
+	terminal.LoadModel("Models/terminal.obj"); 
+	corazonMinos.LoadModel("Models/corazon.obj");
+	venas.LoadModel("Models/venas.obj");
+	cerberus.LoadModel("Models/cerberus.obj");
+	feedbacker.LoadModel("Models/feedbacker.obj");
+	idol.LoadModel("Models/idol.obj");
+	minos.LoadModel("Models/minos.obj");
 	maurice.LoadModel("Models/maurice.obj");
 	cerberusOrb.LoadModel("Models/cerberusOrb.obj");
 	woodstock.LoadModel("Models/Woodstock.obj");
@@ -295,89 +248,26 @@ int main()
 
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
-
+	skyboxFaces.push_back("Textures/Skybox/Dia_Right.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Left.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Down.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Up.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Back.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Front.jpg");
 	skybox = Skybox(skyboxFaces);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.3f,
-		0.0f, 0.0f, -1.0f);
-	//contador de luces puntuales
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
+	
+	//Point Lights
 	unsigned int pointLightCount = 0;
 
-	//Declaración de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f,
-		-6.0f, 1.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
-	pointLightCount++;
-
-	//Lampara
-	PointLight lamp = PointLight(1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,
-		6.0f, 4.0f, 10.0f,
-		0.3f, 0.2f, 0.1f);
-
-
-	// Orbe
-	PointLight orb = PointLight(.92f, 0.62f, .031f,
-		1.0f, 1.0f,
-		0.0f, 5.0f, 0.0f,
-		0.3f, 0.2f, 0.1f);
-	
+	//Spotlights
 	unsigned int spotLightCount = 0;
-	//Linterna
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		5.0f);
-	spotLightCount++;
 
-	//Luz fija
-	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-	spotLightCount++;
-
-	//Luz cofre
-	SpotLight luzCofre = SpotLight(1.0f, 1.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-	
-
-	//Spotlight Frontal
-	SpotLight farosFrontal = SpotLight(0.0f, 0.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-
-	//Spotligh trasero
-	SpotLight farosTrasero=SpotLight(1.0f, 0.0f, 0.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
 	
 
 	
@@ -385,12 +275,20 @@ int main()
 	//se crean mas luces puntuales y spotlight 
 	int contPointLights = pointLightCount;
 	int contSpotLights = spotLightCount;
-	int farosArrayPos=0;
-	int luzCofreArrayPos = 0;
+
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
+
+	//Variables del sol
+	GLfloat sunIntensity = 0.0f;
+	GLfloat sunIncrement = 0.00101f;
+	GLfloat sunX = 0.3f;
+	GLfloat sunY = -1.0f;
+	GLboolean isMorning = true;
+
+
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -418,7 +316,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 		
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -426,79 +324,44 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		glm::vec3 lowerLight = camera.getCameraPosition();
-		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		//Main Light
+		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+			.1f+sunIntensity, .1f+sunIntensity,
+			sunX, sunY, .0f);
 
+		if (isMorning==true) {
+			sunIntensity = sunIntensity + sunIncrement;
+			if (sunIntensity >= 0.6f) isMorning = false;
+		}
+		else {
+			sunIntensity = sunIntensity - sunIncrement;
+			if (sunIntensity <= 0.1f) isMorning = true;
+		}
+		
 		//Spotlights
-		//Faros
-		if (mainWindow.getFarosFrontal()) {
-			spotLights[contSpotLights] = farosFrontal;
-			farosArrayPos = contSpotLights;
-			contSpotLights++;
-		}
-		else {
-			spotLights[contSpotLights] = farosTrasero;
-			farosArrayPos = contSpotLights;
-			contSpotLights++;
-		}
-
-		//Luz cofre
-		if (mainWindow.getmueveCofre() != 0.0f) {
-			spotLights[contSpotLights] = luzCofre;
-			luzCofreArrayPos = contSpotLights;
-			contSpotLights++;
-		}
-
-		//Mover faros
-		if (mainWindow.getFarosFrontal()) {
-			glm::vec3 carPos = glm::vec3(10.0f, 0.1f, -2.0f + mainWindow.getmuevex() / 4);
-			glm::vec3 lightDir = glm::vec3(0.0f, 0.0f, 1.0f);
-			spotLights[farosArrayPos].SetFlash(carPos, lightDir);
-		}
-		else {
-			glm::vec3 carPos2 = glm::vec3(10.0f, 0.1f, -5.0f + mainWindow.getmuevex() / 4);
-			glm::vec3 lightDir2 = glm::vec3(0.0f, 0.0f, -1.0f);
-			spotLights[farosArrayPos].SetFlash(carPos2, lightDir2);
-		}
-
-		//Mover luz cofre
-		if (mainWindow.getmueveCofre() != 0.0f) {
-			glm::vec3 cofrePos = glm::vec3(10.0f, 0.1f, -1.0f + mainWindow.getmuevex() / 4);
-			glm::vec3 cofreDir = glm::vec3(0.0f, -sin(glm::radians(mainWindow.getmueveCofre())), cos(glm::radians(mainWindow.getmueveCofre())));
-			spotLights[luzCofreArrayPos].SetFlash(cofrePos, cofreDir);
-		}
+	
+		
 
 
 		//Point Lights
-		//Lampara
-		if (mainWindow.getFlashlight()) {
-			pointLights[contPointLights] = lamp;
-			contPointLights++;
-		}
-		
-		//Orbe
-		if (mainWindow.getOrbLight()) {
-			pointLights[contPointLights] = orb;
-			contPointLights++;
-		}
-		
+	
 		
 		
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetSpotLights(spotLights, contSpotLights);
 		shaderList[0].SetPointLights(pointLights, contPointLights);
 
-
-
+		
+		
 		//Modelos
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		//Piso
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
@@ -510,6 +373,17 @@ int main()
 
 		meshList[2]->RenderMesh();
 
+		//Calle
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -.9f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		brickTexture.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		meshList[3]->RenderMesh();
+
 		
 		//Orbe
 		model = glm::mat4(1.0);
@@ -519,22 +393,40 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		cerberusOrb.RenderModel();
 
+		//Terminal
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(7.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		terminal.RenderModel();
+
 		//Maurice
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 15.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		maurice.RenderModel();
 
-
-		//Muro Frente
+		//Idol
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(12.0f, 5.0f, 15.f));
-		model = glm::scale(model, glm::vec3(2.f, 3.05f, 1.f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::translate(model, glm::vec3(-4.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(2.f, 2.f, 2.f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		muro.RenderModel();
+		idol.RenderModel();
+
+		//Feedbacker
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 13.0f, 0.0));
+		model = glm::scale(model, glm::vec3(20.f, 20.f, 20.f));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		feedbacker.RenderModel();
 
 		// Woodstock
 		model = glm::mat4(1.0);
@@ -578,6 +470,63 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		lampara.RenderModel();
 
+		//Cerberus
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(4.0f, 1.5f, 0.f));
+		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cerberus.RenderModel();
+
+
+		
+		//Minos Prime
+
+		glm::vec3 cameraPos = camera.getCameraPosition();
+		glm::vec3 cameraDir = camera.getCameraDirection();
+
+		float angulo = atan2(cameraDir.x, cameraDir.z);
+
+		float distanciaDetras = -7.0f; 
+		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
+		posicionModelo.y = 0.2f; 
+
+		// Venas
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, posicionModelo);
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+
+		model = glm::rotate(model, angulo, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux = model;
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+
+		//blending: transparencia o traslucidez
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		venas.RenderModel();
+		
+
+		//Corazon
+		model = glm::translate(model, glm::vec3(0.0f, -.85f, -0.033f));
+		model = glm::rotate(model, glm::radians(90.f), glm::vec3(1.0f, 0.0f, .0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		corazonMinos.RenderModel();
+		
+
+		//Cuerpo
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.15f, 0.033f));
+		model = glm::scale(model, glm::vec3(1.15f, 1.15f, 1.15f));
+		model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.0f, 0.0f, .0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		minos.RenderModel();
+		glDisable(GL_BLEND);
+
+		
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();
