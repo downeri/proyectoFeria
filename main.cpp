@@ -53,6 +53,12 @@ Texture octaDadoTexture;
 Model cerberusOrb;
 Model muro;
 Model maurice;
+Model woodstock;
+Model snoopy;
+Model snoopyHouse;
+Model banca;
+Model basura;
+Model lampara;
 
 Skybox skybox;
 
@@ -271,9 +277,21 @@ int main()
 	muro = Model();
 	cerberusOrb = Model();
 	maurice = Model();
+	woodstock = Model();
+	snoopy = Model();
+	snoopyHouse = Model();
+	banca = Model();
+	basura = Model();
+	lampara = Model();
 
 	maurice.LoadModel("Models/maurice.obj");
 	cerberusOrb.LoadModel("Models/cerberusOrb.obj");
+	woodstock.LoadModel("Models/Woodstock.obj");
+	snoopy.LoadModel("Models/snoopy.obj");
+	snoopyHouse.LoadModel("Models/snoopyHouse.obj");
+	banca.LoadModel("Models/banca.obj");
+	basura.LoadModel("Models/basura.obj");
+	lampara.LoadModel("Models/lampara.obj");
 
 
 	std::vector<std::string> skyboxFaces;
@@ -518,9 +536,48 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		muro.RenderModel();
 
+		// Woodstock
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(1.0f, 5.0f, 5.f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		woodstock.RenderModel();
 
+		// Snoopy
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, 5.f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		snoopy.RenderModel();
 
-	
+		// Snoopy House
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(7.0f, 0.0f, 5.f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		snoopyHouse.RenderModel();
+
+		// Banca
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 0.0f, 5.f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		banca.RenderModel();
+
+		// Basura
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 5.f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		basura.RenderModel();
+
+		// Lampara
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 5.f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		lampara.RenderModel();
+
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();

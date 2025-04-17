@@ -1,0 +1,10 @@
+﻿  main.cpp
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+  (compilando archivo de origen "main.cpp")
+  
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+  (compilando archivo de origen "main.cpp")
+  
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(400,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(402,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  LabCGeIHCC.vcxproj -> C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\Debug\Proyecto Feria.exe
