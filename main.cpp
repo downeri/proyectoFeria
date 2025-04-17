@@ -2,6 +2,10 @@
 Práctica 7: Iluminación 1 
 */
 //para cargar imagen
+
+// Este comentario SÍ se enviará a main
+
+
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stdio.h>
