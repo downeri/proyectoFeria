@@ -63,7 +63,10 @@
     <ClInclude Include="Shader_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test.h">
+    <ClInclude Include="boliche.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bateo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,7 +113,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="boliche.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bateo.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="ambiente.h">

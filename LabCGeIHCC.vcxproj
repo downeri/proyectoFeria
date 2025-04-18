@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bateo.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonValues.h" />
     <ClInclude Include="definition.h" />
@@ -33,13 +34,14 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="test.h" />
+    <ClInclude Include="boliche.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ambiente.cpp" />
     <ClCompile Include="ambiente.h" />
+    <ClCompile Include="bateo.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -52,7 +54,7 @@
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="boliche.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
