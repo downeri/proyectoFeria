@@ -1,7 +1,3 @@
-/*
-Práctica 7: Iluminación 1 
-*/
-//para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stdio.h>
@@ -16,8 +12,6 @@ Práctica 7: Iluminación 1
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
-//para probar el importer
-//#include<assimp/Importer.hpp>
 
 #include "Window.h"
 #include "Mesh.h"
@@ -25,17 +19,18 @@ Práctica 7: Iluminación 1
 #include "Camera.h"
 #include "Texture.h"
 #include "Sphere.h"
-#include"Model.h"
+#include "Model.h"
 #include "Skybox.h"
 
-//para iluminación
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
 
+#include "ambiente.h"
 #include "boliche.h"
+
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
@@ -57,6 +52,12 @@ Texture pisoBoliche;
 Model cerberusOrb;
 Model muro;
 Model maurice;
+Model woodstock;
+Model snoopy;
+Model snoopyHouse;
+Model banca;
+Model basura;
+Model lampara;
 Model minos;
 Model idol;
 Model feedbacker;
@@ -64,8 +65,13 @@ Model cerberus;
 Model venas;
 Model corazonMinos;
 Model terminal;
+Model charlieCarpa;
+Model mesaDados;
+Model arbol;
+Model pino;
 Model ship;
 Model mesaBoliche;
+
 
 Skybox skybox;
 
@@ -96,7 +102,7 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//función de calculo de normales por promedio de vértices 
+//funciï¿½n de calculo de normales por promedio de vï¿½rtices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -227,6 +233,12 @@ int main()
 	muro = Model();
 	cerberusOrb = Model();
 	maurice = Model();
+	woodstock = Model();
+	snoopy = Model();
+	snoopyHouse = Model();
+	banca = Model();
+	basura = Model();
+	lampara = Model();
 	minos = Model();
 	idol = Model();
 	feedbacker = Model();
@@ -234,6 +246,11 @@ int main()
 	venas = Model();
 	corazonMinos = Model();
 	terminal = Model();
+
+	charlieCarpa = Model();
+	mesaDados = Model();
+	arbol = Model();
+	pino = Model();
 	ship = Model();
 	mesaBoliche = Model();
 
@@ -248,6 +265,16 @@ int main()
 	minos.LoadModel("Models/minos.obj");
 	maurice.LoadModel("Models/maurice.obj");
 	cerberusOrb.LoadModel("Models/cerberusOrb.obj");
+	woodstock.LoadModel("Models/Woodstock.obj");
+	snoopy.LoadModel("Models/snoopy.obj");
+	snoopyHouse.LoadModel("Models/snoopyHouse.obj");
+	banca.LoadModel("Models/banca.obj");
+	basura.LoadModel("Models/basura.obj");
+	lampara.LoadModel("Models/lampara.obj");
+	charlieCarpa.LoadModel("Models/carpaCharlie.obj");
+	mesaDados.LoadModel("Models/mesaDados.obj");
+	arbol.LoadModel("Models/arbol.obj");
+	pino.LoadModel("Models/pino.obj");
 
 	bowlingModelsList.push_back(idol);
 	bowlingModelsList.push_back(maurice);
@@ -268,7 +295,7 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
 	
 	//Point Lights
 	unsigned int pointLightCount = 0;
@@ -327,7 +354,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 		
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -388,7 +415,7 @@ int main()
 		
 		
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetSpotLights(spotLights, contSpotLights);
 		shaderList[0].SetPointLights(pointLights, contPointLights);
@@ -425,6 +452,9 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
 		meshList[3]->RenderMesh();
+
+		// Elementos de ambiente 
+		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
 
 		//Piso boliche
 		model = glm::mat4(1.0);

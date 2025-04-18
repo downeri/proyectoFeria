@@ -39,6 +39,8 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ambiente.cpp" />
+    <ClCompile Include="ambiente.h" />
     <ClCompile Include="bateo.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
