@@ -11,13 +11,19 @@ LABORATORIO DE COMPUTACIÓN GRÁFICA e INTERACCIÓN HUMANO COMPUTADORA
 Proyecto Feria
 
 EQUIPO: 
+
 Carreño Limones André
-Pineda Migranas Angeul Uriel
+
+Pineda Migranas Angel Uriel
+
 Trigueros López Héctor Adrían
 
 Nº DE CUENTAs: 
+
 422067683
+
 319260751
+
 318192046
 
 GRUPO DE LABORATORIO: 03
