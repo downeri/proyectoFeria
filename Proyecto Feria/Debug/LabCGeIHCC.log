@@ -5,6 +5,9 @@ C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyect
 C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
   (compilando archivo de origen "main.cpp")
   
-C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(400,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(402,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(304,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(306,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\main.cpp(338,18): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+Proyecto Feria\Debug\ambiente.obj : warning LNK4042: objeto especificado más de una vez; omitidos los sobrantes
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   LabCGeIHCC.vcxproj -> C:\Users\angel\iCloudDrive\Documents\Computación Gráfica\Laboratorio\Proyecto\proyectoFeria\Debug\Proyecto Feria.exe

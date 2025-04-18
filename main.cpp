@@ -1,7 +1,3 @@
-/*
-Pr�ctica 7: Iluminaci�n 1 
-*/
-//para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stdio.h>
@@ -16,8 +12,6 @@ Pr�ctica 7: Iluminaci�n 1
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
-//para probar el importer
-//#include<assimp/Importer.hpp>
 
 #include "Window.h"
 #include "Mesh.h"
@@ -25,17 +19,17 @@ Pr�ctica 7: Iluminaci�n 1
 #include "Camera.h"
 #include "Texture.h"
 #include "Sphere.h"
-#include"Model.h"
+#include "Model.h"
 #include "Skybox.h"
 
-//para iluminaci�n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
 
-#include "test.h"
+#include "ambiente.h"
+
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
@@ -68,6 +62,10 @@ Model cerberus;
 Model venas;
 Model corazonMinos;
 Model terminal;
+Model charlieCarpa;
+Model mesaDados;
+Model arbol;
+Model pino;
 
 Skybox skybox;
 
@@ -229,6 +227,10 @@ int main()
 	venas = Model();
 	corazonMinos = Model();
 	terminal = Model();
+	charlieCarpa = Model();
+	mesaDados = Model();
+	arbol = Model();
+	pino = Model();
 
 	terminal.LoadModel("Models/terminal.obj"); 
 	corazonMinos.LoadModel("Models/corazon.obj");
@@ -245,6 +247,10 @@ int main()
 	banca.LoadModel("Models/banca.obj");
 	basura.LoadModel("Models/basura.obj");
 	lampara.LoadModel("Models/lampara.obj");
+	charlieCarpa.LoadModel("Models/carpaCharlie.obj");
+	mesaDados.LoadModel("Models/mesaDados.obj");
+	arbol.LoadModel("Models/arbol.obj");
+	pino.LoadModel("Models/pino.obj");
 
 
 	std::vector<std::string> skyboxFaces;
@@ -384,101 +390,8 @@ int main()
 
 		meshList[3]->RenderMesh();
 
-		
-		//Orbe
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cerberusOrb.RenderModel();
-
-		//Terminal
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(7.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		terminal.RenderModel();
-
-		//Maurice
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		maurice.RenderModel();
-
-		//Idol
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-4.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(2.f, 2.f, 2.f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
-
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		idol.RenderModel();
-
-		//Feedbacker
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 13.0f, 0.0));
-		model = glm::scale(model, glm::vec3(20.f, 20.f, 20.f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		feedbacker.RenderModel();
-
-		// Woodstock
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(1.0f, 5.0f, 5.f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		woodstock.RenderModel();
-
-		// Snoopy
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(1.0f, 0.0f, 5.f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		snoopy.RenderModel();
-
-		// Snoopy House
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(7.0f, 0.0f, 5.f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		snoopyHouse.RenderModel();
-
-		// Banca
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(15.0f, 0.0f, 5.f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		banca.RenderModel();
-
-		// Basura
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 5.f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		basura.RenderModel();
-
-		// Lampara
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 5.f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		lampara.RenderModel();
-
-		//Cerberus
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(4.0f, 1.5f, 0.f));
-		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cerberus.RenderModel();
-
-
+		// Elementos de ambiente 
+		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
 		
 		//Minos Prime
 
