@@ -17,7 +17,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	mueveCofre = 0.0f;
 	flashlightOn = true;
 	farosFrontal = true;
-	orbLightOn = true;
+	orbLightOn = false;
 	orbLightCooldown = 0;
 	flashCooldown = 0;
 
@@ -149,15 +149,18 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		}
 		
 	}
-	if (key == GLFW_KEY_H) {
-		if (theWindow->orbLightCooldown < 1) {
-			theWindow->orbLightCooldown++;
-		}
-		else {
+
+
+	if (key == GLFW_KEY_P) {
+
+		if (action == GLFW_PRESS) {
 			theWindow->orbLightOn = !theWindow->orbLightOn;
-			theWindow->orbLightCooldown = 0;
 		}
-	}	
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->orbLightOn = !theWindow->orbLightOn;
+		}
+	}
 
 	if (key == GLFW_KEY_G) {
 		if (theWindow->flashCooldown < 1) {
