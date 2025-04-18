@@ -35,21 +35,23 @@ Práctica 7: Iluminación 1
 #include "SpotLight.h"
 #include "Material.h"
 
-#include "test.h"
+#include "boliche.h"
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
+std::vector<Model> bowlingModelsList;
 
 Camera camera;
 
+//Texturas
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
-Texture AgaveTexture;
-Texture octaDadoTexture;
+Texture pisoBoliche;
+
 
 
 Model cerberusOrb;
@@ -62,6 +64,8 @@ Model cerberus;
 Model venas;
 Model corazonMinos;
 Model terminal;
+Model ship;
+Model mesaBoliche;
 
 Skybox skybox;
 
@@ -153,32 +157,41 @@ void CreateObjects()
 
 	GLfloat calleVertices[] = {
 	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
-	10.0f, 0.0f, -10.0f,	5.0f, 0.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	5.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 	-10.0f, 0.0f, 10.0f,	0.0f, 70.0f,	0.0f, -1.0f, 0.0f,
 	10.0f, 0.0f, 10.0f,		5.0f, 70.0f,	0.0f, -1.0f, 0.0f
 	};
 
+	GLfloat bowlingFloorVertices[] = {
+	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	70.0f, 0.0f,	0.0f, -1.0f, 0.0f,
+	-10.0f, 0.0f, 10.0f,	0.0f, 70.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, 10.0f,		70.0f, 70.0f,	0.0f, -1.0f, 0.0f
+	};
+
 
 	
+	Mesh *obj0 = new Mesh();
+	obj0->CreateMesh(vertices, indices, 32, 12);
+	meshList.push_back(obj0);
+
 	Mesh *obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
 
 	Mesh *obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 32, 12);
+	obj2->CreateMesh(floorVertices, floorIndices, 32, 6);
 	meshList.push_back(obj2);
 
-	Mesh *obj3 = new Mesh();
-	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
+	Mesh* obj3 = new Mesh();
+	obj3->CreateMesh(calleVertices, floorIndices, 32, 6);
 	meshList.push_back(obj3);
 
 	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(calleVertices, floorIndices, 32, 6);
+	obj4->CreateMesh(bowlingFloorVertices, floorIndices, 32, 6);
 	meshList.push_back(obj4);
 
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
-
-
 
 }
 
@@ -201,11 +214,15 @@ int main()
 
 	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
 
+	//Carga de texturas
 	brickTexture = Texture("Textures/calle.jpg");
 	brickTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/grass.jpg");
 	pisoTexture.LoadTextureA();
+	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
+	pisoBoliche.LoadTextureA();
 
+	//Carga de Modelos
 
 	muro = Model();
 	cerberusOrb = Model();
@@ -217,7 +234,11 @@ int main()
 	venas = Model();
 	corazonMinos = Model();
 	terminal = Model();
+	ship = Model();
+	mesaBoliche = Model();
 
+	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
+	ship.LoadModel("Models/ship.obj");
 	terminal.LoadModel("Models/terminal.obj"); 
 	corazonMinos.LoadModel("Models/corazon.obj");
 	venas.LoadModel("Models/venas.obj");
@@ -228,14 +249,19 @@ int main()
 	maurice.LoadModel("Models/maurice.obj");
 	cerberusOrb.LoadModel("Models/cerberusOrb.obj");
 
+	bowlingModelsList.push_back(idol);
+	bowlingModelsList.push_back(maurice);
+	bowlingModelsList.push_back(terminal);
+	bowlingModelsList.push_back(mesaBoliche);
 
+	//Skybox
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/Dia_Right.jpg");
 	skyboxFaces.push_back("Textures/Skybox/Dia_Left.jpg");
 	skyboxFaces.push_back("Textures/Skybox/Dia_Down.jpg");
 	skyboxFaces.push_back("Textures/Skybox/Dia_Up.jpg");
-	skyboxFaces.push_back("Textures/Skybox/Dia_Back.jpg");
-	skyboxFaces.push_back("Textures/Skybox/Dia_Front.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Right.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Left.jpg");
 	skybox = Skybox(skyboxFaces);
 
 	Material_brillante = Material(4.0f, 256);
@@ -252,8 +278,6 @@ int main()
 
 	
 
-	
-
 	//se crean mas luces puntuales y spotlight 
 	int contPointLights = pointLightCount;
 	int contSpotLights = spotLightCount;
@@ -264,12 +288,14 @@ int main()
 	GLuint uniformColor = 0;
 
 	//Variables del sol
-	GLfloat sunIntensity = 0.0f;
-	GLfloat sunIncrement = 0.00101f;
+	GLfloat sunIntensity = 0.5f;
+	GLfloat sunIncrement = 0.0001f;
 	GLfloat sunX = 0.3f;
 	GLfloat sunY = -1.0f;
 	GLboolean isMorning = true;
+	GLint activeSkybox = -1;
 
+	GLboolean bowlingActive = false;
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	////Loop mientras no se cierra la ventana
@@ -286,6 +312,9 @@ int main()
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+		glm::vec3 cameraPos = camera.getCameraPosition();
+		glm::vec3 cameraDir = camera.getCameraDirection();
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -308,7 +337,7 @@ int main()
 
 		//Main Light
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-			.1f+sunIntensity, .1f+sunIntensity,
+			sunIntensity, sunIntensity,
 			sunX, sunY, .0f);
 
 		if (isMorning==true) {
@@ -317,9 +346,38 @@ int main()
 		}
 		else {
 			sunIntensity = sunIntensity - sunIncrement;
-			if (sunIntensity <= 0.1f) isMorning = true;
+			if (sunIntensity <= 0.05f) isMorning = true;
 		}
 		
+		if (sunIntensity >= 0.0 && sunIntensity < 0.2 && activeSkybox!=0) {
+			activeSkybox = 0;
+			skyboxFaces[0] = ("Textures/Skybox/Noche_Right.jpg");
+			skyboxFaces[1] = ("Textures/Skybox/Noche_Left.jpg");
+			skyboxFaces[2] = ("Textures/Skybox/Noche_Up.jpg");
+			skyboxFaces[3] = ("Textures/Skybox/Noche_Up.jpg");
+			skyboxFaces[4] = ("Textures/Skybox/Noche_Right.jpg");
+			skyboxFaces[5] = ("Textures/Skybox/Noche_Left.jpg");
+			skybox = Skybox(skyboxFaces);
+		} else if (sunIntensity >= 0.2 && sunIntensity < 0.3 && activeSkybox != 1) {
+			activeSkybox = 1;
+			skyboxFaces[0] = ("Textures/Skybox/Tarde_Right.jpg");
+			skyboxFaces[1] = ("Textures/Skybox/Tarde_Left.jpg");
+			skyboxFaces[2] = ("Textures/Skybox/Tarde_Up.jpg");
+			skyboxFaces[3] = ("Textures/Skybox/Tarde_Up.jpg");
+			skyboxFaces[4] = ("Textures/Skybox/Tarde_Right.jpg");
+			skyboxFaces[5] = ("Textures/Skybox/Tarde_Left.jpg");
+			skybox = Skybox(skyboxFaces);
+		} else if (sunIntensity >= 0.3 && sunIntensity <= 0.6 && activeSkybox != 2) {
+			activeSkybox = 2;
+			skyboxFaces[0] = ("Textures/Skybox/Dia_Right.jpg");
+			skyboxFaces[1] = ("Textures/Skybox/Dia_Left.jpg");
+			skyboxFaces[2] = ("Textures/Skybox/Dia_Up.jpg");
+			skyboxFaces[3] = ("Textures/Skybox/Dia_Up.jpg");
+			skyboxFaces[4] = ("Textures/Skybox/Dia_Right.jpg");
+			skyboxFaces[5] = ("Textures/Skybox/Dia_Left.jpg");
+			skybox = Skybox(skyboxFaces);
+		}
+
 		//Spotlights
 	
 		
@@ -335,8 +393,10 @@ int main()
 		shaderList[0].SetSpotLights(spotLights, contSpotLights);
 		shaderList[0].SetPointLights(pointLights, contPointLights);
 
+		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+
 		
-		
+
 		//Modelos
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
@@ -366,72 +426,44 @@ int main()
 
 		meshList[3]->RenderMesh();
 
-		
-		//Orbe
+		//Piso boliche
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::translate(model, glm::vec3(0.0f, -.8f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 1.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cerberusOrb.RenderModel();
 
-		//Terminal
+		pisoBoliche.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		meshList[4]->RenderMesh();
+		
+		
+		//Barco
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(7.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
+		model = glm::translate(model, glm::vec3(100.0f, 30.0f, 0.0));
+		model = glm::scale(model, glm::vec3(50.f, 50.f, 40.f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		terminal.RenderModel();
+		ship.RenderModel();
 
-		//Maurice
+
+		//Maurice NPC
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0));
+		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 60.0));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		maurice.RenderModel();
 
-		//Idol
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-4.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(2.f, 2.f, 2.f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
-
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		idol.RenderModel();
-
-		//Feedbacker
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 13.0f, 0.0));
-		model = glm::scale(model, glm::vec3(20.f, 20.f, 20.f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		feedbacker.RenderModel();
-
-
-
-		//Cerberus
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(4.0f, 1.5f, 0.f));
-		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cerberus.RenderModel();
-
-
 		
-		//Minos Prime
-
-		glm::vec3 cameraPos = camera.getCameraPosition();
-		glm::vec3 cameraDir = camera.getCameraDirection();
+		//Minos Prime Avatar
 
 		float angulo = atan2(cameraDir.x, cameraDir.z);
 
 		float distanciaDetras = -7.0f; 
 		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
-		posicionModelo.y = 0.2f; 
+		posicionModelo.y = cameraPos.y-5.8f; 
 
 		// Venas
 		model = glm::mat4(1.0f);
@@ -468,7 +500,15 @@ int main()
 		minos.RenderModel();
 		glDisable(GL_BLEND);
 
-		
+
+		renderBoliche(model, uniformModel, bowlingModelsList);
+		//Boliche TP
+		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
+			bowlingActive = true;
+			camera.teleport(glm::vec3(100.0f, -100.9f, 100.0f));
+			
+		}
+
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();
