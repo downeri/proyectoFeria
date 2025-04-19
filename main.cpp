@@ -30,6 +30,8 @@
 
 #include "ambiente.h"
 #include "boliche.h"
+#include "dados.h"
+#include "dardos.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -37,6 +39,8 @@ Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 std::vector<Model> bowlingModelsList;
+std::vector<Model> diceModelsList;
+std::vector<Model> dartsModelsList;
 
 Camera camera;
 
@@ -71,6 +75,12 @@ Model arbol;
 Model pino;
 Model ship;
 Model mesaBoliche;
+Model standDardos;
+Model pikachu;
+Model jigglypuff;
+Model squirtle;
+Model charmander;
+Model carpaPokemon;
 
 
 Skybox skybox;
@@ -254,6 +264,13 @@ int main()
 	ship = Model();
 	mesaBoliche = Model();
 
+	carpaPokemon = Model();
+	standDardos = Model();
+	pikachu = Model();
+	jigglypuff = Model();
+	squirtle = Model();
+	charmander = Model();
+
 	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
 	ship.LoadModel("Models/ship.obj");
 	terminal.LoadModel("Models/terminal.obj"); 
@@ -275,11 +292,28 @@ int main()
 	mesaDados.LoadModel("Models/mesaDados.obj");
 	arbol.LoadModel("Models/arbol.obj");
 	pino.LoadModel("Models/pino.obj");
+	standDardos.LoadModel("Models/standDardos.obj");
+	pikachu.LoadModel("Models/pikachu.obj");
+	jigglypuff.LoadModel("Models/jigglypuff.obj");
+	squirtle.LoadModel("Models/squirtle.obj");
+	charmander.LoadModel("Models/charmander.obj");
+	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 
 	bowlingModelsList.push_back(idol);
 	bowlingModelsList.push_back(maurice);
 	bowlingModelsList.push_back(terminal);
 	bowlingModelsList.push_back(mesaBoliche);
+
+	diceModelsList.push_back(charlieCarpa);
+	diceModelsList.push_back(mesaDados);
+
+	dartsModelsList.push_back(carpaPokemon);
+	dartsModelsList.push_back(standDardos);
+	dartsModelsList.push_back(pikachu);
+	dartsModelsList.push_back(jigglypuff);
+	dartsModelsList.push_back(squirtle);
+	dartsModelsList.push_back(charmander);
+
 
 	//Skybox
 	std::vector<std::string> skyboxFaces;
@@ -455,6 +489,30 @@ int main()
 
 		// Elementos de ambiente 
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
+
+		//Piso juego de Dados
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -300.0f));
+		model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pisoBoliche.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		// Juego de Dados
+		renderJuegoDados(model, uniformModel, diceModelsList);
+
+		//Piso Juego de Dardos
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -250.0f));
+		model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pisoBoliche.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		// Juego de Dardos
+		renderJuegoDardos(model, uniformModel, dartsModelsList);
 
 		//Piso boliche
 		model = glm::mat4(1.0);
