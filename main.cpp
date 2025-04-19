@@ -37,10 +37,16 @@ const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
+std::vector<Mesh*> bowlingMeshList;
 std::vector<Shader> shaderList;
-std::vector<Model> bowlingModelsList;
+
+
 std::vector<Model> diceModelsList;
 std::vector<Model> dartsModelsList;
+
+
+std::vector<Model*> bowlingModelsList;
+std::vector<Texture*> bowlingTextureList;
 
 Camera camera;
 
@@ -81,6 +87,9 @@ Model jigglypuff;
 Model squirtle;
 Model charmander;
 Model carpaPokemon;
+
+Model chandelier;
+
 
 
 Skybox skybox;
@@ -164,6 +173,11 @@ void CreateObjects()
 		1, 2, 3
 	};
 
+	unsigned int wallsIndices[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
 	GLfloat floorVertices[] = {
 		-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 		10.0f, 0.0f, -10.0f,	10.0f, 0.0f,	0.0f, -1.0f, 0.0f,
@@ -185,7 +199,12 @@ void CreateObjects()
 	10.0f, 0.0f, 10.0f,		70.0f, 70.0f,	0.0f, -1.0f, 0.0f
 	};
 
-
+	GLfloat bowlingWallsVertices[] = {
+	-0.5f, 0.0f, 0.0f,		0.0f, 0.0f,			0.0f, 0.0f, -1.0f,
+	0.5f, 0.0f, 0.0f,		50.0f, 0.0f,		0.0f, 0.0f, -1.0f,
+	0.5f, 1.0f, 0.0f,		50.0f, 20.0f,		0.0f, 0.0f, -1.0f,
+	-0.5f, 1.0f, 0.0f,		0.0f, 20.0f,		0.0f, 0.0f, -1.0f
+	};
 	
 	Mesh *obj0 = new Mesh();
 	obj0->CreateMesh(vertices, indices, 32, 12);
@@ -205,7 +224,11 @@ void CreateObjects()
 
 	Mesh* obj4 = new Mesh();
 	obj4->CreateMesh(bowlingFloorVertices, floorIndices, 32, 6);
-	meshList.push_back(obj4);
+	bowlingMeshList.push_back(obj4);
+
+	Mesh* obj5 = new Mesh();
+	obj5->CreateMesh(bowlingWallsVertices, wallsIndices, 32, 6);
+	bowlingMeshList.push_back(obj5);
 
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
 
@@ -237,6 +260,7 @@ int main()
 	pisoTexture.LoadTextureA();
 	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
 	pisoBoliche.LoadTextureA();
+	bowlingTextureList.push_back(&pisoBoliche);
 
 	//Carga de Modelos
 
@@ -256,6 +280,7 @@ int main()
 	venas = Model();
 	corazonMinos = Model();
 	terminal = Model();
+	chandelier = Model();
 
 	charlieCarpa = Model();
 	mesaDados = Model();
@@ -264,13 +289,14 @@ int main()
 	ship = Model();
 	mesaBoliche = Model();
 
+
 	carpaPokemon = Model();
 	standDardos = Model();
 	pikachu = Model();
 	jigglypuff = Model();
 	squirtle = Model();
 	charmander = Model();
-
+	chandelier.LoadModel("Models/chandelier.obj");
 	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
 	ship.LoadModel("Models/ship.obj");
 	terminal.LoadModel("Models/terminal.obj"); 
@@ -299,10 +325,11 @@ int main()
 	charmander.LoadModel("Models/charmander.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 
-	bowlingModelsList.push_back(idol);
-	bowlingModelsList.push_back(maurice);
-	bowlingModelsList.push_back(terminal);
-	bowlingModelsList.push_back(mesaBoliche);
+	bowlingModelsList.push_back(&idol);
+	bowlingModelsList.push_back(&maurice);
+	bowlingModelsList.push_back(&terminal);
+	bowlingModelsList.push_back(&mesaBoliche);
+	bowlingModelsList.push_back(&chandelier);
 
 	diceModelsList.push_back(charlieCarpa);
 	diceModelsList.push_back(mesaDados);
@@ -489,7 +516,7 @@ int main()
 
 		// Elementos de ambiente 
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
-
+    
 		//Piso juego de Dados
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -300.0f));
@@ -513,19 +540,9 @@ int main()
 
 		// Juego de Dardos
 		renderJuegoDardos(model, uniformModel, dartsModelsList);
-
-		//Piso boliche
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -.8f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 1.0f, 6.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		pisoBoliche.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-
-		meshList[4]->RenderMesh();
 		
 		
+	
 		//Barco
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(100.0f, 30.0f, 0.0));
@@ -545,6 +562,20 @@ int main()
 		maurice.RenderModel();
 
 		
+		//Boliche TP
+		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
+			bowlingActive = true;
+			camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
+		}
+
+		if (cameraPos.x < -69.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f && cameraPos.y < 0.0) {
+			bowlingActive = false;
+			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
+		}
+
+		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
+
+		//Transparentes
 		//Minos Prime Avatar
 
 		float angulo = atan2(cameraDir.x, cameraDir.z);
@@ -589,14 +620,7 @@ int main()
 		glDisable(GL_BLEND);
 
 
-		renderBoliche(model, uniformModel, bowlingModelsList);
-		//Boliche TP
-		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
-			bowlingActive = true;
-			camera.teleport(glm::vec3(100.0f, -100.9f, 100.0f));
-			
-		}
-
+		
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();
