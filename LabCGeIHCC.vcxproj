@@ -22,6 +22,8 @@
     <ClInclude Include="bateo.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonValues.h" />
+    <ClInclude Include="dados.h" />
+    <ClInclude Include="dardos.h" />
     <ClInclude Include="definition.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Light.h" />
@@ -43,6 +45,8 @@
     <ClCompile Include="ambiente.h" />
     <ClCompile Include="bateo.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="dados.cpp" />
+    <ClCompile Include="dardos.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />

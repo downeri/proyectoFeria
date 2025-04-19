@@ -69,6 +69,12 @@
     <ClInclude Include="bateo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dados.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dardos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window.cpp">
@@ -123,6 +129,12 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="ambiente.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dados.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dardos.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
