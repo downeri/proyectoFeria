@@ -225,6 +225,7 @@ void CreateObjects()
 	Mesh* obj4 = new Mesh();
 	obj4->CreateMesh(bowlingFloorVertices, floorIndices, 32, 6);
 	bowlingMeshList.push_back(obj4);
+	meshList.push_back(obj3);
 
 	Mesh* obj5 = new Mesh();
 	obj5->CreateMesh(bowlingWallsVertices, wallsIndices, 32, 6);
