@@ -56,7 +56,7 @@ Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
 Texture pisoBoliche;
-
+Texture blackTexture;
 
 
 Model cerberusOrb;
@@ -87,8 +87,9 @@ Model jigglypuff;
 Model squirtle;
 Model charmander;
 Model carpaPokemon;
-
+Model bowlingRailing;
 Model chandelier;
+Model bowlingLaneFloor;
 
 
 
@@ -261,7 +262,10 @@ int main()
 	pisoTexture.LoadTextureA();
 	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
 	pisoBoliche.LoadTextureA();
+	blackTexture = Texture("Textures/negro.jpg");
+	blackTexture.LoadTextureA();
 	bowlingTextureList.push_back(&pisoBoliche);
+	bowlingTextureList.push_back(&blackTexture);
 
 	//Carga de Modelos
 
@@ -297,6 +301,11 @@ int main()
 	jigglypuff = Model();
 	squirtle = Model();
 	charmander = Model();
+	bowlingRailing = Model();
+	bowlingLaneFloor = Model();
+
+	bowlingLaneFloor.LoadModel("Models/bowlingLaneFloor.obj");
+	bowlingRailing.LoadModel("Models/railing.obj");
 	chandelier.LoadModel("Models/chandelier.obj");
 	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
 	ship.LoadModel("Models/ship.obj");
@@ -331,6 +340,8 @@ int main()
 	bowlingModelsList.push_back(&terminal);
 	bowlingModelsList.push_back(&mesaBoliche);
 	bowlingModelsList.push_back(&chandelier);
+	bowlingModelsList.push_back(&bowlingRailing);
+	bowlingModelsList.push_back(&bowlingLaneFloor);
 
 	diceModelsList.push_back(charlieCarpa);
 	diceModelsList.push_back(mesaDados);
@@ -384,7 +395,7 @@ int main()
 	GLboolean isMorning = true;
 	GLint activeSkybox = -1;
 
-	GLboolean bowlingActive = false;
+	GLboolean bowlingActive = true;
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	////Loop mientras no se cierra la ventana
@@ -494,7 +505,7 @@ int main()
 
 		//Piso
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -30.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
@@ -506,7 +517,7 @@ int main()
 
 		//Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -.9f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -.9f, -30.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 

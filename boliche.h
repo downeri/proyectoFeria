@@ -23,3 +23,5 @@ void renderTerminal(glm::mat4 model, GLuint uniformModel, Model& terminal, glm::
 void renderMauriceBowling(glm::mat4 model, GLuint uniformModel, Model & maurice);
 void renderTable(glm::mat4 model, GLuint uniformModel, Model& table, glm::vec3 position);
 void renderChandelier(glm::mat4 model, GLuint uniformModel, Model& chandelier, glm::vec3 position);
+void renderLaneFloor(glm::mat4 model, GLuint uniformModel, Model& laneFloor, glm::vec3 position);
+void renderRailing(glm::mat4 model, GLuint uniformModel, Model& railing, glm::vec3 position);

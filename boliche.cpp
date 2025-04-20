@@ -2,25 +2,24 @@
 
 
 void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> bowlingMeshList, std::vector<Texture*> listaTexturas) {
-	GLfloat altura = -120.0f;
+	GLfloat altura = -0.8f;
 
 	renderBuilding(model, uniformModel, bowlingMeshList, listaTexturas, glm::vec3(0.0f,altura,0.0f));
-	renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, 40.0f));
-	renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, 15.0f));
-	renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, -10.0f));
-	renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, -35.0f));
 
-	renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 2.5, 45.0f));
-	renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 2.5, 20.0f));
-	renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 2.5, -5.0f));
-	renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 2.5, -30.0f));
+	GLfloat z = 45.0f;
+	for (int i = 0; i < 7;i++) {
+		renderRailing(model, uniformModel, *listaModelos[5], glm::vec3(30.0f, altura, z-5.0f));
+		renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, z));
+		renderRailing(model, uniformModel, *listaModelos[5], glm::vec3(30.0f, altura, z + 5.0f));
+		renderLaneFloor(model, uniformModel, *listaModelos[6], glm::vec3(35.0f, altura + 0.01f, z));
+		renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 2.5,z+5.0f));
+		renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, z));
+		if(i%2==0) renderChandelier(model, uniformModel, *listaModelos[4], glm::vec3(0.f, altura + 20, z));
+		z = z - 15.0f;
+	}
+	
+	
 
-	renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, 40.0f));
-	renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, 15.0f));
-	renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, -10.0f));
-	renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, -35.0f));
-
-	renderChandelier(model, uniformModel, *listaModelos[4], glm::vec3(0.f, altura+20, .0f));
 }
 
 void renderPines(glm::mat4 model, GLuint uniformModel, Model& idol, glm::vec3 posInicial) {
@@ -116,6 +115,14 @@ void renderTerminal(glm::mat4 model,GLuint uniformModel, Model& terminal, glm::v
 	terminal.RenderModel();
 }
 
+void renderLaneFloor(glm::mat4 model, GLuint uniformModel, Model& laneFloor, glm::vec3 position) {
+	model = glm::mat4(1.0);
+	model = glm::translate(model, position);
+	model = glm::scale(model, glm::vec3(.8f, .3f, .7f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	laneFloor.RenderModel();
+}
+
 void renderMauriceBowling(glm::mat4 model, GLuint uniformModel, Model& maurice) {
 	model = glm::mat4(1.0);
 	model = glm::translate(model, glm::vec3(5.0f, 1.0f, 0.0));
@@ -143,6 +150,18 @@ void renderChandelier(glm::mat4 model, GLuint uniformModel, Model& chandelier, g
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	chandelier.RenderModel();
+	glDisable(GL_BLEND);
+}
+
+void renderRailing(glm::mat4 model, GLuint uniformModel, Model& railing, glm::vec3 position) {
+	model = glm::mat4(1.0);
+	model = glm::translate(model, position);
+	model = glm::scale(model, glm::vec3(1.8f, 1.0f, 1.0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	railing.RenderModel();
 	glDisable(GL_BLEND);
 }
 
@@ -187,8 +206,8 @@ void renderBuilding(glm::mat4 model, GLuint uniformModel, std::vector<Mesh*> bow
 
 	//Muro trasero boliche
 	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(70.0f, position.y, 0.0f));
-	model = glm::scale(model, glm::vec3(.0f, 20.0f, 130.0f));
+	model = glm::translate(model, glm::vec3(50.0f, position.y+5.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(.0f, 15.0f, 130.0f));
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(.0f, 1.0f, .0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	bowlingMeshList[1]->RenderMesh();
@@ -201,4 +220,12 @@ void renderBuilding(glm::mat4 model, GLuint uniformModel, std::vector<Mesh*> bow
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	bowlingMeshList[1]->RenderMesh();
 
+	//Muro trasero boliche negro
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(55.0f, position.y, 0.0f));
+	model = glm::scale(model, glm::vec3(.0f, 20.0f, 130.0f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(.0f, 1.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	listaTexturas[1]->UseTexture();
+	bowlingMeshList[1]->RenderMesh();
 }
