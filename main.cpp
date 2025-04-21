@@ -389,6 +389,8 @@ int main()
 
 	//Variables del sol
 	GLfloat sunIntensity = 0.5f;
+	GLfloat sunIntensityMax = 0.6f;
+	GLfloat sunIntensityMin = 0.1f;
 	GLfloat sunIncrement = 0.0001f;
 	GLfloat sunX = 0.3f;
 	GLfloat sunY = -1.0f;
@@ -442,11 +444,15 @@ int main()
 
 		if (isMorning==true) {
 			sunIntensity = sunIntensity + sunIncrement;
-			if (sunIntensity >= 0.6f) isMorning = false;
+			sunX = sunIntensity * 0.0000001f / sunIntensityMax;
+			sunY = -sunIntensity / sunIntensityMax;
+			if (sunIntensity >= sunIntensityMax) isMorning = false;
 		}
 		else {
 			sunIntensity = sunIntensity - sunIncrement;
-			if (sunIntensity <= 0.05f) isMorning = true;
+			sunX = -sunIntensity / sunIntensityMax;
+			sunY = -sunIntensity / sunIntensityMax;
+			if (sunIntensity <= sunIntensityMin) isMorning = true;
 		}
 		
 		if (sunIntensity >= 0.0 && sunIntensity < 0.2 && activeSkybox!=0) {

@@ -1,4 +1,3 @@
-#pragma once
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
@@ -18,6 +17,7 @@
 #include "Sphere.h"
 #include"Model.h"
 
+void renderBattingBuilding(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> bowlingMeshList, std::vector<Texture*> listaTexturas);
 void renderFeedbacker(glm::mat4 model, GLuint uniformModel, Model& feedbacker);
 void renderOrbBall(glm::mat4 model, GLuint uniformModel, Model& cerberusOrb);
 void renderCerberusPitcher(glm::mat4 model, GLuint uniformModel, Model& cerberus);
