@@ -25,3 +25,6 @@ void renderTable(glm::mat4 model, GLuint uniformModel, Model& table, glm::vec3 p
 void renderChandelier(glm::mat4 model, GLuint uniformModel, Model& chandelier, glm::vec3 position);
 void renderLaneFloor(glm::mat4 model, GLuint uniformModel, Model& laneFloor, glm::vec3 position);
 void renderRailing(glm::mat4 model, GLuint uniformModel, Model& railing, glm::vec3 position);
+void renderCarpet(glm::mat4 model, GLuint uniformModel, Model& carpet, glm::vec3 position);
+void renderChair(glm::mat4 model, GLuint uniformModel, Model& chair, glm::vec3 position, GLfloat angle);
+void renderCerberusStatue(glm::mat4 model, GLuint uniformModel, Model& cerberusStatue, glm::vec3 position);

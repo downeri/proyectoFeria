@@ -90,7 +90,10 @@ Model carpaPokemon;
 Model bowlingRailing;
 Model chandelier;
 Model bowlingLaneFloor;
-
+Model carpet;
+Model ultraEsquites;
+Model cerberusStatue;
+Model bowlingChair;
 
 
 Skybox skybox;
@@ -123,8 +126,7 @@ static const char* fShader = "shaders/shader_light.frag";
 
 
 //funci�n de calculo de normales por promedio de v�rtices 
-void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
-	unsigned int vLength, unsigned int normalOffset)
+void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
 	{
@@ -293,6 +295,8 @@ int main()
 	pino = Model();
 	ship = Model();
 	mesaBoliche = Model();
+	carpet = Model();
+	bowlingChair = Model();
 
 
 	carpaPokemon = Model();
@@ -303,7 +307,13 @@ int main()
 	charmander = Model();
 	bowlingRailing = Model();
 	bowlingLaneFloor = Model();
+	ultraEsquites = Model();
+	cerberusStatue = Model();
 
+	bowlingChair.LoadModel("Models/chair.obj");
+	cerberusStatue.LoadModel("Models/cerbStatue.obj");
+	ultraEsquites.LoadModel("Models/ultraEsquites.obj");
+	carpet.LoadModel("Models/carpet.obj");
 	bowlingLaneFloor.LoadModel("Models/bowlingLaneFloor.obj");
 	bowlingRailing.LoadModel("Models/railing.obj");
 	chandelier.LoadModel("Models/chandelier.obj");
@@ -342,6 +352,9 @@ int main()
 	bowlingModelsList.push_back(&chandelier);
 	bowlingModelsList.push_back(&bowlingRailing);
 	bowlingModelsList.push_back(&bowlingLaneFloor);
+	bowlingModelsList.push_back(&carpet);
+	bowlingModelsList.push_back(&cerberusStatue);
+	bowlingModelsList.push_back(&bowlingChair);
 
 	diceModelsList.push_back(charlieCarpa);
 	diceModelsList.push_back(mesaDados);
@@ -397,7 +410,13 @@ int main()
 	GLboolean isMorning = true;
 	GLint activeSkybox = -1;
 
-	GLboolean bowlingActive = true;
+	GLboolean bowlingActive = false;
+	GLboolean testingBowling = false;
+
+	if (testingBowling) {
+		bowlingActive = true;
+		camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
+	}
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	////Loop mientras no se cierra la ventana
@@ -532,6 +551,7 @@ int main()
 
 		meshList[3]->RenderMesh();
 
+
 		// Elementos de ambiente 
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
     
@@ -580,20 +600,32 @@ int main()
 		maurice.RenderModel();
 
 		
-		//Boliche TP
+		//Boliche TP y Render
 		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
 			bowlingActive = true;
 			camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
 		}
 
-		if (cameraPos.x < -69.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f && cameraPos.y < 0.0) {
+		if (cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f && cameraPos.y < 0.0) {
 			bowlingActive = false;
 			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
 		}
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
 
-		//Transparentes
+		//************************************Transparentes **********************************
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		//Placeholder Antojitos
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(25.0f, -1.0f, -130.f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(4.f, 4.f, 4.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultraEsquites.RenderModel();
+
 		//Minos Prime Avatar
 
 		float angulo = atan2(cameraDir.x, cameraDir.z);
@@ -612,12 +644,6 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-
-		//blending: transparencia o traslucidez
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		venas.RenderModel();
 		
 
@@ -635,7 +661,12 @@ int main()
 		model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.0f, 0.0f, .0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		minos.RenderModel();
+
+		
+
+
 		glDisable(GL_BLEND);
+
 
 
 		
