@@ -32,6 +32,7 @@
 #include "boliche.h"
 #include "dados.h"
 #include "dardos.h"
+#include "minosPrime.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -46,6 +47,8 @@ std::vector<Model> dartsModelsList;
 
 
 std::vector<Model*> bowlingModelsList;
+std::vector<Model*> minosModelsList;
+std::vector<Model*> minosVeinsModelsList;
 std::vector<Texture*> bowlingTextureList;
 
 Camera camera;
@@ -94,6 +97,26 @@ Model carpet;
 Model ultraEsquites;
 Model cerberusStatue;
 Model bowlingChair;
+Model minosVeinsUpperRightArm;
+Model minosVeinsUpperLeftArm;
+Model minosVeinsRightThigh;
+Model minosVeinsRightLeg;
+Model minosVeinsLowerLeftArm;
+Model minosVeinsLeftThigh;
+Model minosVeinsLeftLeg;
+Model minosVeinsBody;
+
+Model minosUpperRightArm;
+Model minosUpperLeftArm;
+Model minosRightThigh;
+Model minosRightLeg;
+Model minosLowerRightHand;
+Model minosLowerLeftArm;
+Model minosLeftThigh;
+Model minosLeftLeg;
+Model minosHead;
+Model minosVeinsLowerRightArm;
+Model minosBody;
 
 
 Skybox skybox;
@@ -309,7 +332,50 @@ int main()
 	bowlingLaneFloor = Model();
 	ultraEsquites = Model();
 	cerberusStatue = Model();
+	minosVeinsUpperRightArm = Model();
+	minosVeinsUpperLeftArm = Model();
+	minosVeinsRightThigh = Model();
+	minosVeinsRightLeg = Model();
+	minosVeinsLowerLeftArm = Model();
+	minosVeinsLeftThigh = Model();
+	minosVeinsLeftLeg = Model();
+	minosVeinsBody = Model();
 
+	minosUpperRightArm = Model();
+	minosUpperLeftArm = Model();
+	minosRightThigh = Model();
+	minosRightLeg = Model();
+	minosLowerRightHand = Model();
+	minosLowerLeftArm = Model();
+	minosLeftThigh = Model();
+	minosLeftLeg = Model();
+	minosHead = Model();
+	minosVeinsLowerRightArm = Model();
+	minosBody = Model();
+
+
+	minosVeinsUpperRightArm.LoadModel("Models/Minos_Veins_Upper_Right_Arm.obj");
+	minosVeinsUpperLeftArm.LoadModel("Models/Minos_Veins_Upper_Left_Arm.obj");
+	minosVeinsRightThigh.LoadModel("Models/Minos_Veins_Right_Thigh.obj");
+	minosVeinsRightLeg.LoadModel("Models/Minos_Veins_Right_Leg.obj");
+	minosVeinsLowerLeftArm.LoadModel("Models/Minos_Veins_Lower_Left_Arm.obj");
+	minosVeinsLowerRightArm.LoadModel("Models/Minos_Veins_Lower_Right_Arm.obj");
+	minosVeinsLeftThigh.LoadModel("Models/Minos_Veins_Left_Thigh.obj");
+	minosVeinsLeftLeg.LoadModel("Models/Minos_Veins_Left_leg.obj");
+	minosVeinsBody.LoadModel("Models/Minos_Veins_Body.obj");
+
+	minosUpperRightArm.LoadModel("Models/Minos_Upper_Right_Arm.obj");
+	minosUpperLeftArm.LoadModel("Models/Minos_Upper_Left_Arm.obj");
+	minosRightThigh.LoadModel("Models/minos_right_thigh.obj");
+	minosRightLeg.LoadModel("Models/minos_right_leg.obj");
+	minosLowerRightHand.LoadModel("Models/Minos_Lower_Right_Hand.obj");
+	minosLowerLeftArm.LoadModel("Models/Minos_Lower_Left_Arm.obj");
+	minosLeftThigh.LoadModel("Models/Minos_Left_Thigh.obj");
+	minosLeftLeg.LoadModel("Models/minos_left_leg.obj");
+	minosHead.LoadModel("Models/Minos_Head.obj");
+	minosBody.LoadModel("Models/Minos_Body.obj");
+
+	minosRightLeg.LoadModel("Models/Minos_Right_Leg.obj");
 	bowlingChair.LoadModel("Models/chair.obj");
 	cerberusStatue.LoadModel("Models/cerbStatue.obj");
 	ultraEsquites.LoadModel("Models/ultraEsquites.obj");
@@ -344,6 +410,29 @@ int main()
 	squirtle.LoadModel("Models/squirtle.obj");
 	charmander.LoadModel("Models/charmander.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
+
+	minosModelsList.push_back(&minosUpperRightArm);
+	minosModelsList.push_back(&minosUpperLeftArm);
+	minosModelsList.push_back(&minosRightThigh);
+	minosModelsList.push_back(&minosRightLeg);
+	minosModelsList.push_back(&minosLowerRightHand);
+	minosModelsList.push_back(&minosLowerLeftArm);
+	minosModelsList.push_back(&minosLeftThigh);
+	minosModelsList.push_back(&minosLeftLeg);
+	minosModelsList.push_back(&minosHead);
+	minosModelsList.push_back(&minosBody);
+
+	minosVeinsModelsList.push_back(&minosVeinsUpperRightArm);
+	minosVeinsModelsList.push_back(&minosVeinsUpperLeftArm);
+	minosVeinsModelsList.push_back(&minosVeinsRightThigh);
+	minosVeinsModelsList.push_back(&minosVeinsRightLeg);
+	minosVeinsModelsList.push_back(&minosVeinsLowerRightArm);
+	minosVeinsModelsList.push_back(&minosVeinsLowerLeftArm);
+	minosVeinsModelsList.push_back(&minosVeinsLeftThigh);
+	minosVeinsModelsList.push_back(&minosVeinsLeftLeg);
+	minosVeinsModelsList.push_back(&minosVeinsBody);
+	minosVeinsModelsList.push_back(&corazonMinos);
+
 
 	bowlingModelsList.push_back(&idol);
 	bowlingModelsList.push_back(&maurice);
@@ -400,6 +489,7 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
 
+	GLfloat anguloVaria = 0.0f;
 	//Variables del sol
 	GLfloat sunIntensity = 0.5f;
 	GLfloat sunIntensityMax = 0.6f;
@@ -409,9 +499,12 @@ int main()
 	GLfloat sunY = -1.0f;
 	GLboolean isMorning = true;
 	GLint activeSkybox = -1;
-
+	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
 	GLboolean testingBowling = false;
+
+	glm::vec3 cameraPos;
+	glm::vec3 cameraDir;
 
 	if (testingBowling) {
 		bowlingActive = true;
@@ -419,23 +512,33 @@ int main()
 	}
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-	////Loop mientras no se cierra la ventana
+	
+	
+	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
 	{
-		contPointLights = pointLightCount;
-		contSpotLights = spotLightCount;
-		GLfloat now = glfwGetTime();
+
+		now = glfwGetTime();
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
+
+		anguloVaria += 4.f * deltaTime;
+		if (anguloVaria + 10 >= FLT_MAX) {
+			anguloVaria = 0.0f;
+		}
+
+		contPointLights = pointLightCount;
+		contSpotLights = spotLightCount;
+	
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
-		glm::vec3 cameraPos = camera.getCameraPosition();
-		glm::vec3 cameraDir = camera.getCameraDirection();
+		cameraPos = camera.getCameraPosition();
+		cameraDir = camera.getCameraDirection();
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -520,7 +623,6 @@ int main()
 
 		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		
 
 		//Modelos
 		glm::mat4 model(1.0);
@@ -601,12 +703,12 @@ int main()
 
 		
 		//Boliche TP y Render
-		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
+		if ((cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71) && cameraPos.y == 6.0) {
 			bowlingActive = true;
 			camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
 		}
 
-		if (cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f && cameraPos.y < 0.0) {
+		if ((cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
 			bowlingActive = false;
 			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
 		}
@@ -614,9 +716,18 @@ int main()
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
 
 		//************************************Transparentes **********************************
+		//Minos Prime Avatar
+
+		float angulo = atan2(cameraDir.x, cameraDir.z);
+
+		float distanciaDetras = -7.0f;
+		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
+		posicionModelo.y = cameraPos.y-1.0f;
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
 
 		//Placeholder Antojitos
 		model = glm::mat4(1.0f);
@@ -626,14 +737,17 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultraEsquites.RenderModel();
 
-		//Minos Prime Avatar
 
-		float angulo = atan2(cameraDir.x, cameraDir.z);
+		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, anguloVaria);
+		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, anguloVaria);
 
-		float distanciaDetras = -7.0f; 
-		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
-		posicionModelo.y = cameraPos.y-5.8f; 
+		
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
+		/*
 		// Venas
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, posicionModelo);
@@ -659,17 +773,16 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, -0.15f, 0.033f));
 		model = glm::scale(model, glm::vec3(1.15f, 1.15f, 1.15f));
 		model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.0f, 0.0f, .0f));
+		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		minos.RenderModel();
-
-		
-
-
 		glDisable(GL_BLEND);
-
-
+		*/
+		
+		
 
 		
+
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();

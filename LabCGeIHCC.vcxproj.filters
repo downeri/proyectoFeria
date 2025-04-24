@@ -75,6 +75,9 @@
     <ClInclude Include="dardos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="minosPrime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window.cpp">
@@ -135,6 +138,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="dardos.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minosPrime.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
