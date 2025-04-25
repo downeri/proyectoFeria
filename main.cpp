@@ -1,7 +1,3 @@
-/*
-Práctica 7: Iluminación 1 
-*/
-//para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stdio.h>
@@ -16,8 +12,6 @@ Práctica 7: Iluminación 1
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
-//para probar el importer
-//#include<assimp/Importer.hpp>
 
 #include "Window.h"
 #include "Mesh.h"
@@ -25,34 +19,82 @@ Práctica 7: Iluminación 1
 #include "Camera.h"
 #include "Texture.h"
 #include "Sphere.h"
-#include"Model.h"
+#include "Model.h"
 #include "Skybox.h"
 
-//para iluminación
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
+
+#include "ambiente.h"
+#include "boliche.h"
+#include "dados.h"
+#include "dardos.h"
+
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
+std::vector<Mesh*> bowlingMeshList;
 std::vector<Shader> shaderList;
+
+
+std::vector<Model> diceModelsList;
+std::vector<Model> dartsModelsList;
+
+
+std::vector<Model*> bowlingModelsList;
+std::vector<Texture*> bowlingTextureList;
 
 Camera camera;
 
+//Texturas
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
-Texture AgaveTexture;
-Texture octaDadoTexture;
+Texture pisoBoliche;
+Texture blackTexture;
 
 
 Model cerberusOrb;
 Model muro;
 Model maurice;
+Model woodstock;
+Model snoopy;
+Model snoopyHouse;
+Model banca;
+Model basura;
+Model lampara;
+Model minos;
+Model idol;
+Model feedbacker;
+Model cerberus;
+Model venas;
+Model corazonMinos;
+Model terminal;
+Model charlieCarpa;
+Model mesaDados;
+Model arbol;
+Model pino;
+Model ship;
+Model mesaBoliche;
+Model standDardos;
+Model pikachu;
+Model jigglypuff;
+Model squirtle;
+Model charmander;
+Model carpaPokemon;
+Model bowlingRailing;
+Model chandelier;
+Model bowlingLaneFloor;
+Model carpet;
+Model ultraEsquites;
+Model cerberusStatue;
+Model bowlingChair;
+
 
 Skybox skybox;
 
@@ -83,9 +125,8 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-//función de calculo de normales por promedio de vértices 
-void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
-	unsigned int vLength, unsigned int normalOffset)
+//funciï¿½n de calculo de normales por promedio de vï¿½rtices 
+void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
 	{
@@ -135,6 +176,11 @@ void CreateObjects()
 		1, 2, 3
 	};
 
+	unsigned int wallsIndices[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
 	GLfloat floorVertices[] = {
 		-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 		10.0f, 0.0f, -10.0f,	10.0f, 0.0f,	0.0f, -1.0f, 0.0f,
@@ -142,46 +188,53 @@ void CreateObjects()
 		10.0f, 0.0f, 10.0f,		10.0f, 10.0f,	0.0f, -1.0f, 0.0f
 	};
 
-	unsigned int vegetacionIndices[] = {
-	   0, 1, 2,
-	   0, 2, 3,
-	   4,5,6,
-	   4,6,7
+	GLfloat calleVertices[] = {
+	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	5.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	-10.0f, 0.0f, 10.0f,	0.0f, 70.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, 10.0f,		5.0f, 70.0f,	0.0f, -1.0f, 0.0f
 	};
 
-	GLfloat vegetacionVertices[] = {
-		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
+	GLfloat bowlingFloorVertices[] = {
+	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	70.0f, 0.0f,	0.0f, -1.0f, 0.0f,
+	-10.0f, 0.0f, 10.0f,	0.0f, 70.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, 10.0f,		70.0f, 70.0f,	0.0f, -1.0f, 0.0f
+	};
 
-		0.0f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.5f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.5f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, -0.5f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-
-
+	GLfloat bowlingWallsVertices[] = {
+	-0.5f, 0.0f, 0.0f,		0.0f, 0.0f,			0.0f, 0.0f, -1.0f,
+	0.5f, 0.0f, 0.0f,		50.0f, 0.0f,		0.0f, 0.0f, -1.0f,
+	0.5f, 1.0f, 0.0f,		50.0f, 20.0f,		0.0f, 0.0f, -1.0f,
+	-0.5f, 1.0f, 0.0f,		0.0f, 20.0f,		0.0f, 0.0f, -1.0f
 	};
 	
+	Mesh *obj0 = new Mesh();
+	obj0->CreateMesh(vertices, indices, 32, 12);
+	meshList.push_back(obj0);
+
 	Mesh *obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
 
 	Mesh *obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 32, 12);
+	obj2->CreateMesh(floorVertices, floorIndices, 32, 6);
 	meshList.push_back(obj2);
 
-	Mesh *obj3 = new Mesh();
-	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
+	Mesh* obj3 = new Mesh();
+	obj3->CreateMesh(calleVertices, floorIndices, 32, 6);
 	meshList.push_back(obj3);
 
 	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(vegetacionVertices, vegetacionIndices, 64, 12);
-	meshList.push_back(obj4);
+	obj4->CreateMesh(bowlingFloorVertices, floorIndices, 32, 6);
+	bowlingMeshList.push_back(obj4);
+	meshList.push_back(obj3);
+
+	Mesh* obj5 = new Mesh();
+	obj5->CreateMesh(bowlingWallsVertices, wallsIndices, 32, 6);
+	bowlingMeshList.push_back(obj5);
 
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
-
-	calcAverageNormals(vegetacionIndices, 12, vegetacionVertices, 64, 8, 5);
 
 }
 
@@ -193,56 +246,6 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
-void CrearOctaedro() {
-	unsigned int  octaedroIndices[] = {
-		0, 3, 17, //Dado 2
-		7, 2, 18, //Dado 3
-		6, 1, 19, //Dado 4
-		5, 4, 16, //Dado 1
-
-		12, 13, 23, //Dado 8
-		8, 11, 20, //Dado 5
-		10, 15, 21, //Dado 6
-		9, 14, 22, //Dado 7
-
-	};
-
-	GLfloat octaedroVertices[] = {
-		0.5f,-0.5f,0.5f,	0.0029f,  0.3984f,		0.0f,	-1.0f,	-1.0f,		//A	0	Dado 2
-		0.5f,-0.5f,-0.5f,	0.6611f,  0.0049f,		0.0f,	-1.0f,	1.0f,		//B	1	Dado 4
-		-0.5f,-0.5f,-0.5f,	0.6611f,  0.3984f,		1.0f,	-1.0f,	0.0f,		//C	2	Dado 3
-		-0.5f,-0.5f,0.5f,	0.3330f,  0.5957f,		0.0f,	-1.0f,	-1.0f,		//D	3	Dado 2
-
-		0.5f,-0.5f,0.5f,	0.0029f,  0.3984f,		-1.0f,	-1.0f,	-1.0f,		//A	4	Dado 1
-		0.5f,-0.5f,-0.5f,	0.0039f,  0.0049f,		-1.0f,	-1.0f,	-1.0f,		//B	5	Dado 1
-		-0.5f,-0.5f,-0.5f,	0.6611f,  0.3984f,		0.0f,	-1.0f,	1.0f,		//C	6	Dado 4
-		-0.5f,-0.5f,0.5f,	0.3330f,  0.5957f,		1.0f,	-1.0f,	0.0f,		//D	7	Dado 3
-
-		0.5f,-0.5f,0.5f,	0.3369f,  0.9902f,		0.0f,	1.0f,	-1.0f,		//A	8	Dado 5
-		0.5f,-0.5f,-0.5f,	0.9922f,  0.5986f,		0.0f,	1.0f,	1.0f,		//B	9	Dado 7
-		-0.5f,-0.5f,-0.5f,	0.6641f,  0.4043f,		1.0f,	1.0f,	0.0f,		//C	10	Dado 6
-		-0.5f,-0.5f,0.5f,	0.3369f,  0.6094f,		0.0f,	1.0f,	-1.0f,		//D	11	Dado 5
-
-		0.5f,-0.5f,0.5f,	0.9961f,  0.6094f,		-1.0f,	1.0f,	-1.0f,		//A	12	Dado 8
-		0.5f,-0.5f,-0.5f,	0.9961f,  0.9932f,		-1.0f,	1.0f,	-1.0f,		//B	13	Dado 8
-		-0.5f,-0.5f,-0.5f,	0.6689f,  0.4043f,		0.0f,	1.0f,	1.0f,		//C	14	Dado 7
-		-0.5f,-0.5f,0.5f,	0.3418f,  0.5996f,		-1.0f,	1.0f,	0.0f,		//D	15	Dado 6
-
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		-1.0f,	-1.0f,	-1.0f,		//E	16 Dado 1
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		0.0f,	-1.0f,	-1.0f,		//E	17 Dado 2
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		1.0f,	-1.0f,	0.0f,		//E	18 Dado 3
-		0.0f,0.5f,0.0f,		0.3350f,  0.2002f,		0.0f,	-1.0f,	1.0f,		//E	19 Dado 4
-
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		0.0f,	1.0f,	-1.0f,		//F	20 Dado 5
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		1.0f,	1.0f,	0.0f,		//F	21 Dado 6
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		0.0f,	1.0f,	1.0f,		//F	22 Dado 7
-		0.0f,-1.5f,0.0f,	0.6641f,  0.7949f,		-1.0f,	1.0f,	-1.0f,		//F	23 Dado 8
-
-	};
-	Mesh* octaedro = new Mesh();
-	octaedro->CreateMesh(octaedroVertices, octaedroIndices, 192, 24);
-	meshList.push_back(octaedro);
-}
 
 int main()
 {
@@ -252,127 +255,169 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
 
-	brickTexture = Texture("Textures/brick.png");
+	//Carga de texturas
+	brickTexture = Texture("Textures/calle.jpg");
 	brickTexture.LoadTextureA();
-	dirtTexture = Texture("Textures/dirt.png");
-	dirtTexture.LoadTextureA();
-	plainTexture = Texture("Textures/plain.png");
-	plainTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture = Texture("Textures/grass.jpg");
 	pisoTexture.LoadTextureA();
-	AgaveTexture = Texture("Textures/Agave.tga");
-	AgaveTexture.LoadTextureA();
-	octaDadoTexture = Texture("Textures/octaDado.jpg");
-	octaDadoTexture.LoadTexture();
+	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
+	pisoBoliche.LoadTextureA();
+	blackTexture = Texture("Textures/negro.jpg");
+	blackTexture.LoadTextureA();
+	bowlingTextureList.push_back(&pisoBoliche);
+	bowlingTextureList.push_back(&blackTexture);
 
+	//Carga de Modelos
 
 	muro = Model();
 	cerberusOrb = Model();
 	maurice = Model();
+	woodstock = Model();
+	snoopy = Model();
+	snoopyHouse = Model();
+	banca = Model();
+	basura = Model();
+	lampara = Model();
+	minos = Model();
+	idol = Model();
+	feedbacker = Model();
+	cerberus = Model();
+	venas = Model();
+	corazonMinos = Model();
+	terminal = Model();
+	chandelier = Model();
 
+	charlieCarpa = Model();
+	mesaDados = Model();
+	arbol = Model();
+	pino = Model();
+	ship = Model();
+	mesaBoliche = Model();
+	carpet = Model();
+	bowlingChair = Model();
+
+
+	carpaPokemon = Model();
+	standDardos = Model();
+	pikachu = Model();
+	jigglypuff = Model();
+	squirtle = Model();
+	charmander = Model();
+	bowlingRailing = Model();
+	bowlingLaneFloor = Model();
+	ultraEsquites = Model();
+	cerberusStatue = Model();
+
+	bowlingChair.LoadModel("Models/chair.obj");
+	cerberusStatue.LoadModel("Models/cerbStatue.obj");
+	ultraEsquites.LoadModel("Models/ultraEsquites.obj");
+	carpet.LoadModel("Models/carpet.obj");
+	bowlingLaneFloor.LoadModel("Models/bowlingLaneFloor.obj");
+	bowlingRailing.LoadModel("Models/railing.obj");
+	chandelier.LoadModel("Models/chandelier.obj");
+	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
+	ship.LoadModel("Models/ship.obj");
+	terminal.LoadModel("Models/terminal.obj"); 
+	corazonMinos.LoadModel("Models/corazon.obj");
+	venas.LoadModel("Models/venas.obj");
+	cerberus.LoadModel("Models/cerberus.obj");
+	feedbacker.LoadModel("Models/feedbacker.obj");
+	idol.LoadModel("Models/idol.obj");
+	minos.LoadModel("Models/minos.obj");
 	maurice.LoadModel("Models/maurice.obj");
 	cerberusOrb.LoadModel("Models/cerberusOrb.obj");
+	woodstock.LoadModel("Models/Woodstock.obj");
+	snoopy.LoadModel("Models/snoopy.obj");
+	snoopyHouse.LoadModel("Models/snoopyHouse.obj");
+	banca.LoadModel("Models/banca.obj");
+	basura.LoadModel("Models/basura.obj");
+	lampara.LoadModel("Models/lampara.obj");
+	charlieCarpa.LoadModel("Models/carpaCharlie.obj");
+	mesaDados.LoadModel("Models/mesaDados.obj");
+	arbol.LoadModel("Models/arbol.obj");
+	pino.LoadModel("Models/pino.obj");
+	standDardos.LoadModel("Models/standDardos.obj");
+	pikachu.LoadModel("Models/pikachu.obj");
+	jigglypuff.LoadModel("Models/jigglypuff.obj");
+	squirtle.LoadModel("Models/squirtle.obj");
+	charmander.LoadModel("Models/charmander.obj");
+	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
+
+	bowlingModelsList.push_back(&idol);
+	bowlingModelsList.push_back(&maurice);
+	bowlingModelsList.push_back(&terminal);
+	bowlingModelsList.push_back(&mesaBoliche);
+	bowlingModelsList.push_back(&chandelier);
+	bowlingModelsList.push_back(&bowlingRailing);
+	bowlingModelsList.push_back(&bowlingLaneFloor);
+	bowlingModelsList.push_back(&carpet);
+	bowlingModelsList.push_back(&cerberusStatue);
+	bowlingModelsList.push_back(&bowlingChair);
+
+	diceModelsList.push_back(charlieCarpa);
+	diceModelsList.push_back(mesaDados);
+
+	dartsModelsList.push_back(carpaPokemon);
+	dartsModelsList.push_back(standDardos);
+	dartsModelsList.push_back(pikachu);
+	dartsModelsList.push_back(jigglypuff);
+	dartsModelsList.push_back(squirtle);
+	dartsModelsList.push_back(charmander);
 
 
+	//Skybox
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
-
+	skyboxFaces.push_back("Textures/Skybox/Dia_Right.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Left.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Down.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Up.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Right.jpg");
+	skyboxFaces.push_back("Textures/Skybox/Dia_Left.jpg");
 	skybox = Skybox(skyboxFaces);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.3f,
-		0.0f, 0.0f, -1.0f);
-	//contador de luces puntuales
+	//luz direccional, sï¿½lo 1 y siempre debe de existir
+	
+	//Point Lights
 	unsigned int pointLightCount = 0;
 
-	//Declaración de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f,
-		-6.0f, 1.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
-	pointLightCount++;
-
-	//Lampara
-	PointLight lamp = PointLight(1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,
-		6.0f, 4.0f, 10.0f,
-		0.3f, 0.2f, 0.1f);
-
-
-	// Orbe
-	PointLight orb = PointLight(.92f, 0.62f, .031f,
-		1.0f, 1.0f,
-		0.0f, 5.0f, 0.0f,
-		0.3f, 0.2f, 0.1f);
-	
+	//Spotlights
 	unsigned int spotLightCount = 0;
-	//Linterna
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		5.0f);
-	spotLightCount++;
-
-	//Luz fija
-	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-	spotLightCount++;
-
-	//Luz cofre
-	SpotLight luzCofre = SpotLight(1.0f, 1.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-	
-
-	//Spotlight Frontal
-	SpotLight farosFrontal = SpotLight(0.0f, 0.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-
-	//Spotligh trasero
-	SpotLight farosTrasero=SpotLight(1.0f, 0.0f, 0.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-	
 
 	
 
 	//se crean mas luces puntuales y spotlight 
 	int contPointLights = pointLightCount;
 	int contSpotLights = spotLightCount;
-	int farosArrayPos=0;
-	int luzCofreArrayPos = 0;
+
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
+
+	//Variables del sol
+	GLfloat sunIntensity = 0.5f;
+	GLfloat sunIntensityMax = 0.6f;
+	GLfloat sunIntensityMin = 0.1f;
+	GLfloat sunIncrement = 0.0001f;
+	GLfloat sunX = 0.3f;
+	GLfloat sunY = -1.0f;
+	GLboolean isMorning = true;
+	GLint activeSkybox = -1;
+
+	GLboolean bowlingActive = false;
+	GLboolean testingBowling = false;
+
+	if (testingBowling) {
+		bowlingActive = true;
+		camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
+	}
+
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -389,6 +434,9 @@ int main()
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
+		glm::vec3 cameraPos = camera.getCameraPosition();
+		glm::vec3 cameraDir = camera.getCameraDirection();
+
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -400,7 +448,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 		
-		//información en el shader de intensidad especular y brillo
+		//informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -408,72 +456,71 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		glm::vec3 lowerLight = camera.getCameraPosition();
-		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		//Main Light
+		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+			sunIntensity, sunIntensity,
+			sunX, sunY, .0f);
+
+		if (isMorning==true) {
+			sunIntensity = sunIntensity + sunIncrement;
+			sunX = sunIntensity * 0.0000001f / sunIntensityMax;
+			sunY = -sunIntensity / sunIntensityMax;
+			if (sunIntensity >= sunIntensityMax) isMorning = false;
+		}
+		else {
+			sunIntensity = sunIntensity - sunIncrement;
+			sunX = -sunIntensity / sunIntensityMax;
+			sunY = -sunIntensity / sunIntensityMax;
+			if (sunIntensity <= sunIntensityMin) isMorning = true;
+		}
+		
+		if (sunIntensity >= 0.0 && sunIntensity < 0.2 && activeSkybox!=0) {
+			activeSkybox = 0;
+			skyboxFaces[0] = ("Textures/Skybox/Noche_Right.jpg");
+			skyboxFaces[1] = ("Textures/Skybox/Noche_Left.jpg");
+			skyboxFaces[2] = ("Textures/Skybox/Noche_Up.jpg");
+			skyboxFaces[3] = ("Textures/Skybox/Noche_Up.jpg");
+			skyboxFaces[4] = ("Textures/Skybox/Noche_Right.jpg");
+			skyboxFaces[5] = ("Textures/Skybox/Noche_Left.jpg");
+			skybox = Skybox(skyboxFaces);
+		} else if (sunIntensity >= 0.2 && sunIntensity < 0.3 && activeSkybox != 1) {
+			activeSkybox = 1;
+			skyboxFaces[0] = ("Textures/Skybox/Tarde_Right.jpg");
+			skyboxFaces[1] = ("Textures/Skybox/Tarde_Left.jpg");
+			skyboxFaces[2] = ("Textures/Skybox/Tarde_Up.jpg");
+			skyboxFaces[3] = ("Textures/Skybox/Tarde_Up.jpg");
+			skyboxFaces[4] = ("Textures/Skybox/Tarde_Right.jpg");
+			skyboxFaces[5] = ("Textures/Skybox/Tarde_Left.jpg");
+			skybox = Skybox(skyboxFaces);
+		} else if (sunIntensity >= 0.3 && sunIntensity <= 0.6 && activeSkybox != 2) {
+			activeSkybox = 2;
+			skyboxFaces[0] = ("Textures/Skybox/Dia_Right.jpg");
+			skyboxFaces[1] = ("Textures/Skybox/Dia_Left.jpg");
+			skyboxFaces[2] = ("Textures/Skybox/Dia_Up.jpg");
+			skyboxFaces[3] = ("Textures/Skybox/Dia_Up.jpg");
+			skyboxFaces[4] = ("Textures/Skybox/Dia_Right.jpg");
+			skyboxFaces[5] = ("Textures/Skybox/Dia_Left.jpg");
+			skybox = Skybox(skyboxFaces);
+		}
 
 		//Spotlights
-		//Faros
-		if (mainWindow.getFarosFrontal()) {
-			spotLights[contSpotLights] = farosFrontal;
-			farosArrayPos = contSpotLights;
-			contSpotLights++;
-		}
-		else {
-			spotLights[contSpotLights] = farosTrasero;
-			farosArrayPos = contSpotLights;
-			contSpotLights++;
-		}
-
-		//Luz cofre
-		if (mainWindow.getmueveCofre() != 0.0f) {
-			spotLights[contSpotLights] = luzCofre;
-			luzCofreArrayPos = contSpotLights;
-			contSpotLights++;
-		}
-
-		//Mover faros
-		if (mainWindow.getFarosFrontal()) {
-			glm::vec3 carPos = glm::vec3(10.0f, 0.1f, -2.0f + mainWindow.getmuevex() / 4);
-			glm::vec3 lightDir = glm::vec3(0.0f, 0.0f, 1.0f);
-			spotLights[farosArrayPos].SetFlash(carPos, lightDir);
-		}
-		else {
-			glm::vec3 carPos2 = glm::vec3(10.0f, 0.1f, -5.0f + mainWindow.getmuevex() / 4);
-			glm::vec3 lightDir2 = glm::vec3(0.0f, 0.0f, -1.0f);
-			spotLights[farosArrayPos].SetFlash(carPos2, lightDir2);
-		}
-
-		//Mover luz cofre
-		if (mainWindow.getmueveCofre() != 0.0f) {
-			glm::vec3 cofrePos = glm::vec3(10.0f, 0.1f, -1.0f + mainWindow.getmuevex() / 4);
-			glm::vec3 cofreDir = glm::vec3(0.0f, -sin(glm::radians(mainWindow.getmueveCofre())), cos(glm::radians(mainWindow.getmueveCofre())));
-			spotLights[luzCofreArrayPos].SetFlash(cofrePos, cofreDir);
-		}
+	
+		
 
 
 		//Point Lights
-		//Lampara
-		if (mainWindow.getFlashlight()) {
-			pointLights[contPointLights] = lamp;
-			contPointLights++;
-		}
-		
-		//Orbe
-		if (mainWindow.getOrbLight()) {
-			pointLights[contPointLights] = orb;
-			contPointLights++;
-		}
-		
+	
 		
 		
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetSpotLights(spotLights, contSpotLights);
 		shaderList[0].SetPointLights(pointLights, contPointLights);
 
+		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
+		
 
 		//Modelos
 		glm::mat4 model(1.0);
@@ -481,8 +528,9 @@ int main()
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		//Piso
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -30.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
@@ -492,35 +540,136 @@ int main()
 
 		meshList[2]->RenderMesh();
 
-		
-		//Orbe
+		//Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+		model = glm::translate(model, glm::vec3(0.0f, -.9f, -30.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		brickTexture.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		meshList[3]->RenderMesh();
+
+
+		// Elementos de ambiente 
+		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
+    
+		//Piso juego de Dados
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -300.0f));
+		model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pisoBoliche.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		// Juego de Dados
+		renderJuegoDados(model, uniformModel, diceModelsList);
+
+		//Piso Juego de Dardos
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -250.0f));
+		model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pisoBoliche.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		// Juego de Dardos
+		renderJuegoDardos(model, uniformModel, dartsModelsList);
+		
+		
+	
+		//Barco
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(100.0f, 30.0f, 0.0));
+		model = glm::scale(model, glm::vec3(50.f, 50.f, 40.f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cerberusOrb.RenderModel();
+		ship.RenderModel();
 
-		//Maurice
+
+		//Maurice NPC
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 15.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 60.0));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		maurice.RenderModel();
 
+		
+		//Boliche TP y Render
+		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
+			bowlingActive = true;
+			camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
+		}
 
-		//Muro Frente
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(12.0f, 5.0f, 15.f));
-		model = glm::scale(model, glm::vec3(2.f, 3.05f, 1.f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, .0f));
+		if (cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f && cameraPos.y < 0.0) {
+			bowlingActive = false;
+			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
+		}
+
+		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
+
+		//************************************Transparentes **********************************
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		//Placeholder Antojitos
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(25.0f, -1.0f, -130.f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(4.f, 4.f, 4.f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		muro.RenderModel();
+		ultraEsquites.RenderModel();
+
+		//Minos Prime Avatar
+
+		float angulo = atan2(cameraDir.x, cameraDir.z);
+
+		float distanciaDetras = -7.0f; 
+		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
+		posicionModelo.y = cameraPos.y-5.8f; 
+
+		// Venas
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, posicionModelo);
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+
+		model = glm::rotate(model, angulo, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux = model;
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		venas.RenderModel();
+		
+
+		//Corazon
+		model = glm::translate(model, glm::vec3(0.0f, -.85f, -0.033f));
+		model = glm::rotate(model, glm::radians(90.f), glm::vec3(1.0f, 0.0f, .0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		corazonMinos.RenderModel();
+		
+
+		//Cuerpo
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.15f, 0.033f));
+		model = glm::scale(model, glm::vec3(1.15f, 1.15f, 1.15f));
+		model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.0f, 0.0f, .0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		minos.RenderModel();
+
+		
+
+
+		glDisable(GL_BLEND);
 
 
 
-	
+		
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();

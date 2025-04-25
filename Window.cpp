@@ -17,7 +17,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	mueveCofre = 0.0f;
 	flashlightOn = true;
 	farosFrontal = true;
-	orbLightOn = true;
+	orbLightOn = false;
 	orbLightCooldown = 0;
 	flashCooldown = 0;
 
@@ -47,7 +47,7 @@ int Window::Initialise()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	//CREAR VENTANA
-	mainWindow = glfwCreateWindow(width, height, "Practica08: Iluminacion 2", NULL, NULL);
+	mainWindow = glfwCreateWindow(width, height, "Proyecto Feria", NULL, NULL);
 
 	if (!mainWindow)
 	{
@@ -149,15 +149,18 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		}
 		
 	}
-	if (key == GLFW_KEY_H) {
-		if (theWindow->orbLightCooldown < 1) {
-			theWindow->orbLightCooldown++;
-		}
-		else {
+
+
+	if (key == GLFW_KEY_P) {
+
+		if (action == GLFW_PRESS) {
 			theWindow->orbLightOn = !theWindow->orbLightOn;
-			theWindow->orbLightCooldown = 0;
 		}
-	}	
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->orbLightOn = !theWindow->orbLightOn;
+		}
+	}
 
 	if (key == GLFW_KEY_G) {
 		if (theWindow->flashCooldown < 1) {
