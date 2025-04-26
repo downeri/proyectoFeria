@@ -17,5 +17,6 @@
 
 #include "Material.h"
 
-void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model> listaModelos);
-void renderMesaDados(glm::mat4 model, GLuint uniformModel, Model mesaDados, glm::vec3 position, glm::vec3 translate);
+void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos);
+void renderMesaDados(glm::mat4 model, GLuint uniformModel, Model &mesaDados, glm::vec3 position, glm::vec3 translate);
+void renderDados(glm::mat4 model, GLuint uniformModel, Model& dados, glm::vec3 position, glm::vec3 translate);
