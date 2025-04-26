@@ -32,6 +32,14 @@
 #include "boliche.h"
 #include "dados.h"
 #include "dardos.h"
+
+//include zim
+#include "PuestoGlobosZim.h"
+#include "PuestoPizzaZim.h"
+#include "PuestoHachaZim.h"
+#include "PuestoToposZim.h"
+
+
 #include "puestoPan.h"
 #include "puestoRefrescos.h"
 #include "minosPrime.h"
@@ -127,6 +135,13 @@ Model minosLeftLeg;
 Model minosHead;
 Model minosVeinsLowerRightArm;
 Model minosBody;
+
+//Modelos zim
+Model Puestogloboszim_M;
+Model Puestopizzazim_M;
+Model Puestohachazim_M;
+Model Puestotoposzim_M;
+Model NPCGloboszim_M;
 
 
 Skybox skybox;
@@ -462,6 +477,19 @@ int main()
 	minosVeinsModelsList.push_back(&corazonMinos);
 
 
+	//archivos zim
+	Puestogloboszim_M = Model();
+	Puestogloboszim_M.LoadModel("Models/carritodeglobosAdrian.obj");
+	Puestopizzazim_M = Model();
+	Puestopizzazim_M.LoadModel("Models/puestodepizzaAdrian.obj");
+	Puestohachazim_M = Model();
+	Puestohachazim_M.LoadModel("Models/tiroconhacha.obj");
+	Puestotoposzim_M = Model();
+	Puestotoposzim_M.LoadModel("Models/pegaletopo.obj");
+	NPCGloboszim_M = Model();
+	NPCGloboszim_M.LoadModel("Models/NPCglobos.obj");
+
+
 	bowlingModelsList.push_back(&idol);
 	bowlingModelsList.push_back(&maurice);
 	bowlingModelsList.push_back(&terminal);
@@ -765,6 +793,24 @@ int main()
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
 
+
+		//puesto de globos zim
+		renderPuestoGlobosZim(model, uniformModel, Puestogloboszim_M);
+		//NPC puesto de globos zim
+		renderNPCGlobosZim(model, uniformModel, NPCGloboszim_M);
+
+
+		//puesto hacha zim
+		renderTiroHachaZim(model, uniformModel, Puestohachazim_M);
+
+		//puesto topo zim
+		renderPuestoToposZim(model, uniformModel, Puestotoposzim_M);
+
+		
+	
+
+		
+
 		//************************************Transparentes **********************************
 		
 
@@ -826,11 +872,14 @@ int main()
 		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		minos.RenderModel();
-		glDisable(GL_BLEND);
-		*/
-		
-		
 
+    */
+		//puesto de pizza zim
+		renderPuestoPizzaZim(model, uniformModel, Puestopizzazim_M);
+
+
+		glDisable(GL_BLEND);
+		
 		
 
 		glUseProgram(0);

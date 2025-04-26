@@ -1,3 +1,17 @@
+# Ignorar archivos y carpetas generados por Visual Studio
 .vs/
+*.VC.db
+*.slnx.sqlite
+*.suo
+*.user
+*.log
+
+# Ignorar carpetas de compilación
 Debug/
+Release/
+
+# Ignorar cualquier carpeta Debug dentro de subdirectorios
+**/Debug/
+
+# Otros posibles temporales o específicos
 Proyecto*Feria/Debug/
