@@ -79,6 +79,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="puestoRefrescos.h">
+    <ClInclude Include="minosPrime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -147,6 +148,7 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="puestoRefrescos.cpp">
+    <ClCompile Include="minosPrime.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

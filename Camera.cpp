@@ -9,43 +9,74 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	yaw = startYaw;
 	pitch = startPitch;
 	front = glm::vec3(0.0f, 0.0f, -1.0f);
+	anguloVaria = 0.0f;
 
 	moveSpeed = startMoveSpeed;
 	turnSpeed = startTurnSpeed;
-
 	update();
 }
 
 void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
-
 	if (keys[GLFW_KEY_W])
 	{
 		position.x += front.x * velocity;
 		position.z += front.z * velocity;
+
+		anguloVaria += 5.f * deltaTime;
+		if (anguloVaria + 10 >= FLT_MAX) {
+			anguloVaria = 0.0f;
+		}
+		
 	}
+	
+	
 
 	if (keys[GLFW_KEY_S])
 	{
 		position.x -= front.x * velocity;
 		position.z -= front.z * velocity;
+		anguloVaria += 5.f * deltaTime;
+		if (anguloVaria + 10 >= FLT_MAX) {
+			anguloVaria = 0.0f;
+		}
+
 	}
 
 	if (keys[GLFW_KEY_A])
 	{
 		position -= right * velocity;
+		anguloVaria += 5.f * deltaTime;
+		if (anguloVaria + 10 >= FLT_MAX) {
+			anguloVaria = 0.0f;
+		}
+
 	}
 
 	if (keys[GLFW_KEY_D])
 	{
 		position += right * velocity;
+		anguloVaria += 5.f * deltaTime;
+		if (anguloVaria + 10 >= FLT_MAX) {
+			anguloVaria = 0.0f;
+		}
+
+	}
+
+	if (abs(sin(glm::radians(anguloVaria)) / 2.5f) < 0.011f && !keys[GLFW_KEY_W] && !keys[GLFW_KEY_S] && !keys[GLFW_KEY_A] && !keys[GLFW_KEY_D]) {
+		anguloVaria = 0.0f;
+
+	}
+	if (abs(sin(glm::radians(anguloVaria)) / 2.5f) > 0 && !keys[GLFW_KEY_W] && !keys[GLFW_KEY_S] && !keys[GLFW_KEY_A] && !keys[GLFW_KEY_D]) {
+		anguloVaria -= 5.0f * deltaTime;
 	}
 }
 
 void Camera::teleport(glm::vec3 newPosition){
 	position = newPosition;
 }
+
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 {
