@@ -87,6 +87,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PuestoToposZim.h">
+	  <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="puestoPan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -170,6 +172,8 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="PuestoToposZim.cpp">
+		<Filter>Resource Files</Filter>
+    </ClCompile>
     <ClCompile Include="puestoPan.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
