@@ -75,6 +75,18 @@
     <ClInclude Include="dardos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PuestoGlobosZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoPizzaZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoHachaZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoToposZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window.cpp">
@@ -135,6 +147,18 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="dardos.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoGlobosZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoPizzaZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoHachaZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoToposZim.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

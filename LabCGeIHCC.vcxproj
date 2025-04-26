@@ -31,6 +31,9 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PuestoGlobosZim.h" />
+    <ClInclude Include="PuestoPizzaZim.h" />
+    <ClInclude Include="PuestoToposZim.h" />
     <ClInclude Include="Shader_light.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sphere.h" />
@@ -38,6 +41,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="boliche.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="PuestoHachaZim.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -54,12 +58,16 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PuestoGlobosZim.cpp" />
+    <ClCompile Include="PuestoPizzaZim.cpp" />
+    <ClCompile Include="PuestoToposZim.cpp" />
     <ClCompile Include="Shader_light.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="boliche.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="PuestoHachaZim.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
