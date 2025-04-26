@@ -32,8 +32,9 @@
 #include "boliche.h"
 #include "dados.h"
 #include "dardos.h"
+#include "puestoPan.h"
+#include "puestoRefrescos.h"
 #include "minosPrime.h"
-
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
@@ -42,8 +43,11 @@ std::vector<Mesh*> bowlingMeshList;
 std::vector<Shader> shaderList;
 
 
-std::vector<Model> diceModelsList;
-std::vector<Model> dartsModelsList;
+std::vector<Model*> diceModelsList;
+std::vector<Model*> dartsModelsList;
+
+std::vector<Model*> breadModelsList;
+std::vector<Model*> sodaModelsList;
 
 
 std::vector<Model*> bowlingModelsList;
@@ -80,6 +84,7 @@ Model corazonMinos;
 Model terminal;
 Model charlieCarpa;
 Model mesaDados;
+Model dado;
 Model arbol;
 Model pino;
 Model ship;
@@ -90,6 +95,12 @@ Model jigglypuff;
 Model squirtle;
 Model charmander;
 Model carpaPokemon;
+Model chandelier;
+Model mesa;
+Model dardo;
+Model puestoPan;
+Model puestoRefrescos;
+Model globosPokemon;
 Model bowlingRailing;
 Model chandelier;
 Model bowlingLaneFloor;
@@ -314,13 +325,15 @@ int main()
 
 	charlieCarpa = Model();
 	mesaDados = Model();
+	mesa = Model();
+
 	arbol = Model();
 	pino = Model();
+
 	ship = Model();
 	mesaBoliche = Model();
 	carpet = Model();
 	bowlingChair = Model();
-
 
 	carpaPokemon = Model();
 	standDardos = Model();
@@ -328,6 +341,15 @@ int main()
 	jigglypuff = Model();
 	squirtle = Model();
 	charmander = Model();
+
+	dardo = Model();
+	mesa = Model();
+
+	puestoPan = Model();
+	puestoRefrescos = Model();
+	globosPokemon = Model();
+
+
 	bowlingRailing = Model();
 	bowlingLaneFloor = Model();
 	ultraEsquites = Model();
@@ -382,6 +404,7 @@ int main()
 	carpet.LoadModel("Models/carpet.obj");
 	bowlingLaneFloor.LoadModel("Models/bowlingLaneFloor.obj");
 	bowlingRailing.LoadModel("Models/railing.obj");
+
 	chandelier.LoadModel("Models/chandelier.obj");
 	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
 	ship.LoadModel("Models/ship.obj");
@@ -402,6 +425,7 @@ int main()
 	lampara.LoadModel("Models/lampara.obj");
 	charlieCarpa.LoadModel("Models/carpaCharlie.obj");
 	mesaDados.LoadModel("Models/mesaDados.obj");
+	dado.LoadModel("Models/dado.obj");
 	arbol.LoadModel("Models/arbol.obj");
 	pino.LoadModel("Models/pino.obj");
 	standDardos.LoadModel("Models/standDardos.obj");
@@ -410,6 +434,11 @@ int main()
 	squirtle.LoadModel("Models/squirtle.obj");
 	charmander.LoadModel("Models/charmander.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
+	puestoPan.LoadModel("Models/puestoPan.obj");
+	puestoRefrescos.LoadModel("Models/puestoRefrescos.obj");
+	globosPokemon.LoadModel("Models/globosPokemon.obj");
+	dardo.LoadModel("Models/dardo.obj");
+	mesa.LoadModel("Models/mesa.obj");
 
 	minosModelsList.push_back(&minosUpperRightArm);
 	minosModelsList.push_back(&minosUpperLeftArm);
@@ -445,15 +474,24 @@ int main()
 	bowlingModelsList.push_back(&cerberusStatue);
 	bowlingModelsList.push_back(&bowlingChair);
 
-	diceModelsList.push_back(charlieCarpa);
-	diceModelsList.push_back(mesaDados);
+	diceModelsList.push_back(&charlieCarpa);
+	diceModelsList.push_back(&mesaDados);
+	diceModelsList.push_back(&dado);
 
-	dartsModelsList.push_back(carpaPokemon);
-	dartsModelsList.push_back(standDardos);
-	dartsModelsList.push_back(pikachu);
-	dartsModelsList.push_back(jigglypuff);
-	dartsModelsList.push_back(squirtle);
-	dartsModelsList.push_back(charmander);
+	dartsModelsList.push_back(&carpaPokemon);
+	dartsModelsList.push_back(&standDardos);
+	dartsModelsList.push_back(&pikachu);
+	dartsModelsList.push_back(&jigglypuff);
+	dartsModelsList.push_back(&squirtle);
+	dartsModelsList.push_back(&charmander);
+	dartsModelsList.push_back(&dardo);
+	dartsModelsList.push_back(&mesa);
+
+	breadModelsList.push_back(&puestoPan);
+	breadModelsList.push_back(&snoopy);
+
+	sodaModelsList.push_back(&puestoRefrescos);
+	sodaModelsList.push_back(&snoopy);
 
 
 	//Skybox
@@ -682,7 +720,19 @@ int main()
 		// Juego de Dardos
 		renderJuegoDardos(model, uniformModel, dartsModelsList);
 		
-		
+		// Puesto de Pan
+		renderPuestoPan(model, uniformModel, breadModelsList);
+
+		// Puesto de Refrescos
+		renderPuestoRefrescos(model, uniformModel, sodaModelsList);
+
+		// Globos de Pokemon
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, -1.0f, -250.0f));
+		model = glm::scale(model, glm::vec3(3.5f, 3.5f, 3.5f));
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		globosPokemon.RenderModel();
 	
 		//Barco
 		model = glm::mat4(1.0);
