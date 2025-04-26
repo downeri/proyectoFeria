@@ -14,7 +14,9 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+
   <ItemGroup>
+    <!-- HEADER FILES -->
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -79,11 +81,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="puestoRefrescos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="minosPrime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ambiente.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
+
   <ItemGroup>
+    <!-- SOURCE FILES -->
     <ClCompile Include="Window.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -132,9 +141,6 @@
     <ClCompile Include="bateo.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="ambiente.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="ambiente.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -148,11 +154,15 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="puestoRefrescos.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
     <ClCompile Include="minosPrime.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
+
   <ItemGroup>
+    <!-- RESOURCE FILES (None type) -->
     <None Include="shaders\shader.frag" />
     <None Include="shaders\shader.vert" />
     <None Include="shaders\shadercolor.frag" />

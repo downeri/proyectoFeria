@@ -102,7 +102,6 @@ Model puestoPan;
 Model puestoRefrescos;
 Model globosPokemon;
 Model bowlingRailing;
-Model chandelier;
 Model bowlingLaneFloor;
 Model carpet;
 Model ultraEsquites;
