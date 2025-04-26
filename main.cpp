@@ -524,11 +524,6 @@ int main()
 		lastTime = now;
 
 
-		anguloVaria += 4.f * deltaTime;
-		if (anguloVaria + 10 >= FLT_MAX) {
-			anguloVaria = 0.0f;
-		}
-
 		contPointLights = pointLightCount;
 		contSpotLights = spotLightCount;
 	
@@ -559,7 +554,7 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		//Main Light
+		//Main Light y skybox
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 			sunIntensity, sunIntensity,
 			sunX, sunY, .0f);
@@ -624,12 +619,13 @@ int main()
 		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
 
-		//Modelos
+		//Matrices
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		//********************* Pisos *******************
 		//Piso
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -30.0f));
@@ -653,10 +649,6 @@ int main()
 
 		meshList[3]->RenderMesh();
 
-
-		// Elementos de ambiente 
-		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
-    
 		//Piso juego de Dados
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -300.0f));
@@ -665,9 +657,6 @@ int main()
 		pisoBoliche.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[4]->RenderMesh();
-
-		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList);
 
 		//Piso Juego de Dardos
 		model = glm::mat4(1.0);
@@ -678,6 +667,18 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[4]->RenderMesh();
 
+
+
+		//**************************** Modelos ***************************
+		// 
+		// Elementos de ambiente 
+		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
+    
+
+		// Juego de Dados
+		renderJuegoDados(model, uniformModel, diceModelsList);
+
+		
 		// Juego de Dardos
 		renderJuegoDardos(model, uniformModel, dartsModelsList);
 		
@@ -716,7 +717,7 @@ int main()
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
 
 		//************************************Transparentes **********************************
-		//Minos Prime Avatar
+		
 
 		float angulo = atan2(cameraDir.x, cameraDir.z);
 
@@ -737,9 +738,9 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultraEsquites.RenderModel();
 
-
-		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, anguloVaria);
-		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, anguloVaria);
+		//Minos Prime Avatar Animado
+		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
+		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
 
 		
 		
@@ -747,7 +748,7 @@ int main()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
-		/*
+		/* Static model
 		// Venas
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, posicionModelo);
