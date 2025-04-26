@@ -32,6 +32,7 @@
 #include "boliche.h"
 #include "dados.h"
 #include "dardos.h"
+#include "minosPrime.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -46,6 +47,8 @@ std::vector<Model> dartsModelsList;
 
 
 std::vector<Model*> bowlingModelsList;
+std::vector<Model*> minosModelsList;
+std::vector<Model*> minosVeinsModelsList;
 std::vector<Texture*> bowlingTextureList;
 
 Camera camera;
@@ -56,7 +59,7 @@ Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
 Texture pisoBoliche;
-
+Texture blackTexture;
 
 
 Model cerberusOrb;
@@ -87,9 +90,33 @@ Model jigglypuff;
 Model squirtle;
 Model charmander;
 Model carpaPokemon;
-
+Model bowlingRailing;
 Model chandelier;
+Model bowlingLaneFloor;
+Model carpet;
+Model ultraEsquites;
+Model cerberusStatue;
+Model bowlingChair;
+Model minosVeinsUpperRightArm;
+Model minosVeinsUpperLeftArm;
+Model minosVeinsRightThigh;
+Model minosVeinsRightLeg;
+Model minosVeinsLowerLeftArm;
+Model minosVeinsLeftThigh;
+Model minosVeinsLeftLeg;
+Model minosVeinsBody;
 
+Model minosUpperRightArm;
+Model minosUpperLeftArm;
+Model minosRightThigh;
+Model minosRightLeg;
+Model minosLowerRightHand;
+Model minosLowerLeftArm;
+Model minosLeftThigh;
+Model minosLeftLeg;
+Model minosHead;
+Model minosVeinsLowerRightArm;
+Model minosBody;
 
 
 Skybox skybox;
@@ -122,8 +149,7 @@ static const char* fShader = "shaders/shader_light.frag";
 
 
 //funci�n de calculo de normales por promedio de v�rtices 
-void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
-	unsigned int vLength, unsigned int normalOffset)
+void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
 	{
@@ -261,7 +287,10 @@ int main()
 	pisoTexture.LoadTextureA();
 	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
 	pisoBoliche.LoadTextureA();
+	blackTexture = Texture("Textures/negro.jpg");
+	blackTexture.LoadTextureA();
 	bowlingTextureList.push_back(&pisoBoliche);
+	bowlingTextureList.push_back(&blackTexture);
 
 	//Carga de Modelos
 
@@ -289,6 +318,8 @@ int main()
 	pino = Model();
 	ship = Model();
 	mesaBoliche = Model();
+	carpet = Model();
+	bowlingChair = Model();
 
 
 	carpaPokemon = Model();
@@ -297,6 +328,60 @@ int main()
 	jigglypuff = Model();
 	squirtle = Model();
 	charmander = Model();
+	bowlingRailing = Model();
+	bowlingLaneFloor = Model();
+	ultraEsquites = Model();
+	cerberusStatue = Model();
+	minosVeinsUpperRightArm = Model();
+	minosVeinsUpperLeftArm = Model();
+	minosVeinsRightThigh = Model();
+	minosVeinsRightLeg = Model();
+	minosVeinsLowerLeftArm = Model();
+	minosVeinsLeftThigh = Model();
+	minosVeinsLeftLeg = Model();
+	minosVeinsBody = Model();
+
+	minosUpperRightArm = Model();
+	minosUpperLeftArm = Model();
+	minosRightThigh = Model();
+	minosRightLeg = Model();
+	minosLowerRightHand = Model();
+	minosLowerLeftArm = Model();
+	minosLeftThigh = Model();
+	minosLeftLeg = Model();
+	minosHead = Model();
+	minosVeinsLowerRightArm = Model();
+	minosBody = Model();
+
+
+	minosVeinsUpperRightArm.LoadModel("Models/Minos_Veins_Upper_Right_Arm.obj");
+	minosVeinsUpperLeftArm.LoadModel("Models/Minos_Veins_Upper_Left_Arm.obj");
+	minosVeinsRightThigh.LoadModel("Models/Minos_Veins_Right_Thigh.obj");
+	minosVeinsRightLeg.LoadModel("Models/Minos_Veins_Right_Leg.obj");
+	minosVeinsLowerLeftArm.LoadModel("Models/Minos_Veins_Lower_Left_Arm.obj");
+	minosVeinsLowerRightArm.LoadModel("Models/Minos_Veins_Lower_Right_Arm.obj");
+	minosVeinsLeftThigh.LoadModel("Models/Minos_Veins_Left_Thigh.obj");
+	minosVeinsLeftLeg.LoadModel("Models/Minos_Veins_Left_leg.obj");
+	minosVeinsBody.LoadModel("Models/Minos_Veins_Body.obj");
+
+	minosUpperRightArm.LoadModel("Models/Minos_Upper_Right_Arm.obj");
+	minosUpperLeftArm.LoadModel("Models/Minos_Upper_Left_Arm.obj");
+	minosRightThigh.LoadModel("Models/minos_right_thigh.obj");
+	minosRightLeg.LoadModel("Models/minos_right_leg.obj");
+	minosLowerRightHand.LoadModel("Models/Minos_Lower_Right_Hand.obj");
+	minosLowerLeftArm.LoadModel("Models/Minos_Lower_Left_Arm.obj");
+	minosLeftThigh.LoadModel("Models/Minos_Left_Thigh.obj");
+	minosLeftLeg.LoadModel("Models/minos_left_leg.obj");
+	minosHead.LoadModel("Models/Minos_Head.obj");
+	minosBody.LoadModel("Models/Minos_Body.obj");
+
+	minosRightLeg.LoadModel("Models/Minos_Right_Leg.obj");
+	bowlingChair.LoadModel("Models/chair.obj");
+	cerberusStatue.LoadModel("Models/cerbStatue.obj");
+	ultraEsquites.LoadModel("Models/ultraEsquites.obj");
+	carpet.LoadModel("Models/carpet.obj");
+	bowlingLaneFloor.LoadModel("Models/bowlingLaneFloor.obj");
+	bowlingRailing.LoadModel("Models/railing.obj");
 	chandelier.LoadModel("Models/chandelier.obj");
 	mesaBoliche.LoadModel("Models/mesaBoliche.obj");
 	ship.LoadModel("Models/ship.obj");
@@ -326,11 +411,39 @@ int main()
 	charmander.LoadModel("Models/charmander.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 
+	minosModelsList.push_back(&minosUpperRightArm);
+	minosModelsList.push_back(&minosUpperLeftArm);
+	minosModelsList.push_back(&minosRightThigh);
+	minosModelsList.push_back(&minosRightLeg);
+	minosModelsList.push_back(&minosLowerRightHand);
+	minosModelsList.push_back(&minosLowerLeftArm);
+	minosModelsList.push_back(&minosLeftThigh);
+	minosModelsList.push_back(&minosLeftLeg);
+	minosModelsList.push_back(&minosHead);
+	minosModelsList.push_back(&minosBody);
+
+	minosVeinsModelsList.push_back(&minosVeinsUpperRightArm);
+	minosVeinsModelsList.push_back(&minosVeinsUpperLeftArm);
+	minosVeinsModelsList.push_back(&minosVeinsRightThigh);
+	minosVeinsModelsList.push_back(&minosVeinsRightLeg);
+	minosVeinsModelsList.push_back(&minosVeinsLowerRightArm);
+	minosVeinsModelsList.push_back(&minosVeinsLowerLeftArm);
+	minosVeinsModelsList.push_back(&minosVeinsLeftThigh);
+	minosVeinsModelsList.push_back(&minosVeinsLeftLeg);
+	minosVeinsModelsList.push_back(&minosVeinsBody);
+	minosVeinsModelsList.push_back(&corazonMinos);
+
+
 	bowlingModelsList.push_back(&idol);
 	bowlingModelsList.push_back(&maurice);
 	bowlingModelsList.push_back(&terminal);
 	bowlingModelsList.push_back(&mesaBoliche);
 	bowlingModelsList.push_back(&chandelier);
+	bowlingModelsList.push_back(&bowlingRailing);
+	bowlingModelsList.push_back(&bowlingLaneFloor);
+	bowlingModelsList.push_back(&carpet);
+	bowlingModelsList.push_back(&cerberusStatue);
+	bowlingModelsList.push_back(&bowlingChair);
 
 	diceModelsList.push_back(charlieCarpa);
 	diceModelsList.push_back(mesaDados);
@@ -376,34 +489,51 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
 
+	GLfloat anguloVaria = 0.0f;
 	//Variables del sol
 	GLfloat sunIntensity = 0.5f;
+	GLfloat sunIntensityMax = 0.6f;
+	GLfloat sunIntensityMin = 0.1f;
 	GLfloat sunIncrement = 0.0001f;
 	GLfloat sunX = 0.3f;
 	GLfloat sunY = -1.0f;
 	GLboolean isMorning = true;
 	GLint activeSkybox = -1;
-
+	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
+	GLboolean testingBowling = false;
+
+	glm::vec3 cameraPos;
+	glm::vec3 cameraDir;
+
+	if (testingBowling) {
+		bowlingActive = true;
+		camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
+	}
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-	////Loop mientras no se cierra la ventana
+	
+	
+	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
 	{
-		contPointLights = pointLightCount;
-		contSpotLights = spotLightCount;
-		GLfloat now = glfwGetTime();
+
+		now = glfwGetTime();
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
+
+		contPointLights = pointLightCount;
+		contSpotLights = spotLightCount;
+	
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
-		glm::vec3 cameraPos = camera.getCameraPosition();
-		glm::vec3 cameraDir = camera.getCameraDirection();
+		cameraPos = camera.getCameraPosition();
+		cameraDir = camera.getCameraDirection();
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -424,18 +554,22 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		//Main Light
+		//Main Light y skybox
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 			sunIntensity, sunIntensity,
 			sunX, sunY, .0f);
 
 		if (isMorning==true) {
 			sunIntensity = sunIntensity + sunIncrement;
-			if (sunIntensity >= 0.6f) isMorning = false;
+			sunX = sunIntensity * 0.0000001f / sunIntensityMax;
+			sunY = -sunIntensity / sunIntensityMax;
+			if (sunIntensity >= sunIntensityMax) isMorning = false;
 		}
 		else {
 			sunIntensity = sunIntensity - sunIncrement;
-			if (sunIntensity <= 0.05f) isMorning = true;
+			sunX = -sunIntensity / sunIntensityMax;
+			sunY = -sunIntensity / sunIntensityMax;
+			if (sunIntensity <= sunIntensityMin) isMorning = true;
 		}
 		
 		if (sunIntensity >= 0.0 && sunIntensity < 0.2 && activeSkybox!=0) {
@@ -484,17 +618,17 @@ int main()
 
 		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		
 
-		//Modelos
+		//Matrices
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		//********************* Pisos *******************
 		//Piso
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -30.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
@@ -506,7 +640,7 @@ int main()
 
 		//Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -.9f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -.9f, -30.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -515,9 +649,6 @@ int main()
 
 		meshList[3]->RenderMesh();
 
-		// Elementos de ambiente 
-		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
-    
 		//Piso juego de Dados
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -300.0f));
@@ -526,9 +657,6 @@ int main()
 		pisoBoliche.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[4]->RenderMesh();
-
-		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList);
 
 		//Piso Juego de Dardos
 		model = glm::mat4(1.0);
@@ -539,6 +667,18 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[4]->RenderMesh();
 
+
+
+		//**************************** Modelos ***************************
+		// 
+		// Elementos de ambiente 
+		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
+    
+
+		// Juego de Dados
+		renderJuegoDados(model, uniformModel, diceModelsList);
+
+		
 		// Juego de Dardos
 		renderJuegoDardos(model, uniformModel, dartsModelsList);
 		
@@ -563,28 +703,52 @@ int main()
 		maurice.RenderModel();
 
 		
-		//Boliche TP
-		if (cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71 && cameraPos.y == 6.0) {
+		//Boliche TP y Render
+		if ((cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71) && cameraPos.y == 6.0) {
 			bowlingActive = true;
 			camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
 		}
 
-		if (cameraPos.x < -69.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f && cameraPos.y < 0.0) {
+		if ((cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
 			bowlingActive = false;
 			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
 		}
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
 
-		//Transparentes
-		//Minos Prime Avatar
+		//************************************Transparentes **********************************
+		
 
 		float angulo = atan2(cameraDir.x, cameraDir.z);
 
-		float distanciaDetras = -7.0f; 
+		float distanciaDetras = -7.0f;
 		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
-		posicionModelo.y = cameraPos.y-5.8f; 
+		posicionModelo.y = cameraPos.y-1.0f;
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+
+		//Placeholder Antojitos
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(25.0f, -1.0f, -130.f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(4.f, 4.f, 4.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultraEsquites.RenderModel();
+
+		//Minos Prime Avatar Animado
+		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
+		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
+
+		
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		/* Static model
 		// Venas
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, posicionModelo);
@@ -595,12 +759,6 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-
-		//blending: transparencia o traslucidez
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		venas.RenderModel();
 		
 
@@ -616,12 +774,16 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, -0.15f, 0.033f));
 		model = glm::scale(model, glm::vec3(1.15f, 1.15f, 1.15f));
 		model = glm::rotate(model, glm::radians(-90.f), glm::vec3(1.0f, 0.0f, .0f));
+		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		minos.RenderModel();
 		glDisable(GL_BLEND);
-
+		*/
+		
+		
 
 		
+
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();
