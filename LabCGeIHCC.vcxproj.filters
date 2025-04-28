@@ -14,7 +14,6 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
-
   <ItemGroup>
     <!-- HEADER FILES -->
     <ClInclude Include="Window.h">
@@ -87,7 +86,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PuestoToposZim.h">
-	  <Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="puestoPan.h">
       <Filter>Header Files</Filter>
@@ -98,11 +97,13 @@
     <ClInclude Include="minosPrime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ambiente.h">
+    <ClInclude Include="woodstock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="puestoGlobosPokemon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-
   <ItemGroup>
     <!-- SOURCE FILES -->
     <ClCompile Include="Window.cpp">
@@ -172,7 +173,7 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="PuestoToposZim.cpp">
-		<Filter>Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="puestoPan.cpp">
       <Filter>Resource Files</Filter>
@@ -183,8 +184,16 @@
     <ClCompile Include="minosPrime.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="ambiente.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="woodstock.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="puestoGlobosPokemon.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
-
   <ItemGroup>
     <!-- RESOURCE FILES (None type) -->
     <None Include="shaders\shader.frag" />

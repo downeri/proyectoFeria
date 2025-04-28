@@ -32,6 +32,7 @@
     <ClInclude Include="minosPrime.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="puestoGlobosPokemon.h" />
     <ClInclude Include="PuestoGlobosZim.h" />
     <ClInclude Include="PuestoPizzaZim.h" />
     <ClInclude Include="PuestoToposZim.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="PuestoHachaZim.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="woodstock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ambiente.cpp" />
@@ -62,6 +64,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="puestoGlobosPokemon.cpp" />
     <ClCompile Include="PuestoGlobosZim.cpp" />
     <ClCompile Include="PuestoPizzaZim.cpp" />
     <ClCompile Include="PuestoToposZim.cpp" />
@@ -75,6 +78,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PuestoHachaZim.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="woodstock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\shader.frag" />

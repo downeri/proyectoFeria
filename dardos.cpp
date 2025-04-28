@@ -1,6 +1,6 @@
 #include "dardos.h"
 
-void renderJuegoDardos(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos) {
+void renderJuegoDardos(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura) {
 	glm::vec3 posicion = glm::vec3(-20.0f, -1.0f, -250.0f);
 
 	model = glm::mat4(1.0);
@@ -9,6 +9,13 @@ void renderJuegoDardos(glm::mat4 model, GLuint uniformModel, std::vector<Model*>
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	listaModelos[0]->RenderModel();
+
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posicion.x, posicion.y + 0.2f, posicion.z));
+	model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	pisoTextura.UseTexture();
+	piso.RenderMesh();
 
 	renderStandDardos(model, uniformModel, *listaModelos[1], posicion, glm::vec3(-7.0f, 0.0f, -15.0f));
 	renderStandDardos(model, uniformModel, *listaModelos[1], posicion, glm::vec3(-7.0f, 0.0f, -5.0f));
