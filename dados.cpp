@@ -1,7 +1,7 @@
 #include "dados.h"
 
 void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura) {
-	glm::vec3 posicion = glm::vec3(-20.0f, -1.0f, -300.0f);
+	glm::vec3 posicion = glm::vec3(-20.0f, -1.0f, -250.0f);
 
 	model = glm::mat4(1.0);
 	model = glm::translate(model, posicion);

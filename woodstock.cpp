@@ -4,7 +4,7 @@ float movimientoWoodstock = 0.0f;
 
 void renderWoodstock(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, float deltaTime) {
 
-	glm::vec3 posicion = glm::vec3(0.0f, -1.0f, -30.0f);
+	glm::vec3 posicion = glm::vec3(-30.0f, -1.0f, -330.0f);
 	glm::mat4 modelaux(1.0);
 
 	movimientoWoodstock += 1.0f * deltaTime;

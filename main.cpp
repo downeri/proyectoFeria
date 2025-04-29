@@ -160,6 +160,7 @@ Model minosBody;
 Model rejaBateo;
 Model v1Ultrakill;
 Model v2Ultrakill;
+Model ultrakillFountain;
 
 //Modelos zim
 Model Puestogloboszim_M;
@@ -456,7 +457,9 @@ int main()
 	rejaBateo = Model();
 	v1Ultrakill = Model();
 	v2Ultrakill = Model();
+	ultrakillFountain = Model();
 
+	ultrakillFountain.LoadModel("Models/ultrakillFountain.obj");
 	v2Ultrakill.LoadModel("Models/UltraV2.obj");
 	v1Ultrakill.LoadModel("Models/UltraV1.obj");
 	rejaBateo.LoadModel("Models/reja.obj");
@@ -793,6 +796,16 @@ int main()
 
 		meshList[2]->RenderMesh();
 
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -630.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		meshList[2]->RenderMesh();
+
 		//Calle
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -.9f, -30.0f));
@@ -801,6 +814,24 @@ int main()
 
 		brickTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		meshList[3]->RenderMesh();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -.9f, -100.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+
+
+		meshList[3]->RenderMesh();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(40.0f, -.9f, -20.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
 
 		meshList[3]->RenderMesh();
 
@@ -879,10 +910,6 @@ int main()
 		//puesto topo zim
 		renderPuestoToposZim(model, uniformModel, Puestotoposzim_M);
 
-		
-	
-
-		
 
 		//************************************Transparentes **********************************
 		
@@ -897,6 +924,7 @@ int main()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
+		renderPuestoPizzaZim(model, uniformModel, Puestopizzazim_M);
 
 		//Placeholder Antojitos
 		model = glm::mat4(1.0f);
@@ -907,16 +935,49 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		v2Ultrakill.RenderModel();
-		
 
-		//
+
+		//Placeholder antojitos
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(.0f, 0.0f, 2.0));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
 		model = glm::scale(model, glm::vec3(4.f, 4.f, 4.f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultraEsquites.RenderModel();
+
+		//Ultrakill esquites
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-30.0f, -1.0f, -300.f));
+		modelaux = model;
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(3.2f, 3.2f, 3.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		v2Ultrakill.RenderModel();
 		
+
+		//
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(.0f, 0.0f, -2.0));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(4.f, 4.f, 4.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultraEsquites.RenderModel();
+		
+
+		//Fountain
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 2.0f, -175.f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillFountain.RenderModel();
+
+		model = glm::translate(model, glm::vec3(3.0f, 3.0f, 0.f));
+		model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cerberusStatue.RenderModel();
+
+
 
 		//Minos Prime Avatar Animado
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
@@ -959,7 +1020,7 @@ int main()
 
     */
 		//puesto de pizza zim
-		renderPuestoPizzaZim(model, uniformModel, Puestopizzazim_M);
+		
 
 
 		glDisable(GL_BLEND);

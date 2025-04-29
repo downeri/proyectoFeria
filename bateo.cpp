@@ -3,7 +3,7 @@
 
 
 void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> meshList, std::vector<Texture*> listaTexturas) {
-	glm::vec3 position = glm::vec3(90.0f, 0.0f, -200.0f);
+	glm::vec3 position = glm::vec3(90.0f, 0.0f, -300.0f);
 	renderBattingBuilding(model, uniformModel, meshList, listaTexturas, position);
 	float z = 35.0f;
 	for (int i = 0;i < 4;i++) {

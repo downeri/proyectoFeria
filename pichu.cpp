@@ -32,7 +32,7 @@ void renderPichu(glm::mat4 model, GLuint uniformModel, Model& pichu, float delta
 	}
 
 	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(movimientoPichu, -1.1f, -20.0f));
+	model = glm::translate(model, glm::vec3(movimientoPichu, -1.1f, -200.0f));
 	model = glm::translate(model, glm::vec3(0.0f, abs(sin(glm::radians(saltoPichu * 2.5f)) * 5.0f), 0.0f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	if (idaPichu == false)
