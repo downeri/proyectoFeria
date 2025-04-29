@@ -43,7 +43,12 @@
 
 #include "puestoPan.h"
 #include "puestoRefrescos.h"
+#include "puestoGlobosPokemon.h"
 #include "minosPrime.h"
+#include "woodstock.h"
+#include "pichu.h"
+
+
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
@@ -58,6 +63,9 @@ std::vector<Model*> dartsModelsList;
 
 std::vector<Model*> breadModelsList;
 std::vector<Model*> sodaModelsList;
+std::vector<Model*> pokemonBalloonsModelsList;
+
+std::vector<Model*> woodstockModelsList;
 
 
 std::vector<Model*> bowlingModelsList;
@@ -87,6 +95,8 @@ Model cerberusOrb;
 Model muro;
 Model maurice;
 Model woodstock;
+Model alaDerechaWoodstock;
+Model alaIzquierdaWoodstock;
 Model snoopy;
 Model snoopyHouse;
 Model banca;
@@ -101,6 +111,7 @@ Model corazonMinos;
 Model terminal;
 Model charlieCarpa;
 Model mesaDados;
+Model charlieBrown;
 Model dado;
 Model arbol;
 Model pino;
@@ -111,6 +122,7 @@ Model pikachu;
 Model jigglypuff;
 Model squirtle;
 Model charmander;
+Model pichu;
 Model carpaPokemon;
 Model chandelier;
 Model mesa;
@@ -372,6 +384,8 @@ int main()
 	cerberusOrb = Model();
 	maurice = Model();
 	woodstock = Model();
+	alaDerechaWoodstock = Model();
+	alaIzquierdaWoodstock = Model();
 	snoopy = Model();
 	snoopyHouse = Model();
 	banca = Model();
@@ -388,6 +402,7 @@ int main()
 
 	charlieCarpa = Model();
 	mesaDados = Model();
+	charlieBrown = Model();
 	mesa = Model();
 
 	arbol = Model();
@@ -404,6 +419,7 @@ int main()
 	jigglypuff = Model();
 	squirtle = Model();
 	charmander = Model();
+	pichu = Model();
 
 	dardo = Model();
 	mesa = Model();
@@ -486,6 +502,8 @@ int main()
 	maurice.LoadModel("Models/maurice.obj");
 	cerberusOrb.LoadModel("Models/cerberusOrb.obj");
 	woodstock.LoadModel("Models/Woodstock.obj");
+	alaDerechaWoodstock.LoadModel("Models/alaDerechaWoodstock.obj");
+	alaIzquierdaWoodstock.LoadModel("Models/alaIzquierdaWoodstock.obj");
 	snoopy.LoadModel("Models/snoopy.obj");
 	snoopyHouse.LoadModel("Models/snoopyHouse.obj");
 	banca.LoadModel("Models/banca.obj");
@@ -493,6 +511,7 @@ int main()
 	lampara.LoadModel("Models/lampara.obj");
 	charlieCarpa.LoadModel("Models/carpaCharlie.obj");
 	mesaDados.LoadModel("Models/mesaDados.obj");
+	charlieBrown.LoadModel("Models/charlieBrown.obj");
 	dado.LoadModel("Models/dado.obj");
 	arbol.LoadModel("Models/arbol.obj");
 	pino.LoadModel("Models/pino.obj");
@@ -501,6 +520,7 @@ int main()
 	jigglypuff.LoadModel("Models/jigglypuff.obj");
 	squirtle.LoadModel("Models/squirtle.obj");
 	charmander.LoadModel("Models/charmander.obj");
+	pichu.LoadModel("Models/pichu.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 	puestoPan.LoadModel("Models/puestoPan.obj");
 	puestoRefrescos.LoadModel("Models/puestoRefrescos.obj");
@@ -565,6 +585,7 @@ int main()
 	diceModelsList.push_back(&charlieCarpa);
 	diceModelsList.push_back(&mesaDados);
 	diceModelsList.push_back(&dado);
+	diceModelsList.push_back(&charlieBrown);
 
 	dartsModelsList.push_back(&carpaPokemon);
 	dartsModelsList.push_back(&standDardos);
@@ -580,6 +601,14 @@ int main()
 
 	sodaModelsList.push_back(&puestoRefrescos);
 	sodaModelsList.push_back(&snoopy);
+
+	pokemonBalloonsModelsList.push_back(&globosPokemon);
+
+	woodstockModelsList.push_back(&snoopyHouse);
+	woodstockModelsList.push_back(&snoopy);
+	woodstockModelsList.push_back(&woodstock);
+	woodstockModelsList.push_back(&alaDerechaWoodstock);
+	woodstockModelsList.push_back(&alaIzquierdaWoodstock);
 
 
 	//Skybox
@@ -638,7 +667,7 @@ int main()
 	}
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-	
+
 	
 	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
@@ -649,7 +678,7 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
-
+		
 		contPointLights = pointLightCount;
 		contSpotLights = spotLightCount;
 	
@@ -775,38 +804,17 @@ int main()
 
 		meshList[3]->RenderMesh();
 
-		//Piso juego de Dados
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -300.0f));
-		model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		pisoBoliche.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[4]->RenderMesh();
-
-		//Piso Juego de Dardos
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, -0.8f, -250.0f));
-		model = glm::scale(model, glm::vec3(0.9f, 1.0f, 2.4f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		pisoBoliche.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[4]->RenderMesh();
-
-
-
+		
 		//**************************** Modelos ***************************
 		// 
 		// Elementos de ambiente 
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
     
-
 		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList);
-
-		
+		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche);
+				
 		// Juego de Dardos
-		renderJuegoDardos(model, uniformModel, dartsModelsList);
+		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche);
 		
 		// Puesto de Pan
 		renderPuestoPan(model, uniformModel, breadModelsList);
@@ -815,13 +823,15 @@ int main()
 		renderPuestoRefrescos(model, uniformModel, sodaModelsList);
 
 		// Globos de Pokemon
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, -1.0f, -250.0f));
-		model = glm::scale(model, glm::vec3(3.5f, 3.5f, 3.5f));
-		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		globosPokemon.RenderModel();
-	
+		renderPuestoGlobosPokemon(model, uniformModel, pokemonBalloonsModelsList);
+
+		// Woodstock
+		renderWoodstock(model, uniformModel, woodstockModelsList, deltaTime);
+
+		// Pichu
+		renderPichu(model, uniformModel, pichu, deltaTime);
+
+			
 		//Barco
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(100.0f, 30.0f, 0.0));
@@ -912,7 +922,6 @@ int main()
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
 		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
 
-		
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
