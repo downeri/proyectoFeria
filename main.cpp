@@ -30,6 +30,7 @@
 
 #include "ambiente.h"
 #include "boliche.h"
+#include "bateo.h"
 #include "dados.h"
 #include "dardos.h"
 
@@ -48,6 +49,7 @@ const float toRadians = 3.14159265f / 180.0f;
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Mesh*> bowlingMeshList;
+std::vector<Mesh*> battingMeshList;
 std::vector<Shader> shaderList;
 
 
@@ -59,9 +61,12 @@ std::vector<Model*> sodaModelsList;
 
 
 std::vector<Model*> bowlingModelsList;
+std::vector<Model*> battingModelsList;
 std::vector<Model*> minosModelsList;
 std::vector<Model*> minosVeinsModelsList;
+
 std::vector<Texture*> bowlingTextureList;
+std::vector<Texture*> battingTextureList;
 
 Camera camera;
 
@@ -72,7 +77,11 @@ Texture plainTexture;
 Texture pisoTexture;
 Texture pisoBoliche;
 Texture blackTexture;
+Texture battingFloor;
+Texture battingWalls;
+Texture lavaTexture;
 
+//Models
 
 Model cerberusOrb;
 Model muro;
@@ -135,6 +144,10 @@ Model minosLeftLeg;
 Model minosHead;
 Model minosVeinsLowerRightArm;
 Model minosBody;
+
+Model rejaBateo;
+Model v1Ultrakill;
+Model v2Ultrakill;
 
 //Modelos zim
 Model Puestogloboszim_M;
@@ -257,6 +270,20 @@ void CreateObjects()
 	-0.5f, 1.0f, 0.0f,		0.0f, 20.0f,		0.0f, 0.0f, -1.0f
 	};
 	
+	GLfloat battingFloorVertices[] = {
+	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	30.0f, 0.0f,	0.0f, -1.0f, 0.0f,
+	-10.0f, 0.0f, 10.0f,	0.0f, 30.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, 10.0f,		30.0f, 30.0f,	0.0f, -1.0f, 0.0f
+	};
+
+	GLfloat lavaVertices[] = {
+	-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, -10.0f,	2.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+	-10.0f, 0.0f, 10.0f,	0.0f, 1.0f,	0.0f, -1.0f, 0.0f,
+	10.0f, 0.0f, 10.0f,		2.0f, 1.0f,	0.0f, -1.0f, 0.0f
+	};
+
 	Mesh *obj0 = new Mesh();
 	obj0->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj0);
@@ -282,6 +309,15 @@ void CreateObjects()
 	obj5->CreateMesh(bowlingWallsVertices, wallsIndices, 32, 6);
 	bowlingMeshList.push_back(obj5);
 
+	Mesh* obj6 = new Mesh();
+	obj6->CreateMesh(battingFloorVertices, floorIndices, 32, 6);
+	battingMeshList.push_back(obj6);
+	battingMeshList.push_back(obj5);
+
+	Mesh* obj7 = new Mesh();
+	obj7->CreateMesh(lavaVertices, floorIndices, 32, 6);
+	battingMeshList.push_back(obj7);
+
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
 
 }
@@ -303,19 +339,32 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.6f, 0.5f);
 
 	//Carga de texturas
 	brickTexture = Texture("Textures/calle.jpg");
-	brickTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/grass.jpg");
-	pisoTexture.LoadTextureA();
-	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
-	pisoBoliche.LoadTextureA();
 	blackTexture = Texture("Textures/negro.jpg");
+	pisoTexture = Texture("Textures/grass.jpg");
+	pisoBoliche = Texture("Textures/bowlingFloor.jpg");
+	battingFloor = Texture("Textures/floordecoration8b.png");
+	battingWalls = Texture("Textures/floorpattern2n.png");
+	lavaTexture = Texture("Textures/LavaSingle.png");
+
+	lavaTexture.LoadTextureA();
+	battingWalls.LoadTextureA();
+	battingFloor.LoadTextureA();
+	brickTexture.LoadTextureA();
+	pisoTexture.LoadTextureA();
+	pisoBoliche.LoadTextureA();
 	blackTexture.LoadTextureA();
+
+
 	bowlingTextureList.push_back(&pisoBoliche);
 	bowlingTextureList.push_back(&blackTexture);
+
+	battingTextureList.push_back(&battingFloor);
+	battingTextureList.push_back(&battingWalls);
+	battingTextureList.push_back(&lavaTexture);
 
 	//Carga de Modelos
 
@@ -388,8 +437,13 @@ int main()
 	minosHead = Model();
 	minosVeinsLowerRightArm = Model();
 	minosBody = Model();
+	rejaBateo = Model();
+	v1Ultrakill = Model();
+	v2Ultrakill = Model();
 
-
+	v2Ultrakill.LoadModel("Models/UltraV2.obj");
+	v1Ultrakill.LoadModel("Models/UltraV1.obj");
+	rejaBateo.LoadModel("Models/reja.obj");
 	minosVeinsUpperRightArm.LoadModel("Models/Minos_Veins_Upper_Right_Arm.obj");
 	minosVeinsUpperLeftArm.LoadModel("Models/Minos_Veins_Upper_Left_Arm.obj");
 	minosVeinsRightThigh.LoadModel("Models/Minos_Veins_Right_Thigh.obj");
@@ -500,6 +554,13 @@ int main()
 	bowlingModelsList.push_back(&carpet);
 	bowlingModelsList.push_back(&cerberusStatue);
 	bowlingModelsList.push_back(&bowlingChair);
+
+	battingModelsList.push_back(&cerberus);
+	battingModelsList.push_back(&cerberusOrb);
+	battingModelsList.push_back(&feedbacker);
+	battingModelsList.push_back(&terminal);
+	battingModelsList.push_back(&rejaBateo);
+	battingModelsList.push_back(&v1Ultrakill);
 
 	diceModelsList.push_back(&charlieCarpa);
 	diceModelsList.push_back(&mesaDados);
@@ -780,10 +841,11 @@ int main()
 		maurice.RenderModel();
 
 		
+		
 		//Boliche TP y Render
 		if ((cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71) && cameraPos.y == 6.0) {
 			bowlingActive = true;
-			camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
+			camera.teleport(glm::vec3(0.0f, -117.5f, 0.0f));
 		}
 
 		if ((cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
@@ -793,6 +855,7 @@ int main()
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
 
+		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList);
 
 		//puesto de globos zim
 		renderPuestoGlobosZim(model, uniformModel, Puestogloboszim_M);
@@ -828,10 +891,22 @@ int main()
 		//Placeholder Antojitos
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(25.0f, -1.0f, -130.f));
+		modelaux = model;
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+		model = glm::scale(model, glm::vec3(3.2f, 3.2f, 3.2f));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		v2Ultrakill.RenderModel();
+		
+
+		//
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(.0f, 0.0f, 2.0));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
 		model = glm::scale(model, glm::vec3(4.f, 4.f, 4.f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultraEsquites.RenderModel();
+		
 
 		//Minos Prime Avatar Animado
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);

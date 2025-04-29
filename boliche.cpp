@@ -12,7 +12,7 @@ void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 		renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, z));
 		renderRailing(model, uniformModel, *listaModelos[5], glm::vec3(30.0f, altura, z + 5.0f));
 		renderLaneFloor(model, uniformModel, *listaModelos[6], glm::vec3(35.0f, altura + 0.01f, z));
-		renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 2.5,z+5.0f));
+		renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 3.0, z + 7.0f));
 
 		renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, z));
 
@@ -24,8 +24,8 @@ void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 		z = z - 15.0f;
 	}
 	renderCarpet(model, uniformModel, *listaModelos[7], glm::vec3(-14.0f, altura + 0.1f, 10.0f));
-	renderCerberusStatue(model, uniformModel, *listaModelos[8], glm::vec3(10, altura + 0.1f, 55.0f));
-	renderCerberusStatue(model, uniformModel, *listaModelos[8], glm::vec3(10, altura + 0.1f, -55.0f));
+	renderCerberusStatue(model, uniformModel, *listaModelos[8], glm::vec3(10, altura + 0.1f, 57.0f));
+	renderCerberusStatue(model, uniformModel, *listaModelos[8], glm::vec3(10, altura + 0.1f, -57.0f));
 
 }
 
@@ -115,7 +115,7 @@ void renderPines(glm::mat4 model, GLuint uniformModel, Model& idol, glm::vec3 po
 void renderTerminal(glm::mat4 model,GLuint uniformModel, Model& terminal, glm::vec3 position) {
 	model = glm::mat4(1.0);
 	model = glm::translate(model, position);
-	model = glm::scale(model, glm::vec3(5.f, 5.f, 5.f));
+	model = glm::scale(model, glm::vec3(8.f, 8.f, 8.f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
 	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, .0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
