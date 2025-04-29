@@ -102,6 +102,7 @@ Model corazonMinos;
 Model terminal;
 Model charlieCarpa;
 Model mesaDados;
+Model charlieBrown;
 Model dado;
 Model arbol;
 Model pino;
@@ -352,6 +353,7 @@ int main()
 
 	charlieCarpa = Model();
 	mesaDados = Model();
+	charlieBrown = Model();
 	mesa = Model();
 
 	arbol = Model();
@@ -455,6 +457,7 @@ int main()
 	lampara.LoadModel("Models/lampara.obj");
 	charlieCarpa.LoadModel("Models/carpaCharlie.obj");
 	mesaDados.LoadModel("Models/mesaDados.obj");
+	charlieBrown.LoadModel("Models/charlieBrown.obj");
 	dado.LoadModel("Models/dado.obj");
 	arbol.LoadModel("Models/arbol.obj");
 	pino.LoadModel("Models/pino.obj");
@@ -521,6 +524,7 @@ int main()
 	diceModelsList.push_back(&charlieCarpa);
 	diceModelsList.push_back(&mesaDados);
 	diceModelsList.push_back(&dado);
+	diceModelsList.push_back(&charlieBrown);
 
 	dartsModelsList.push_back(&carpaPokemon);
 	dartsModelsList.push_back(&standDardos);
