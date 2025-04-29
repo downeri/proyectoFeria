@@ -103,6 +103,9 @@
     <ClInclude Include="puestoGlobosPokemon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pichu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <!-- SOURCE FILES -->
@@ -191,6 +194,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="puestoGlobosPokemon.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pichu.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

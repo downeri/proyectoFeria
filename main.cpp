@@ -45,6 +45,7 @@
 #include "puestoGlobosPokemon.h"
 #include "minosPrime.h"
 #include "woodstock.h"
+#include "pichu.h"
 
 
 const float toRadians = 3.14159265f / 180.0f;
@@ -111,6 +112,7 @@ Model pikachu;
 Model jigglypuff;
 Model squirtle;
 Model charmander;
+Model pichu;
 Model carpaPokemon;
 Model chandelier;
 Model mesa;
@@ -366,6 +368,7 @@ int main()
 	jigglypuff = Model();
 	squirtle = Model();
 	charmander = Model();
+	pichu = Model();
 
 	dardo = Model();
 	mesa = Model();
@@ -460,6 +463,7 @@ int main()
 	jigglypuff.LoadModel("Models/jigglypuff.obj");
 	squirtle.LoadModel("Models/squirtle.obj");
 	charmander.LoadModel("Models/charmander.obj");
+	pichu.LoadModel("Models/pichu.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 	puestoPan.LoadModel("Models/puestoPan.obj");
 	puestoRefrescos.LoadModel("Models/puestoRefrescos.obj");
@@ -759,6 +763,8 @@ int main()
 		// Woodstock
 		renderWoodstock(model, uniformModel, woodstockModelsList, deltaTime);
 
+		// Pichu
+		renderPichu(model, uniformModel, pichu, deltaTime);
 
 			
 		//Barco
@@ -837,7 +843,6 @@ int main()
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
 		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
 
-		
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

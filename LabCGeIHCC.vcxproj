@@ -31,6 +31,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="minosPrime.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="pichu.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="puestoGlobosPokemon.h" />
     <ClInclude Include="PuestoGlobosZim.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="Mesh_tn.cpp" />
     <ClCompile Include="minosPrime.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="pichu.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="puestoGlobosPokemon.cpp" />

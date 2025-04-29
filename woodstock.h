@@ -17,6 +17,4 @@
 
 #include "Material.h"
 
-extern float avanza;
-
 void renderWoodstock(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, float deltaTime);
