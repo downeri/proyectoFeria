@@ -17,7 +17,7 @@ public:
 	GLfloat getmueveCofre() { return mueveCofre; }
 	GLboolean getFlashlight() { return flashlightOn; };
 	GLboolean getOrbLight() { return orbLightOn; };
-	GLboolean getFarosFrontal() { return farosFrontal; };
+	GLint getCameraIndex() { return cameraIndex; };
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -39,9 +39,8 @@ private:
 	GLboolean reverse;
 	GLboolean flashlightOn;
 	GLboolean orbLightOn;
-	GLboolean farosFrontal;
-	GLint flashCooldown;
-	GLint orbLightCooldown;
+	GLint cameraIndex;
+	GLboolean cPressed;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);

@@ -16,10 +16,10 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	muevex = 2.0f;
 	mueveCofre = 0.0f;
 	flashlightOn = true;
-	farosFrontal = true;
 	orbLightOn = false;
-	orbLightCooldown = 0;
-	flashCooldown = 0;
+	cameraIndex = 0;
+	cPressed = false;
+	
 
 
 
@@ -115,17 +115,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y) //Enfrente
-	{
-		theWindow-> muevex += 1.0;
-		theWindow->farosFrontal = true;
-
-	}
-	if (key == GLFW_KEY_U) //Reversa
-	{
-		theWindow-> muevex -= 1.0;
-		theWindow->farosFrontal = false;
-	}
+	
 	if (key == GLFW_KEY_F)
 	{
 		if (theWindow->mueveCofre == -45.0f) {
@@ -162,15 +152,23 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		}
 	}
 
-	if (key == GLFW_KEY_G) {
-		if (theWindow->flashCooldown < 1) {
-			theWindow->flashCooldown++;
+	if (key == GLFW_KEY_C) {
+
+		if (action == GLFW_PRESS) {
+			if (!theWindow->cPressed) {
+				if (theWindow->cameraIndex < 2 || theWindow->cameraIndex >=14) theWindow->cameraIndex = 2;
+				else theWindow->cameraIndex += 1;
+			}
+			theWindow->cPressed = true;
 		}
-		else {
-			theWindow->flashlightOn = !theWindow->flashlightOn;
-			theWindow->flashCooldown = 0;
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->cPressed = false;
 		}
 	}
+
+	if (key == GLFW_KEY_T) theWindow->cameraIndex = 0;
+	if (key == GLFW_KEY_B) theWindow->cameraIndex = 1;
 
 	if (key >= 0 && key < 1024)
 	{

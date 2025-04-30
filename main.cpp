@@ -76,7 +76,24 @@ std::vector<Model*> minosVeinsModelsList;
 std::vector<Texture*> bowlingTextureList;
 std::vector<Texture*> battingTextureList;
 
+std::vector<Camera*> cameraList;
+
 Camera camera;
+Camera birdsEyeViewCamera;
+Camera bowlingCamera;
+Camera antojitosCamera;
+Camera axesCamera;
+Camera sodaCamera;
+Camera battingCamera;
+Camera baloonCamera;
+Camera snoopyHouseCamera;
+Camera esquitesCamera;
+Camera diceCamera;
+Camera pizzaCamera;
+Camera dartsCamera;
+Camera breadCamera;
+Camera whackAMoleCamera;
+
 
 //Texturas
 Texture brickTexture;
@@ -352,7 +369,39 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
+	//Camaras
 	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.6f, 0.5f);
+	birdsEyeViewCamera = Camera(glm::vec3(0.0f, 200.0f, -150.0f), glm::vec3(.0f, 0.0f, -1.0f), 0.0f, -90.0f, 0.0f, 0.0f);
+	bowlingCamera = Camera(glm::vec3(-50.0f, 50.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	antojitosCamera = Camera(glm::vec3(-.5f, 4.0f, -130.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	axesCamera = Camera(glm::vec3(.5f, 4.0f, -170.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	sodaCamera = Camera(glm::vec3(.5f, 4.0f, -220.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	battingCamera = Camera(glm::vec3(-5.f, 4.0f, -300.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	baloonCamera = Camera(glm::vec3(-5.f, 4.0f, -380.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	baloonCamera = Camera(glm::vec3(-5.f, 4.0f, -380.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	snoopyHouseCamera = Camera(glm::vec3(-5.f, 4.0f, -330.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	esquitesCamera = Camera(glm::vec3(-5.f, 4.0f, -300.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	diceCamera = Camera(glm::vec3(10.f, 4.0f, -250.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	pizzaCamera = Camera(glm::vec3(-5.f, 4.0f, -180.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	dartsCamera = Camera(glm::vec3(15.f, 4.0f, -130.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	breadCamera = Camera(glm::vec3(0.f, 4.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	whackAMoleCamera = Camera(glm::vec3(0.f, 4.0f, -5.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+
+	cameraList.push_back(&camera);
+	cameraList.push_back(&birdsEyeViewCamera);
+	cameraList.push_back(&bowlingCamera);
+	cameraList.push_back(&antojitosCamera);
+	cameraList.push_back(&axesCamera);
+	cameraList.push_back(&sodaCamera);
+	cameraList.push_back(&battingCamera);
+	cameraList.push_back(&baloonCamera);
+	cameraList.push_back(&snoopyHouseCamera);
+	cameraList.push_back(&esquitesCamera);
+	cameraList.push_back(&diceCamera);
+	cameraList.push_back(&pizzaCamera);
+	cameraList.push_back(&dartsCamera);
+	cameraList.push_back(&breadCamera);
+	cameraList.push_back(&whackAMoleCamera);
 
 	//Carga de texturas
 	brickTexture = Texture("Textures/calle.jpg");
@@ -459,6 +508,7 @@ int main()
 	v2Ultrakill = Model();
 	ultrakillFountain = Model();
 
+	
 	ultrakillFountain.LoadModel("Models/ultrakillFountain.obj");
 	v2Ultrakill.LoadModel("Models/UltraV2.obj");
 	v1Ultrakill.LoadModel("Models/UltraV1.obj");
@@ -649,7 +699,7 @@ int main()
 
 	GLfloat anguloVaria = 0.0f;
 	//Variables del sol
-	GLfloat sunIntensity = 0.5f;
+	GLfloat sunIntensity = 0.2f;
 	GLfloat sunIntensityMax = 0.6f;
 	GLfloat sunIntensityMin = 0.1f;
 	GLfloat sunIncrement = 0.0001f;
@@ -671,6 +721,8 @@ int main()
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 
+	int activeCameraIndex = cameraList.size()-1;
+	Camera* activeCamera = &camera;
 	
 	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
@@ -684,11 +736,15 @@ int main()
 		
 		contPointLights = pointLightCount;
 		contSpotLights = spotLightCount;
-	
+
+		
+
+		activeCamera = cameraList[mainWindow.getCameraIndex()];
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		activeCamera->keyControl(mainWindow.getsKeys(), deltaTime);
+		activeCamera->mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 		cameraPos = camera.getCameraPosition();
 		cameraDir = camera.getCameraDirection();
@@ -696,21 +752,24 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		skybox.DrawSkybox(activeCamera->calculateViewMatrix(), projection);
+		
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
+
 		
 		//informaci�n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
-
+		
+		
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(activeCamera->calculateViewMatrix()));
+		glUniform3f(uniformEyePosition, activeCamera->getCameraPosition().x, activeCamera->getCameraPosition().y, activeCamera->getCameraPosition().z);
 
 		//Main Light y skybox
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
