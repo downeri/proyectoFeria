@@ -47,6 +47,7 @@
 #include "minosPrime.h"
 #include "woodstock.h"
 #include "pichu.h"
+#include "snoopySanta.h"
 
 
 const float toRadians = 3.14159265f / 180.0f;
@@ -99,6 +100,7 @@ Model alaDerechaWoodstock;
 Model alaIzquierdaWoodstock;
 Model snoopy;
 Model snoopyHouse;
+Model snoopySanta;
 Model banca;
 Model basura;
 Model lampara;
@@ -123,6 +125,8 @@ Model jigglypuff;
 Model squirtle;
 Model charmander;
 Model pichu;
+Model ash;
+Model brock;
 Model carpaPokemon;
 Model chandelier;
 Model mesa;
@@ -389,6 +393,7 @@ int main()
 	alaIzquierdaWoodstock = Model();
 	snoopy = Model();
 	snoopyHouse = Model();
+	snoopySanta = Model();
 	banca = Model();
 	basura = Model();
 	lampara = Model();
@@ -421,6 +426,8 @@ int main()
 	squirtle = Model();
 	charmander = Model();
 	pichu = Model();
+	ash = Model();
+	brock = Model();
 
 	dardo = Model();
 	mesa = Model();
@@ -509,6 +516,7 @@ int main()
 	alaIzquierdaWoodstock.LoadModel("Models/alaIzquierdaWoodstock.obj");
 	snoopy.LoadModel("Models/snoopy.obj");
 	snoopyHouse.LoadModel("Models/snoopyHouse.obj");
+	snoopySanta.LoadModel("Models/snoopySanta.obj");
 	banca.LoadModel("Models/banca.obj");
 	basura.LoadModel("Models/basura.obj");
 	lampara.LoadModel("Models/lampara.obj");
@@ -524,6 +532,8 @@ int main()
 	squirtle.LoadModel("Models/squirtle.obj");
 	charmander.LoadModel("Models/charmander.obj");
 	pichu.LoadModel("Models/pichu.obj");
+	ash.LoadModel("Models/ash.obj");
+	brock.LoadModel("Models/brock.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 	puestoPan.LoadModel("Models/puestoPan.obj");
 	puestoRefrescos.LoadModel("Models/puestoRefrescos.obj");
@@ -598,6 +608,7 @@ int main()
 	dartsModelsList.push_back(&charmander);
 	dartsModelsList.push_back(&dardo);
 	dartsModelsList.push_back(&mesa);
+	dartsModelsList.push_back(&ash);
 
 	breadModelsList.push_back(&puestoPan);
 	breadModelsList.push_back(&snoopy);
@@ -606,6 +617,7 @@ int main()
 	sodaModelsList.push_back(&snoopy);
 
 	pokemonBalloonsModelsList.push_back(&globosPokemon);
+	pokemonBalloonsModelsList.push_back(&brock);
 
 	woodstockModelsList.push_back(&snoopyHouse);
 	woodstockModelsList.push_back(&snoopy);
@@ -861,6 +873,9 @@ int main()
 
 		// Pichu
 		renderPichu(model, uniformModel, pichu, deltaTime);
+
+		// Snoopy Santa
+		renderSnoopySanta(model, uniformModel, snoopySanta, deltaTime);
 
 			
 		//Barco
