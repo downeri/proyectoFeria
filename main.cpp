@@ -721,9 +721,10 @@ int main()
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 
-	int activeCameraIndex = cameraList.size()-1;
+	int activeCameraIndex = 0;
 	Camera* activeCamera = &camera;
-	
+	float birdsEyeViewZPos = 0.0f;
+	GLboolean birdsEyeViewReverse = false;
 	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
 	{
@@ -737,9 +738,19 @@ int main()
 		contPointLights = pointLightCount;
 		contSpotLights = spotLightCount;
 
-		
+		activeCameraIndex = mainWindow.getCameraIndex();
 
-		activeCamera = cameraList[mainWindow.getCameraIndex()];
+		activeCamera = cameraList[activeCameraIndex];
+
+		if (activeCameraIndex == 1) {
+			glm::vec3 activeCameraPosition = activeCamera->getCameraPosition();
+			printf("%f\n", birdsEyeViewZPos);
+			if (!birdsEyeViewReverse) birdsEyeViewZPos = activeCameraPosition.z - 0.5 * deltaTime;
+			else birdsEyeViewZPos = activeCameraPosition.z + 0.5 * deltaTime;
+			if (birdsEyeViewZPos < -430.0f && !birdsEyeViewReverse) birdsEyeViewReverse = !birdsEyeViewReverse;
+			else if (birdsEyeViewZPos > 130.0f && birdsEyeViewReverse) birdsEyeViewReverse = !birdsEyeViewReverse;
+			activeCamera->teleport(glm::vec3(activeCameraPosition.x, activeCameraPosition.y, birdsEyeViewZPos));
+		}
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
