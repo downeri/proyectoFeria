@@ -78,6 +78,8 @@ std::vector<Texture*> battingTextureList;
 
 std::vector<Camera*> cameraList;
 
+GLfloat bowlingAnimation[7];
+
 Camera camera;
 Camera birdsEyeViewCamera;
 Camera bowlingCamera;
@@ -682,6 +684,11 @@ int main()
 	
 	//Point Lights
 	unsigned int pointLightCount = 0;
+	pointLights[0] = PointLight(0.0f, .7f, 0.7f,
+		0.0f, 1.0f,
+		-0.0f, 2.f, 1.5f,
+		0.3f, 0.2f, 0.1f);
+	pointLightCount++;
 
 	//Spotlights
 	unsigned int spotLightCount = 0;
@@ -692,6 +699,7 @@ int main()
 	int contPointLights = pointLightCount;
 	int contSpotLights = spotLightCount;
 
+	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
@@ -738,13 +746,13 @@ int main()
 		contPointLights = pointLightCount;
 		contSpotLights = spotLightCount;
 
+		//Set Active Camera
 		activeCameraIndex = mainWindow.getCameraIndex();
-
 		activeCamera = cameraList[activeCameraIndex];
 
+		//Birds Eye View Camera Panning
 		if (activeCameraIndex == 1) {
 			glm::vec3 activeCameraPosition = activeCamera->getCameraPosition();
-			printf("%f\n", birdsEyeViewZPos);
 			if (!birdsEyeViewReverse) birdsEyeViewZPos = activeCameraPosition.z - 0.5 * deltaTime;
 			else birdsEyeViewZPos = activeCameraPosition.z + 0.5 * deltaTime;
 			if (birdsEyeViewZPos < -430.0f && !birdsEyeViewReverse) birdsEyeViewReverse = !birdsEyeViewReverse;
@@ -853,6 +861,12 @@ int main()
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		float angulo = atan2(cameraDir.x, cameraDir.z);
+
+		float distanciaDetras = -7.0f;
+		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
+		posicionModelo.y = cameraPos.y - 1.0f;
+
 		//********************* Pisos *******************
 		//Piso
 		model = glm::mat4(1.0);
@@ -956,15 +970,15 @@ int main()
 		//Boliche TP y Render
 		if ((cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71) && cameraPos.y == 6.0) {
 			bowlingActive = true;
-			camera.teleport(glm::vec3(0.0f, -117.5f, 0.0f));
+			camera.teleport(glm::vec3(-45.0f, -117.5f, 40.0f));
 		}
 
-		if ((cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
+		if ((cameraPos.x < -50.0f || cameraPos.x > 45.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
 			bowlingActive = false;
 			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
 		}
 
-		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
+		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList, mainWindow.getEPressed(),posicionModelo, bowlingAnimation, deltaTime);
 
 		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList);
 
@@ -984,11 +998,7 @@ int main()
 		//************************************Transparentes **********************************
 		
 
-		float angulo = atan2(cameraDir.x, cameraDir.z);
-
-		float distanciaDetras = -7.0f;
-		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
-		posicionModelo.y = cameraPos.y-1.0f;
+		
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1005,7 +1015,6 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		v2Ultrakill.RenderModel();
-
 
 		//Placeholder antojitos
 		model = modelaux;
@@ -1050,8 +1059,10 @@ int main()
 
 
 		//Minos Prime Avatar Animado
+		pointLights[0].MoveLight(glm::vec3(posicionModelo.x, posicionModelo.y + .5f, posicionModelo.z));
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
 		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
+		
 
 		
 		glEnable(GL_BLEND);

@@ -18,6 +18,7 @@ public:
 	GLboolean getFlashlight() { return flashlightOn; };
 	GLboolean getOrbLight() { return orbLightOn; };
 	GLint getCameraIndex() { return cameraIndex; };
+	GLboolean getEPressed() { return ePressed; };
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -41,6 +42,7 @@ private:
 	GLboolean orbLightOn;
 	GLint cameraIndex;
 	GLboolean cPressed;
+	GLboolean ePressed;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);

@@ -19,10 +19,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	orbLightOn = false;
 	cameraIndex = 0;
 	cPressed = false;
-	
-
-
-
+	ePressed = false;
 	reverse = true;
 
 	for (size_t i = 0; i < 1024; i++)
@@ -149,6 +146,17 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		else if (action == GLFW_RELEASE)
 		{
 			theWindow->orbLightOn = !theWindow->orbLightOn;
+		}
+	}
+
+	if (key == GLFW_KEY_E) {
+
+		if (action == GLFW_PRESS) {
+			theWindow->ePressed = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->ePressed = false;
 		}
 	}
 
