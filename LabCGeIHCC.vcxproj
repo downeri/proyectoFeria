@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="snoopySanta.h" />
     <ClInclude Include="bateo.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonValues.h" />
@@ -75,6 +76,7 @@
     <ClCompile Include="puestoRefrescos.cpp" />
     <ClCompile Include="Shader_light.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="snoopySanta.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="boliche.cpp" />
