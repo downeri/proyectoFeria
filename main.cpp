@@ -89,6 +89,10 @@ Texture battingFloor;
 Texture battingWalls;
 Texture lavaTexture;
 
+
+
+
+
 //Models
 
 Model cerberusOrb;
@@ -168,7 +172,21 @@ Model Puestopizzazim_M;
 Model Puestohachazim_M;
 Model Puestotoposzim_M;
 Model NPCGloboszim_M;
-
+Model NPCToposzim_M;
+Model NPCPizzazim_M;
+Model NPChachazim_M;
+Model NPCMartillotoposzim_M;
+Model CerditoOjosNorm_M;
+Model CerditoOjosX_M;
+Model NPCBrazo1pizza_M;
+Model NPCOjosabiertos_M;
+Model NPCOjoscerrados_M;
+Model NPCDibbrazo_M;
+Model NPChacha_M;
+Model NPCbrazoglobos_M;
+Model CasaZim_M;
+Model Hachacasazim_M;
+Model Hacha2casazim_M;
 
 Skybox skybox;
 
@@ -362,6 +380,8 @@ int main()
 	battingFloor = Texture("Textures/floordecoration8b.png");
 	battingWalls = Texture("Textures/floorpattern2n.png");
 	lavaTexture = Texture("Textures/LavaSingle.png");
+
+
 
 	lavaTexture.LoadTextureA();
 	battingWalls.LoadTextureA();
@@ -565,6 +585,35 @@ int main()
 	Puestotoposzim_M.LoadModel("Models/pegaletopo.obj");
 	NPCGloboszim_M = Model();
 	NPCGloboszim_M.LoadModel("Models/NPCglobos.obj");
+	NPCToposzim_M = Model();
+	NPCToposzim_M.LoadModel("Models/NPCtopos.obj");
+	NPCMartillotoposzim_M = Model();
+	NPCMartillotoposzim_M.LoadModel("Models/NPCtoposMartillo.obj");
+	NPCPizzazim_M = Model();
+	NPCPizzazim_M.LoadModel("Models/NPCpizza.obj");
+	NPChachazim_M = Model();
+	NPChachazim_M.LoadModel("Models/NPChacha.obj");
+	CerditoOjosNorm_M = Model();
+	CerditoOjosNorm_M.LoadModel("Models/cerditoOjosNorm.obj");
+	CerditoOjosX_M = Model();
+	CerditoOjosX_M.LoadModel("Models/cerditoOjosX.obj");
+	NPCBrazo1pizza_M = Model();
+	NPCBrazo1pizza_M.LoadModel("Models/NPCbrazo1pizza.obj");
+	NPCOjosabiertos_M = Model();
+	NPCOjosabiertos_M.LoadModel("Models/NPCojosabiertospizza.obj");
+	NPCOjoscerrados_M = Model();
+	NPCOjoscerrados_M.LoadModel("Models/NPCojoscerradospizza.obj");
+	NPCDibbrazo_M = Model();
+	NPCDibbrazo_M.LoadModel("Models/dibbrazo.obj");
+	NPChacha_M = Model();
+	NPChacha_M.LoadModel("Models/NPChachagira.obj");
+	NPCbrazoglobos_M = Model();
+	NPCbrazoglobos_M.LoadModel("Models/NPCbrazoglobos.obj");
+	CasaZim_M = Model();
+	CasaZim_M.LoadModel("Models/casazimhachas.obj");
+	Hachacasazim_M = Model();
+	Hachacasazim_M.LoadModel("Models/hachacasazim1.obj");
+	
 
 
 	bowlingModelsList.push_back(&idol);
@@ -647,6 +696,7 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
 
+
 	GLfloat anguloVaria = 0.0f;
 	//Variables del sol
 	GLfloat sunIntensity = 0.5f;
@@ -698,11 +748,14 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 		shaderList[0].UseShader();
+
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
+
+	
 		
 		//informaci�n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
@@ -898,17 +951,69 @@ int main()
 
 		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList);
 
-		//puesto de globos zim
+
+		
+		// PUESTO GLOBOS ------------------------------
 		renderPuestoGlobosZim(model, uniformModel, Puestogloboszim_M);
-		//NPC puesto de globos zim
-		renderNPCGlobosZim(model, uniformModel, NPCGloboszim_M);
+
+		// base común del personaje y sus partes
+		glm::mat4 modelauxGlobos = glm::mat4(1.0f);
+		modelauxGlobos = glm::translate(modelauxGlobos, glm::vec3(15.0f, 0.0f, -370.0f)); // posición del NPC
+		modelauxGlobos = glm::scale(modelauxGlobos, glm::vec3(1.5f, 1.5f, 1.5f));         // escala
+		modelauxGlobos = glm::rotate(modelauxGlobos, glm::radians(0.0f), glm::vec3(0, 1, 0)); // rotación Y
+
+		// cuerpo del NPC
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelauxGlobos));
+		NPCGloboszim_M.RenderModel();
+
+		// brazo jerárquico
+		renderBrazoNPCGlobos(modelauxGlobos, uniformModel, NPCbrazoglobos_M, now);
 
 
+
+		//PUESTO HACHA.............................................
 		//puesto hacha zim
 		renderTiroHachaZim(model, uniformModel, Puestohachazim_M);
 
+		glm::mat4 modelauxzim = glm::mat4(1.0f);
+		modelauxzim = glm::translate(modelauxzim, glm::vec3(30.5f, 0.0f, -198.0f));
+		modelauxzim = glm::rotate(modelauxzim, glm::radians(-90.0f), glm::vec3(0, 1, 0));
+		modelauxzim = glm::scale(modelauxzim, glm::vec3(2.5f, 2.5f, 2.5f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelauxzim));
+		NPChachazim_M.RenderModel(); // cuerpo Dib
+		float factorLanzamiento = (sin(now * 2.0f) + 1.0f) / 2.0f;
+		//NPC brazo
+		renderNPCBrazoDib(modelauxzim, uniformModel, NPCDibbrazo_M, factorLanzamiento);
+		//NPC hacha
+		renderHachaLanzada(modelauxzim, uniformModel, factorLanzamiento);
+		//Casa zim
+		renderCasaHachaZim(model, uniformModel, CasaZim_M, Hachacasazim_M, now);
+
+
+
+		//........................................................
+	 
+
+
 		//puesto topo zim
 		renderPuestoToposZim(model, uniformModel, Puestotoposzim_M);
+		//NPC puesto topo zim
+		renderNPCPuestoToposZim(model, uniformModel, NPCToposzim_M);
+
+		//NPC puesto topo Martillo (animado)
+		renderNPCMartilloPuestoToposZim(model, uniformModel, NPCMartillotoposzim_M);
+		
+		//NPC puesto de pizza
+		renderNPCPuestoPizzaZim(model, uniformModel, NPCPizzazim_M);
+		//NPC ojos puesto de pizza (animado)
+		renderNPCOjosPizzaZim(model, uniformModel, now); 
+
+		//NPC brazo1 puesto de pizza(animado)
+		renderNPCBrazo1PuestoPizzaZim(model, uniformModel, NPCBrazo1pizza_M, now);
+
+
+
 
 
 		//************************************Transparentes **********************************
@@ -924,6 +1029,7 @@ int main()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
+		//puesto de pizza
 		renderPuestoPizzaZim(model, uniformModel, Puestopizzazim_M);
 
 		//Placeholder Antojitos
