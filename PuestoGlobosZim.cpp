@@ -20,3 +20,19 @@ void renderNPCGlobosZim(glm::mat4 model, GLuint uniformModel, Model& npcGlobos) 
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     npcGlobos.RenderModel();
 }
+
+void renderBrazoNPCGlobos(glm::mat4 modelNPC, GLuint uniformModel, Model& brazo, float tiempo) {
+    glm::mat4 modelBrazo = modelNPC;
+
+    //  Posición relativa al cuerpo: mueve el brazo al hombro 
+    modelBrazo = glm::translate(modelBrazo, glm::vec3(0.1f, 1.4f, 0.0f));  // x, y, z: posición desde el cuerpo
+
+    // Rotación oscilatoria en su pivote 
+    float angulo = glm::radians(sin(tiempo * 1.5f) * 18.0f);
+    modelBrazo = glm::rotate(modelBrazo, angulo, glm::vec3(1.0f, 0.0f, 0.0f));
+
+    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelBrazo));
+    brazo.RenderModel();
+}
+
+
