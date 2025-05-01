@@ -1,7 +1,7 @@
 #include "boliche.h"
+#include "utilities.h"
 
-
-void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> bowlingMeshList, std::vector<Texture*> listaTexturas) {
+void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> bowlingMeshList, std::vector<Texture*> listaTexturas, GLboolean ePressed, glm::vec3 modelPosition, GLfloat* bowlingAnimationLane, GLfloat deltaTime) {
 	GLfloat altura = -123.f;
 
 	renderBuilding(model, uniformModel, bowlingMeshList, listaTexturas, glm::vec3(0.0f,altura,0.0f));
@@ -9,16 +9,27 @@ void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 	GLfloat z = 45.0f;
 	for (int i = 0; i < 7;i++) {
 		renderRailing(model, uniformModel, *listaModelos[5], glm::vec3(30.0f, altura, z-5.0f));
-		renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, z));
+		if (bowlingAnimationLane[i] == 0.0f) renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, z));
 		renderRailing(model, uniformModel, *listaModelos[5], glm::vec3(30.0f, altura, z + 5.0f));
 		renderLaneFloor(model, uniformModel, *listaModelos[6], glm::vec3(35.0f, altura + 0.01f, z));
-		renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 3.0, z + 7.0f));
 
+		renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 3.0, z + 7.0f));
+		if (twoPointsDistance(modelPosition, glm::vec3(10.0f, altura + 3.0, z + 7.0f)) < 10 && ePressed) {
+			bowlingAnimationLane[i] = 0.01;
+		} 
 		renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, z));
 
 		renderChair(model, uniformModel, *listaModelos[9], glm::vec3(-19.0f, altura + 2.0f, z + 1.5f), 0.0f);
 		renderChair(model, uniformModel, *listaModelos[9], glm::vec3(-14.0f, altura + 2.0f, z + 5.f), 90.0f);
 		renderChair(model, uniformModel, *listaModelos[9], glm::vec3(-15.0f, altura + 2.0f, z - 5.f), -90.0f);
+
+		if (bowlingAnimationLane[i]>0.0f) {
+			bowlingAnimationLane[i] += 0.2f * deltaTime;
+			if (bowlingAnimationLane[i] <= 40.0f) renderPines(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, z));
+			else if (10.0f + bowlingAnimationLane[i] > 40.0f) renderPinesAnimation(model, uniformModel, *listaModelos[0], glm::vec3(50.0f, altura, z), bowlingAnimationLane[i]*1.8f);
+			if (10.0f + bowlingAnimationLane[i]>=100.0f) bowlingAnimationLane[i] = 0.0f;
+			renderMauriceBowling(model, uniformModel, *listaModelos[1], glm::vec3(10.0f + bowlingAnimationLane[i], altura + 1.0f, z), bowlingAnimationLane[i]*20.0f);
+		}
 
 		if(i%2==0) renderChandelier(model, uniformModel, *listaModelos[4], glm::vec3(0.f, altura + 20, z));
 		z = z - 15.0f;
@@ -112,6 +123,100 @@ void renderPines(glm::mat4 model, GLuint uniformModel, Model& idol, glm::vec3 po
 	idol.RenderModel();
 }
 
+void renderPinesAnimation(glm::mat4 model, GLuint uniformModel, Model& idol, glm::vec3 posInicial, GLfloat rotation) {
+	if (rotation > 90.0f) rotation = 90.0f;
+	//1
+	model = glm::mat4(1.0);
+	model = glm::translate(model, posInicial);
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(1.0f, 0.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//2,1
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 1.0f, posInicial.y, posInicial.z + 0.6f));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(0.3f, 0.0f, 0.67f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//2,2
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 1.0f, posInicial.y, posInicial.z - .6f));
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(-0.5f, 0.0f, -0.2f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//3,1
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 2.0f, posInicial.y, posInicial.z - 1.0f));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(0.8f, 0.0f, -0.4f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//3,2
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 2.0f, posInicial.y, posInicial.z));
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(-0.1f, 0.0f, 0.9f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//3,3
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 2.0f, posInicial.y, posInicial.z + 1.0f));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(0.6f, 0.0f, 0.3f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//4,1
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 3.0f, posInicial.y, posInicial.z - 1.5f));
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(-0.75f, 0.0f, 0.15f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//4,2
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 3.0f, posInicial.y, posInicial.z - 0.5f));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(0.45f, 0.0f, -0.6f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//4,3
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 3.0f, posInicial.y, posInicial.z + 0.5f));
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.25f, 0.0f, 0.88f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+
+	//4,4
+	model = glm::mat4(1.0);
+	model = glm::translate(model, glm::vec3(posInicial.x + 3.0f, posInicial.y, posInicial.z + 1.5f));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(-0.35f, 0.0f, 0.7f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, .0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	idol.RenderModel();
+}
+
+
 void renderTerminal(glm::mat4 model,GLuint uniformModel, Model& terminal, glm::vec3 position) {
 	model = glm::mat4(1.0);
 	model = glm::translate(model, position);
@@ -130,11 +235,13 @@ void renderLaneFloor(glm::mat4 model, GLuint uniformModel, Model& laneFloor, glm
 	laneFloor.RenderModel();
 }
 
-void renderMauriceBowling(glm::mat4 model, GLuint uniformModel, Model& maurice) {
+void renderMauriceBowling(glm::mat4 model, GLuint uniformModel, Model& maurice, glm::vec3 position, GLfloat rotation) {
 	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(5.0f, 1.0f, 0.0));
-	model = glm::scale(model, glm::vec3(.2f, .3f, .3f));
+	model = glm::translate(model, glm::vec3(position));
+	model = glm::scale(model, glm::vec3(.3f, .3f, .3f));
+	model = glm::rotate(model, glm::radians(-rotation), glm::vec3(.0f, 0.0f, 1.0f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, .0f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, .0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	maurice.RenderModel();
 
