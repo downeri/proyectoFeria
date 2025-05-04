@@ -138,15 +138,17 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 
-	if (key == GLFW_KEY_P) {
+	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
 
-		if (action == GLFW_PRESS) {
+		theWindow->orbLightOn = !theWindow->orbLightOn;
+
+		/*if (action == GLFW_PRESS) {
 			theWindow->orbLightOn = !theWindow->orbLightOn;
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			theWindow->orbLightOn = !theWindow->orbLightOn;
-		}
+		}*/
 	}
 
 	if (key == GLFW_KEY_E) {
