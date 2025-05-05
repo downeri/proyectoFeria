@@ -1,6 +1,10 @@
 #include "dardos.h"
 
-void renderJuegoDardos(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura) {
+bool animacion = false;
+glm::vec3 posicionAnimacion = glm::vec3(0.0f, 0.0f, 0.0f);
+float movimientoDardo = 0.0f;
+
+void renderJuegoDardos(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura, float posicionX, float posicionZ, GLboolean getEPressed, float deltaTime) {
 	glm::vec3 posicion = glm::vec3(-20.0f, -1.0f, -130.0f);
 
 	model = glm::mat4(1.0);
@@ -51,6 +55,28 @@ void renderJuegoDardos(glm::mat4 model, GLuint uniformModel, std::vector<Model*>
 	for (float i = -17.0f; i <= 17.0; i += 2.0) {
 		renderDardo(model, uniformModel, *listaModelos[6], posicion, glm::vec3(4.0f, 3.5f, i));
 	}
+
+	if (!animacion && getEPressed && (posicionX > -15.0f && posicionX < -10.0f) && (posicionZ > -150.0f && posicionZ < -110.0f)) {
+		animacion = true;
+		posicionAnimacion = glm::vec3(posicionX, 4.0f, posicionZ);
+	}
+			
+	if (animacion) {
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posicionAnimacion.x - movimientoDardo, posicionAnimacion.y, posicionAnimacion.z));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(movimientoDardo * 5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		listaModelos[6]->RenderModel();
+
+		movimientoDardo += 0.1f * deltaTime;
+		if (posicionAnimacion.x - movimientoDardo <= -27.0f) {
+			movimientoDardo = 0.0f;
+			animacion = false;
+		}
+	}
+
 }
 void renderDardo(glm::mat4 model, GLuint uniformModel, Model& dardo, glm::vec3 position, glm::vec3 translate) {
 	model = glm::mat4(1.0);

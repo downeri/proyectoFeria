@@ -1087,7 +1087,7 @@ int main()
 
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		
-		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		
 
 
 		//Matrices
@@ -1101,6 +1101,8 @@ int main()
 		float distanciaDetras = -7.0f;
 		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
 		posicionModelo.y = cameraPos.y - 1.0f;
+
+		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", posicionModelo.x, posicionModelo.y, posicionModelo.z);
 
 		//********************* Pisos *******************
 		//Piso
@@ -1164,7 +1166,7 @@ int main()
 		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche);
 				
 		// Juego de Dardos
-		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche);
+		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 		
 		// Puesto de Pan
 		renderPuestoPan(model, uniformModel, breadModelsList);
