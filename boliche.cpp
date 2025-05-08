@@ -14,7 +14,7 @@ void renderBoliche(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 		renderLaneFloor(model, uniformModel, *listaModelos[6], glm::vec3(35.0f, altura + 0.01f, z));
 
 		renderTerminal(model, uniformModel, *listaModelos[2], glm::vec3(10.0f, altura + 3.0, z + 7.0f));
-		if (twoPointsDistance(modelPosition, glm::vec3(10.0f, altura + 3.0, z + 7.0f)) < 10 && ePressed) {
+		if (twoPointsDistance(modelPosition, glm::vec3(10.0f, altura + 3.0, z + 7.0f)) < 5.0f && ePressed) {
 			bowlingAnimationLane[i] = 0.01;
 		} 
 		renderTable(model, uniformModel, *listaModelos[3], glm::vec3(-14.0f, altura, z));
