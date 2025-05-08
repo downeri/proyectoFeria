@@ -2,7 +2,7 @@
 #include "boliche.h"
 #include "utilities.h"
 
-void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> meshList, std::vector<Texture*> listaTexturas, GLfloat* battingAnimationLane, GLfloat deltaTime, GLboolean ePressed , glm::vec3 modelPosition, GLboolean* battingReverse) {
+void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> meshList, std::vector<Texture*> listaTexturas, GLfloat* battingAnimationLane, GLfloat deltaTime, GLboolean ePressed , glm::vec3 modelPosition, GLboolean* battingReverse, GLfloat* parryAnimation, GLboolean* parryReverse) {
 	glm::vec3 position = glm::vec3(90.0f, 0.0f, -300.0f);
 	renderBattingBuilding(model, uniformModel, meshList, listaTexturas, position);
 	float z = 35.0f;
@@ -11,9 +11,9 @@ void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 		if (battingAnimationLane[i] != 0.0f) {
 			if (!*battingReverse) {
 				battingAnimationLane[i] -= 0.5f * deltaTime;
-				if (battingAnimationLane[i] <= -40.0f) {
-					*battingReverse = true;
-				}
+				if (battingAnimationLane[i] <= -30.0f) parryAnimation[i] = 0.001f;
+				if (battingAnimationLane[i] <= -40.0f) *battingReverse = true;
+
 			}
 			else {
 				battingAnimationLane[i] += 0.5f * deltaTime;
@@ -27,7 +27,20 @@ void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 		
 		renderLava(model, uniformModel, *meshList[2], *listaTexturas[2], glm::vec3(position.x + 20.0f, position.y + .1f, position.z + z));
 		renderTerminal(model, uniformModel, *listaModelos[3], glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z + 8.0f));
-		renderFeedbacker(model, uniformModel, *listaModelos[2], *listaModelos[6], glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z), battingAnimationLane[i]);
+		if (parryAnimation[i] > 0 && !*parryReverse) { 
+			parryAnimation[i] += 7.0f * deltaTime;
+			if (parryAnimation[i] >= 140.0f) *parryReverse=true;
+		}
+		
+		if (parryAnimation[i] > 0 && *parryReverse) { 
+			parryAnimation[i] -= 7.0f * deltaTime;
+			if (parryAnimation[i] <= 0.0f) { 
+				parryAnimation[i] = 0.0f;
+				*parryReverse=false;
+			}
+		}
+		
+		renderFeedbacker(model, uniformModel, *listaModelos[2], *listaModelos[6], glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z), parryAnimation[i]);
 		if (twoPointsDistance(modelPosition, glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z + 8.0f)) < 5.0f && ePressed) battingAnimationLane[i] = -0.1;
 		float xReja = 0.0f;
 		for (int u = 0;u < 4;u++) {
@@ -91,11 +104,14 @@ void renderFeedbacker(glm::mat4 model, GLuint uniformModel, Model& feedbackerUpp
 	model = glm::mat4(1.0);
 	model = glm::translate(model, position);
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(model, -glm::radians(animationVariable), glm::vec3(1.0f, .0f, 0.0f));
 	model = glm::scale(model, glm::vec3(20.f, 20.f, 20.f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	feedbackerUpper.RenderModel();
 
+	
 	model = glm::translate(model, glm::vec3(0.0f, 0.0f,-.08f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, .0f, 0.0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	feedbackerLower.RenderModel();
 }

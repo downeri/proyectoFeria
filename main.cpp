@@ -81,6 +81,7 @@ std::vector<Camera*> cameraList;
 
 GLfloat bowlingAnimation[7];
 GLfloat battingAnimation[4];
+GLfloat parryAnimation[4];
 
 Camera camera;
 Camera birdsEyeViewCamera;
@@ -398,7 +399,7 @@ int main()
 
 	//Camaras
 	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.6f, 0.5f);
-	birdsEyeViewCamera = Camera(glm::vec3(0.0f, 200.0f, -150.0f), glm::vec3(.0f, 0.0f, -1.0f), 0.0f, -90.0f, 0.0f, 0.0f);
+	birdsEyeViewCamera = Camera(glm::vec3(0.0f, 200.0f, 130.0f), glm::vec3(.0f, 0.0f, -1.0f), 0.0f, -90.0f, 0.0f, 0.0f);
 	bowlingCamera = Camera(glm::vec3(-50.0f, 50.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
 	antojitosCamera = Camera(glm::vec3(-.5f, 4.0f, -130.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
 	axesCamera = Camera(glm::vec3(.5f, 4.0f, -170.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
@@ -936,7 +937,7 @@ int main()
 	
 	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
 	for (int i = 0;i < 4;i++) battingAnimation[i] = 0.0f;
-
+	for (int i = 0;i < 4;i++) parryAnimation[i] = 0.0f;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
@@ -956,6 +957,7 @@ int main()
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
 	GLboolean battingReverse = false;
+	GLboolean parryReverse = false;
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
 
@@ -1223,7 +1225,7 @@ int main()
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList, mainWindow.getEPressed(),posicionModelo, bowlingAnimation, deltaTime);
 
-		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, &battingReverse);
+		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, &battingReverse, parryAnimation, &parryReverse);
 
 
 		
