@@ -80,6 +80,7 @@ std::vector<Texture*> battingTextureList;
 std::vector<Camera*> cameraList;
 
 GLfloat bowlingAnimation[7];
+GLfloat battingAnimation[4];
 
 Camera camera;
 Camera birdsEyeViewCamera;
@@ -129,7 +130,8 @@ Model basura;
 Model lampara;
 Model minos;
 Model idol;
-Model feedbacker;
+Model feedbackerUpper;
+Model feedbackerLower;
 Model cerberus;
 Model venas;
 Model corazonMinos;
@@ -471,7 +473,8 @@ int main()
 	lampara = Model();
 	minos = Model();
 	idol = Model();
-	feedbacker = Model();
+	feedbackerUpper = Model();
+	feedbackerLower = Model();
 	cerberus = Model();
 	venas = Model();
 	corazonMinos = Model();
@@ -579,7 +582,8 @@ int main()
 	corazonMinos.LoadModel("Models/corazon.obj");
 	venas.LoadModel("Models/venas.obj");
 	cerberus.LoadModel("Models/cerberus.obj");
-	feedbacker.LoadModel("Models/feedbacker.obj");
+	feedbackerLower.LoadModel("Models/feedbackerLower.obj");
+	feedbackerUpper.LoadModel("Models/feedbackerUpper.obj");
 	idol.LoadModel("Models/idol.obj");
 	minos.LoadModel("Models/minos.obj");
 	maurice.LoadModel("Models/maurice.obj");
@@ -692,10 +696,11 @@ int main()
 
 	battingModelsList.push_back(&cerberus);
 	battingModelsList.push_back(&cerberusOrb);
-	battingModelsList.push_back(&feedbacker);
+	battingModelsList.push_back(&feedbackerUpper);
 	battingModelsList.push_back(&terminal);
 	battingModelsList.push_back(&rejaBateo);
 	battingModelsList.push_back(&v1Ultrakill);
+	battingModelsList.push_back(&feedbackerLower);
 
 	diceModelsList.push_back(&charlieCarpa);
 	diceModelsList.push_back(&mesaDados);
@@ -930,6 +935,8 @@ int main()
 
 	
 	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) battingAnimation[i] = 0.0f;
+
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
@@ -948,15 +955,11 @@ int main()
 	GLint activeSkybox = -1;
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
-	GLboolean testingBowling = false;
-
+	GLboolean battingReverse = false;
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
 
-	if (testingBowling) {
-		bowlingActive = true;
-		camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
-	}
+
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 
@@ -1024,13 +1027,13 @@ int main()
 
 		if (isMorning==true) {
 			sunIntensity = sunIntensity + sunIncrement;
-			sunX = sunIntensity * 0.0000001f / sunIntensityMax;
+			sunX = sin(sunIntensity);
 			sunY = -sunIntensity / sunIntensityMax;
 			if (sunIntensity >= sunIntensityMax) isMorning = false;
 		}
 		else {
 			sunIntensity = sunIntensity - sunIncrement;
-			sunX = -sunIntensity / sunIntensityMax;
+			sunX = -sin(sunIntensity);
 			sunY = -sunIntensity / sunIntensityMax;
 			if (sunIntensity <= sunIntensityMin) isMorning = true;
 		}
@@ -1220,7 +1223,7 @@ int main()
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList, mainWindow.getEPressed(),posicionModelo, bowlingAnimation, deltaTime);
 
-		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList);
+		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, &battingReverse);
 
 
 		

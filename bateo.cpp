@@ -1,15 +1,34 @@
 #include "bateo.h"
 #include "boliche.h"
+#include "utilities.h"
 
-
-void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> meshList, std::vector<Texture*> listaTexturas) {
+void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> meshList, std::vector<Texture*> listaTexturas, GLfloat* battingAnimationLane, GLfloat deltaTime, GLboolean ePressed , glm::vec3 modelPosition, GLboolean* battingReverse) {
 	glm::vec3 position = glm::vec3(90.0f, 0.0f, -300.0f);
 	renderBattingBuilding(model, uniformModel, meshList, listaTexturas, position);
 	float z = 35.0f;
 	for (int i = 0;i < 4;i++) {
 		renderCerberusPitcher(model, uniformModel, *listaModelos[0], glm::vec3(position.x + 45.0f, position.y + 4.5f, position.z + z));
+		if (battingAnimationLane[i] != 0.0f) {
+			if (!*battingReverse) {
+				battingAnimationLane[i] -= 0.5f * deltaTime;
+				if (battingAnimationLane[i] <= -40.0f) {
+					*battingReverse = true;
+				}
+			}
+			else {
+				battingAnimationLane[i] += 0.5f * deltaTime;
+				if (battingAnimationLane[i] >= 0.0f) {
+					*battingReverse = false;
+					battingAnimationLane[i] = 0.0f;
+				}
+			}
+			renderOrbBall(model, uniformModel, *listaModelos[1], glm::vec3(position.x + 40.0f + battingAnimationLane[i], position.y + 4.5f, position.z + z));
+		}
+		
 		renderLava(model, uniformModel, *meshList[2], *listaTexturas[2], glm::vec3(position.x + 20.0f, position.y + .1f, position.z + z));
 		renderTerminal(model, uniformModel, *listaModelos[3], glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z + 8.0f));
+		renderFeedbacker(model, uniformModel, *listaModelos[2], *listaModelos[6], glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z), battingAnimationLane[i]);
+		if (twoPointsDistance(modelPosition, glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z + 8.0f)) < 5.0f && ePressed) battingAnimationLane[i] = -0.1;
 		float xReja = 0.0f;
 		for (int u = 0;u < 4;u++) {
 			renderReja(model, uniformModel, *listaModelos[4], glm::vec3(position.x + 6.0f + xReja, position.y, position.z + z + 8.0f));
@@ -68,17 +87,22 @@ void renderBattingBuilding(glm::mat4 model, GLuint uniformModel, std::vector<Mes
 
 }
 
-void renderFeedbacker(glm::mat4 model, GLuint uniformModel, Model& feedbacker) {
+void renderFeedbacker(glm::mat4 model, GLuint uniformModel, Model& feedbackerUpper, Model& feedbackerLower, glm::vec3 position ,GLfloat animationVariable) {
 	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(0.0f, 13.0f, 0.0));
+	model = glm::translate(model, position);
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::scale(model, glm::vec3(20.f, 20.f, 20.f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	feedbacker.RenderModel();
+	feedbackerUpper.RenderModel();
+
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f,-.08f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	feedbackerLower.RenderModel();
 }
 
 void renderOrbBall(glm::mat4 model, GLuint uniformModel, Model& cerberusOrb, glm::vec3 position) {
 	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
+	model = glm::translate(model,position);
 	model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	cerberusOrb.RenderModel();
