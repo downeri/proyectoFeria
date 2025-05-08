@@ -14,6 +14,9 @@
 #include "Texture.h"
 #include "Sphere.h"
 #include "Model.h"
+#include "Mesh.h"
+#include "Camera.h"
+#include "Window.h"
 
 #include "Material.h"
 

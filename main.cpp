@@ -227,6 +227,7 @@ static double limitFPS = 1.0 / 60.0;
 DirectionalLight mainLight;
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
+PointLight lucesPuntuales[MAX_POINT_LIGHTS];
 
 
 SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -745,21 +746,189 @@ int main()
 	
 	//Point Lights
 	unsigned int pointLightCount = 0;
+
 	pointLights[0] = PointLight(0.0f, .7f, 0.7f,
 		0.0f, 1.0f,
 		-0.0f, 2.f, 1.5f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 45.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[2] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 15.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[3] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -15.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[4] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -45.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[5] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, 0.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[6] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -40.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[7] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -75.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[8] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -100.0f,
+		0.5f, 0.2f, 0.0f);
+	pointLightCount++;
+
+	pointLights[9] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -155.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[10] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -210.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[11] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -245.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[12] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -285.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[13] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -335.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[14] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -375.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+
+	unsigned int contadorLucesPuntuales = 0;
+
+	lucesPuntuales[0] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 45.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[1] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 15.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[2] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -15.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[3] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -45.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[4] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, 0.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[5] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -40.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[6] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -75.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[7] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -100.0f,
+		0.5f, 0.2f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[8] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -155.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[9] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -210.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[10] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -245.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[11] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -285.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[12] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -335.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[13] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -375.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+	
+
 	//Spotlights
 	unsigned int spotLightCount = 0;
 
 	
-
-	//se crean mas luces puntuales y spotlight 
-	int contPointLights = pointLightCount;
-	int contSpotLights = spotLightCount;
-
 	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -803,10 +972,6 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
-
-		
-		contPointLights = pointLightCount;
-		contSpotLights = spotLightCount;
 
 		//Set Active Camera
 		activeCameraIndex = mainWindow.getCameraIndex();
@@ -899,22 +1064,30 @@ int main()
 			skybox = Skybox(skyboxFaces);
 		}
 
-		//Spotlights
-	
 		
-
-
-		//Point Lights
-	
-		
-		
-
 		//informaci�n al shader de fuentes de iluminaci�n
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetSpotLights(spotLights, contSpotLights);
-		shaderList[0].SetPointLights(pointLights, contPointLights);
 
-		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		if (mainWindow.getOrbLight()) {
+			if (sunIntensity < 0.2)
+				shaderList[0].SetPointLights(pointLights, pointLightCount);
+			else if (sunIntensity < 0.27)
+				shaderList[0].SetPointLights(pointLights, pointLightCount - 10);
+			else
+				shaderList[0].SetPointLights(pointLights, pointLightCount - 14);
+		}
+		else {
+			if (sunIntensity < 0.2)
+				shaderList[0].SetPointLights(lucesPuntuales, contadorLucesPuntuales);
+			else if (sunIntensity < 0.27)
+				shaderList[0].SetPointLights(lucesPuntuales, contadorLucesPuntuales - 10);
+			else
+				shaderList[0].SetPointLights(lucesPuntuales, contadorLucesPuntuales - 14);
+		}
+
+		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		
+		
 
 
 		//Matrices
@@ -928,6 +1101,8 @@ int main()
 		float distanciaDetras = -7.0f;
 		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
 		posicionModelo.y = cameraPos.y - 1.0f;
+
+		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", posicionModelo.x, posicionModelo.y, posicionModelo.z);
 
 		//********************* Pisos *******************
 		//Piso
@@ -991,7 +1166,7 @@ int main()
 		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche);
 				
 		// Juego de Dardos
-		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche);
+		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 		
 		// Puesto de Pan
 		renderPuestoPan(model, uniformModel, breadModelsList);
@@ -1177,7 +1352,8 @@ int main()
 
 
 		//Minos Prime Avatar Animado
-		pointLights[0].MoveLight(glm::vec3(posicionModelo.x, posicionModelo.y + .5f, posicionModelo.z));
+		if(mainWindow.getOrbLight())
+			pointLights[0].MoveLight(glm::vec3(posicionModelo.x, posicionModelo.y + .5f, posicionModelo.z));
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
 		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
 		
