@@ -79,9 +79,12 @@ std::vector<Texture*> battingTextureList;
 
 std::vector<Camera*> cameraList;
 
+
 GLfloat bowlingAnimation[7];
 GLfloat battingAnimation[4];
 GLfloat parryAnimation[4];
+GLboolean battingReverse[4];
+GLboolean parryReverse[4];
 
 Camera camera;
 Camera birdsEyeViewCamera;
@@ -959,6 +962,9 @@ int main()
 	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
 	for (int i = 0;i < 4;i++) battingAnimation[i] = 0.0f;
 	for (int i = 0;i < 4;i++) parryAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) battingReverse[i] = false;
+	for (int i = 0;i < 4;i++) parryReverse[i] = false;
+
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0, signPosition = 0;
@@ -978,8 +984,7 @@ int main()
 	GLint activeSkybox = -1;
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
-	GLboolean battingReverse = false;
-	GLboolean parryReverse = false;
+	
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
 	glm::vec2 toffsetSign = glm::vec2(0.0f, 0.0f);
@@ -1277,7 +1282,7 @@ int main()
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList, mainWindow.getEPressed(),posicionModelo, bowlingAnimation, deltaTime);
 
-		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, &battingReverse, parryAnimation, &parryReverse);
+		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, battingReverse, parryAnimation, parryReverse);
 
 
 		
@@ -1421,6 +1426,8 @@ int main()
 		meshList[4]->RenderMesh();
 		toffsetSign = glm::vec2(0.0f, 0.0f);
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
 		//puesto de pizza
 		renderPuestoPizzaZim(model, uniformModel, Puestopizzazim_M);
 

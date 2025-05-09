@@ -9,16 +9,16 @@ void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 	for (int i = 0;i < 4;i++) {
 		renderCerberusPitcher(model, uniformModel, *listaModelos[0], glm::vec3(position.x + 45.0f, position.y + 4.5f, position.z + z));
 		if (battingAnimationLane[i] != 0.0f) {
-			if (!*battingReverse) {
+			if (!battingReverse[i]) {
 				battingAnimationLane[i] -= 0.5f * deltaTime;
 				if (battingAnimationLane[i] <= -30.0f) parryAnimation[i] = 0.001f;
-				if (battingAnimationLane[i] <= -40.0f) *battingReverse = true;
+				if (battingAnimationLane[i] <= -40.0f) battingReverse[i] = true;
 
 			}
 			else {
 				battingAnimationLane[i] += 0.5f * deltaTime;
 				if (battingAnimationLane[i] >= 0.0f) {
-					*battingReverse = false;
+					battingReverse[i] = false;
 					battingAnimationLane[i] = 0.0f;
 				}
 			}
@@ -27,16 +27,16 @@ void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> lis
 		
 		renderLava(model, uniformModel, *meshList[2], *listaTexturas[2], glm::vec3(position.x + 20.0f, position.y + .1f, position.z + z));
 		renderTerminal(model, uniformModel, *listaModelos[3], glm::vec3(position.x - 2.0f, position.y + 3.5f, position.z + z + 8.0f));
-		if (parryAnimation[i] > 0 && !*parryReverse) { 
+		if (parryAnimation[i] > 0 && !parryReverse[i]) {
 			parryAnimation[i] += 7.0f * deltaTime;
-			if (parryAnimation[i] >= 140.0f) *parryReverse=true;
+			if (parryAnimation[i] >= 140.0f) parryReverse[i] = true;
 		}
 		
-		if (parryAnimation[i] > 0 && *parryReverse) { 
+		if (parryAnimation[i] > 0 && parryReverse[i]) {
 			parryAnimation[i] -= 7.0f * deltaTime;
 			if (parryAnimation[i] <= 0.0f) { 
 				parryAnimation[i] = 0.0f;
-				*parryReverse=false;
+				parryReverse[i] = false;
 			}
 		}
 		
