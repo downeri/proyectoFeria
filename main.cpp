@@ -39,7 +39,10 @@
 #include "PuestoPizzaZim.h"
 #include "PuestoHachaZim.h"
 #include "PuestoToposZim.h"
+#include "GirNPC.h"
+#include "cerdoTOPO.h"
 
+extern bool lanzamientoEnProgreso;
 
 #include "puestoPan.h"
 #include "puestoRefrescos.h"
@@ -187,6 +190,10 @@ Model NPCbrazoglobos_M;
 Model CasaZim_M;
 Model Hachacasazim_M;
 Model Hacha2casazim_M;
+Model troncoZIM_M;
+Model cabezaZIM_M;
+Model brazo1ZIM_M;
+Model cerdoTOPO_M;
 
 Skybox skybox;
 
@@ -613,7 +620,14 @@ int main()
 	CasaZim_M.LoadModel("Models/casazimhachas.obj");
 	Hachacasazim_M = Model();
 	Hachacasazim_M.LoadModel("Models/hachacasazim1.obj");
-	
+	troncoZIM_M = Model();
+	troncoZIM_M.LoadModel("Models/troncoZIM.obj");
+	cabezaZIM_M = Model();
+	cabezaZIM_M.LoadModel("Models/cabezaZIM.obj");
+	brazo1ZIM_M = Model();
+	brazo1ZIM_M.LoadModel("Models/brazo1ZIM.obj");
+	cerdoTOPO_M = Model();
+	cerdoTOPO_M.LoadModel("Models/cerdoTOPO.obj");
 
 
 	bowlingModelsList.push_back(&idol);
@@ -721,7 +735,6 @@ int main()
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 
-	
 	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
 	{
@@ -970,6 +983,26 @@ int main()
 		renderBrazoNPCGlobos(modelauxGlobos, uniformModel, NPCbrazoglobos_M, now);
 
 
+		// --- DETECCIÓN ÚNICA DE TECLA E ---
+		static bool ePresionada = false;          // recuerda si la E estaba hundida
+
+		bool eAhora = mainWindow.getsKeys()[GLFW_KEY_E];
+
+		if (eAhora && !ePresionada &&            // se acaba de presionar
+			cameraPos.x > 15.0f && cameraPos.x < 100.0f &&
+			cameraPos.z > -192.0f && cameraPos.z < -148.0f &&
+			!lanzarHacha && !lanzamientoEnProgreso)
+		{
+			lanzarHacha = true;
+			lanzamientoEnProgreso = true;
+			std::cout << "¡LANZAMIENTO ACTIVADO!\n";
+		}
+
+		ePresionada = eAhora;                     // actualiza estado
+		// -----------------------------------
+
+
+
 
 		//PUESTO HACHA.............................................
 		//puesto hacha zim
@@ -989,6 +1022,8 @@ int main()
 		renderHachaLanzada(modelauxzim, uniformModel, factorLanzamiento);
 		//Casa zim
 		renderCasaHachaZim(model, uniformModel, CasaZim_M, Hachacasazim_M, now);
+		//hacha voladora
+		renderHachaVoladora(uniformModel, Hachacasazim_M, deltaTime, camera);
 
 
 
@@ -1013,8 +1048,21 @@ int main()
 		renderNPCBrazo1PuestoPizzaZim(model, uniformModel, NPCBrazo1pizza_M, now);
 
 
-
-
+		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   // posición que quieras
+			uniformModel,
+			deltaTime,
+			now);
+		//cerditotopo
+		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, -0.02f), uniformModel, now, 0.0f);
+		
+		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, -1.3f), uniformModel, now, 0.3f);
+		
+		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, 1.1f), uniformModel, now, 0.6f);
+		
+		renderCerdoTOPO(glm::vec3(-19.0f, 3.0f, 1.1f), uniformModel, now, 0.9f);
+		/*
+		renderCerdoTOPO(glm::vec3(32.0f, 0.0f, -240.0f), uniformModel, now, 1.2f);
+		*/
 
 		//************************************Transparentes **********************************
 		

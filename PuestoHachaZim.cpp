@@ -1,5 +1,14 @@
 #include "PuestoHachaZim.h"
 #include <gtc/type_ptr.hpp>
+#include "Window.h"
+#include "Camera.h"
+#include <iostream>        
+
+
+bool lanzarHacha = false;
+float movimientoHacha = 0.0f;
+glm::vec3 posicionInicioHacha = glm::vec3(30.5f, 1.35f, -198.0f); 
+bool lanzamientoEnProgreso = false;
 
 
 void renderTiroHachaZim(glm::mat4 model, GLuint uniformModel, Model& puestoHacha) {
@@ -42,11 +51,11 @@ extern Model NPChacha_M;
 void renderHachaLanzada(glm::mat4 modelNPC, GLuint uniformModel, float factor) {
     glm::mat4 model = modelNPC;
 
-    // Posición relativa al cuerpo (mano)
+    // Posición relativa al cuerpo 
     model = glm::translate(model, glm::vec3(-0.5f, 1.35f, 0.65f));
 
-    // Movimiento vertical (lanza hacia arriba)
-    float altura = factor * 2.0f;  // Ajusta la altura máxima
+    // Movimiento vertical
+    float altura = factor * 2.0f;  
     model = glm::translate(model, glm::vec3(0.0f, altura, 0.0f));
 
     // Escalado
@@ -73,7 +82,7 @@ void renderCasaHachaZim(glm::mat4& model, GLuint uniformModel, Model& casaZim, M
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelCasa));
     casaZim.RenderModel();
 
-    float angulo = sin(now * 4.0f) * glm::radians(45.0f);  // MISMO ángulo para ambas
+    float angulo = sin(now * 4.0f) * glm::radians(45.0f); 
 
     // Hacha 1
     glm::mat4 modelHacha1 = glm::translate(modelCasa, glm::vec3(0.7f, 1.8f, 0.0f));
@@ -91,6 +100,70 @@ void renderCasaHachaZim(glm::mat4& model, GLuint uniformModel, Model& casaZim, M
     hachaZim.RenderModel();
 
 }
+
+void renderHachaVoladora(GLuint uniformModel, Model& hacha,
+
+    float deltaTime, Camera& cam)
+{
+    deltaTime = glm::clamp(deltaTime, 0.0f, 0.016f); 
+
+    if (!lanzarHacha) return;
+
+    static glm::vec3 origen;
+    static bool  iniciado = false;
+    static float avance = 0.0f;
+    static float spin = 0.0f;
+
+    if (!iniciado) {
+        glm::vec3 frente = glm::normalize(cam.getCameraDirection());
+        origen = cam.getCameraPosition() + frente * 10.5f;
+        origen.y = cam.getCameraPosition().y - 0.5f;
+        iniciado = true;
+        avance = 0.0f;
+        spin = 0.0f;
+    }
+
+    const float velocidad = 17.5f;
+    avance += velocidad * deltaTime;
+
+    glm::vec3 frenteXZ = glm::normalize(glm::vec3(
+        cam.getCameraDirection().x, 0.0f,
+        cam.getCameraDirection().z));
+    glm::vec3 pos = origen + frenteXZ * avance;
+
+    const float vueltasPorSegundo = 1.6f;
+    spin += vueltasPorSegundo * glm::two_pi<float>() * deltaTime;
+
+    // ---------- Matriz del modelo ----------
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, pos);
+
+    // (a) Rotación fija: 90° en Y para modelos con hoja en +X
+    model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
+
+    // (b) Yaw hacia la trayectoria
+    float yaw = atan2(frenteXZ.x, frenteXZ.z);
+    model = glm::rotate(model, yaw, glm::vec3(0, 1, 0));
+
+    // (c) Giro longitudinal
+    model = glm::rotate(model, spin, glm::vec3(0, 0, 1));
+
+    // (d) Escala
+    model = glm::scale(model, glm::vec3(3.5f));
+
+    glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+    hacha.RenderModel();
+
+    if (avance >= 30.0f) {
+        lanzarHacha = false;
+        lanzamientoEnProgreso = false;
+        iniciado = false;
+    }
+}
+
+
+
+
 
 
 
