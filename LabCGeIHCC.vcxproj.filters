@@ -106,6 +106,12 @@
     <ClInclude Include="pichu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GirNPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cerdoTOPO.h">
+       <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -204,6 +210,12 @@
     </ClCompile>
     <ClCompile Include="pichu.cpp">
       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GirNPC.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cerdoTOPO.cpp">
+       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="utilities.cpp">
       <Filter>Resource Files</Filter>

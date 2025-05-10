@@ -25,3 +25,6 @@ void renderPuestoToposZim(glm::mat4 model, GLuint uniformModel, Model& puestoTop
 void renderNPCPuestoToposZim(glm::mat4 model, GLuint uniformModel, Model& npcToposCuerpo);
 
 void renderNPCMartilloPuestoToposZim(glm::mat4 model, GLuint uniformModel, Model& npcMartilloTopos);
+
+
+
