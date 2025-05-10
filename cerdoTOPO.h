@@ -1,4 +1,3 @@
-// cerdoTOPO.h
 #pragma once
 #include <glm.hpp>
 #include <glew.h>

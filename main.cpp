@@ -1321,12 +1321,11 @@ int main()
 		renderBrazoNPCGlobos(modelauxGlobos, uniformModel, NPCbrazoglobos_M, now);
 
 
-		// --- DETECCIÓN ÚNICA DE TECLA E ---
-		static bool ePresionada = false;          // recuerda si la E estaba hundida
+		static bool ePresionada = false;          
 
 		bool eAhora = mainWindow.getsKeys()[GLFW_KEY_E];
 
-		if (eAhora && !ePresionada &&            // se acaba de presionar
+		if (eAhora && !ePresionada &&            
 			cameraPos.x > 15.0f && cameraPos.x < 100.0f &&
 			cameraPos.z > -192.0f && cameraPos.z < -148.0f &&
 			!lanzarHacha && !lanzamientoEnProgreso)
@@ -1335,7 +1334,7 @@ int main()
 			lanzamientoEnProgreso = true;
 		}
 
-		ePresionada = eAhora;                     // actualiza estado
+		ePresionada = eAhora;                    
 		// -----------------------------------
 
 
@@ -1351,7 +1350,7 @@ int main()
 		modelauxzim = glm::scale(modelauxzim, glm::vec3(2.5f, 2.5f, 2.5f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelauxzim));
-		NPChachazim_M.RenderModel(); // cuerpo Dib
+		NPChachazim_M.RenderModel(); 
 		float factorLanzamiento = (sin(now * 2.0f) + 1.0f) / 2.0f;
 		//NPC brazo
 		renderNPCBrazoDib(modelauxzim, uniformModel, NPCDibbrazo_M, factorLanzamiento);
@@ -1385,7 +1384,7 @@ int main()
 		renderNPCBrazo1PuestoPizzaZim(model, uniformModel, NPCBrazo1pizza_M, now);
 
 
-		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   // posición que quieras
+		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   
 			uniformModel,
 			deltaTime,
 			now);
@@ -1397,9 +1396,7 @@ int main()
 		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, 1.1f), uniformModel, now, 0.6f);
 		
 		renderCerdoTOPO(glm::vec3(-19.0f, 3.0f, 1.1f), uniformModel, now, 0.9f);
-		/*
-		renderCerdoTOPO(glm::vec3(32.0f, 0.0f, -240.0f), uniformModel, now, 1.2f);
-		*/
+		
 
 		//************************************Transparentes **********************************
 		

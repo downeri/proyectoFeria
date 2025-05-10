@@ -16,7 +16,6 @@ void renderHachaLanzada(glm::mat4 modelNPC, GLuint uniformModel, float tiempo);
 
 void renderCasaHachaZim(glm::mat4& model, GLuint uniformModel, Model& casaZim, Model& hachaZim, float now);
 
-// Animación de hacha lanzada por el jugador
 void renderHachaVoladora(GLuint uniformModel, Model& hacha, float deltaTime, Camera& cam);
 
 
