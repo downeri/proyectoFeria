@@ -998,6 +998,9 @@ int main()
 	GLint activeSkybox = -1;
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
+	GLboolean door = false;
+	GLboolean doorMovement = false;
+	GLfloat doorAngle = 0.0f;
 	
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
@@ -1171,6 +1174,7 @@ int main()
 		//Matrices
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
+		glm::mat4 modelaux2(1.0);
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -1179,8 +1183,6 @@ int main()
 		float distanciaDetras = -7.0f;
 		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
 		posicionModelo.y = cameraPos.y - 1.0f;
-
-		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", posicionModelo.x, posicionModelo.y, posicionModelo.z);
 
 		//********************* Pisos *******************
 		//Piso
@@ -1331,7 +1333,6 @@ int main()
 		{
 			lanzarHacha = true;
 			lanzamientoEnProgreso = true;
-			std::cout << "¡LANZAMIENTO ACTIVADO!\n";
 		}
 
 		ePresionada = eAhora;                     // actualiza estado
@@ -1418,15 +1419,32 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultrakillArch.RenderModel();
 
+		if (!doorMovement && mainWindow.getEPressed() && (posicionModelo.x > -8.0f && posicionModelo.x < 8.0f) && (posicionModelo.z > 100.0f && posicionModelo.z < 150.0f)) {
+			doorMovement = true;
+			door = !door;
+		}			
+
+		if (door && doorAngle < 90.0f)
+			doorAngle += 1.0f * deltaTime;
+		else if (!door && doorAngle > 0.0f)
+			doorAngle -= 1.0f * deltaTime;
+		else
+			doorMovement = false;
+
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 4.6f));
+		modelaux2 = model;
+		model = glm::rotate(model, glm::radians(-doorAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultrakillDoor.RenderModel();
-
+		model = modelaux2;
 
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -7.5f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux2 = model;
+		model = glm::rotate(model, glm::radians(doorAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultrakillDoor.RenderModel();
+		model = modelaux2;
 
 
 		if (signFrameTime >= 40.0f) {
