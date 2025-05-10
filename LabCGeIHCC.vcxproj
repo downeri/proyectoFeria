@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="snoopySanta.h" />
     <ClInclude Include="bateo.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="cerdoTOPO.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="boliche.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="PuestoHachaZim.h" />
+    <ClInclude Include="utilities.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="woodstock.h" />
   </ItemGroup>
@@ -78,11 +80,13 @@
     <ClCompile Include="puestoRefrescos.cpp" />
     <ClCompile Include="Shader_light.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="snoopySanta.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="boliche.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PuestoHachaZim.cpp" />
+    <ClCompile Include="utilities.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="woodstock.cpp" />
   </ItemGroup>

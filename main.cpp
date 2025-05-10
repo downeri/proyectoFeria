@@ -50,6 +50,7 @@ extern bool lanzamientoEnProgreso;
 #include "minosPrime.h"
 #include "woodstock.h"
 #include "pichu.h"
+#include "snoopySanta.h"
 
 
 const float toRadians = 3.14159265f / 180.0f;
@@ -59,7 +60,7 @@ std::vector<Mesh*> meshList;
 std::vector<Mesh*> bowlingMeshList;
 std::vector<Mesh*> battingMeshList;
 std::vector<Shader> shaderList;
-
+std::vector<glm::vec2> messageCoordinates;
 
 std::vector<Model*> diceModelsList;
 std::vector<Model*> dartsModelsList;
@@ -79,7 +80,31 @@ std::vector<Model*> minosVeinsModelsList;
 std::vector<Texture*> bowlingTextureList;
 std::vector<Texture*> battingTextureList;
 
+std::vector<Camera*> cameraList;
+
+
+GLfloat bowlingAnimation[7];
+GLfloat battingAnimation[4];
+GLfloat parryAnimation[4];
+GLboolean battingReverse[4];
+GLboolean parryReverse[4];
+
 Camera camera;
+Camera birdsEyeViewCamera;
+Camera bowlingCamera;
+Camera antojitosCamera;
+Camera axesCamera;
+Camera sodaCamera;
+Camera battingCamera;
+Camera baloonCamera;
+Camera snoopyHouseCamera;
+Camera esquitesCamera;
+Camera diceCamera;
+Camera pizzaCamera;
+Camera dartsCamera;
+Camera breadCamera;
+Camera whackAMoleCamera;
+
 
 //Texturas
 Texture brickTexture;
@@ -91,7 +116,7 @@ Texture blackTexture;
 Texture battingFloor;
 Texture battingWalls;
 Texture lavaTexture;
-
+Texture ultrakillFont;
 
 
 
@@ -106,12 +131,14 @@ Model alaDerechaWoodstock;
 Model alaIzquierdaWoodstock;
 Model snoopy;
 Model snoopyHouse;
+Model snoopySanta;
 Model banca;
 Model basura;
 Model lampara;
 Model minos;
 Model idol;
-Model feedbacker;
+Model feedbackerUpper;
+Model feedbackerLower;
 Model cerberus;
 Model venas;
 Model corazonMinos;
@@ -130,6 +157,8 @@ Model jigglypuff;
 Model squirtle;
 Model charmander;
 Model pichu;
+Model ash;
+Model brock;
 Model carpaPokemon;
 Model chandelier;
 Model mesa;
@@ -168,6 +197,9 @@ Model rejaBateo;
 Model v1Ultrakill;
 Model v2Ultrakill;
 Model ultrakillFountain;
+
+Model ultrakillDoor;
+Model ultrakillArch;
 
 //Modelos zim
 Model Puestogloboszim_M;
@@ -211,6 +243,7 @@ static double limitFPS = 1.0 / 60.0;
 DirectionalLight mainLight;
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
+PointLight lucesPuntuales[MAX_POINT_LIGHTS];
 
 
 SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -280,6 +313,7 @@ void CreateObjects()
 		0, 2, 3
 	};
 
+
 	GLfloat floorVertices[] = {
 		-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 		10.0f, 0.0f, -10.0f,	10.0f, 0.0f,	0.0f, -1.0f, 0.0f,
@@ -322,6 +356,14 @@ void CreateObjects()
 	10.0f, 0.0f, 10.0f,		2.0f, 1.0f,	0.0f, -1.0f, 0.0f
 	};
 
+	GLfloat signVertices[] = {
+		-0.5f, 0.0f, 0.5f,		0.01f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, 0.5f,		0.1f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, -0.5f,		0.1f, .9f,		0.0f, -1.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,		0.01f, .9f,		0.0f, -1.0f, 0.0f,
+
+	};
+
 	Mesh *obj0 = new Mesh();
 	obj0->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj0);
@@ -341,7 +383,6 @@ void CreateObjects()
 	Mesh* obj4 = new Mesh();
 	obj4->CreateMesh(bowlingFloorVertices, floorIndices, 32, 6);
 	bowlingMeshList.push_back(obj4);
-	meshList.push_back(obj3);
 
 	Mesh* obj5 = new Mesh();
 	obj5->CreateMesh(bowlingWallsVertices, wallsIndices, 32, 6);
@@ -355,6 +396,10 @@ void CreateObjects()
 	Mesh* obj7 = new Mesh();
 	obj7->CreateMesh(lavaVertices, floorIndices, 32, 6);
 	battingMeshList.push_back(obj7);
+
+	Mesh* obj8 = new Mesh();
+	obj8->CreateMesh(signVertices, wallsIndices, 32, 6);
+	meshList.push_back(obj8);
 
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
 
@@ -377,7 +422,39 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.6f, 0.5f);
+	//Camaras
+	camera = Camera(glm::vec3(0.0f, 6.0f, 170.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.6f, 0.5f);
+	birdsEyeViewCamera = Camera(glm::vec3(0.0f, 200.0f, 130.0f), glm::vec3(.0f, 0.0f, -1.0f), 0.0f, -90.0f, 0.0f, 0.0f);
+	bowlingCamera = Camera(glm::vec3(-50.0f, 50.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	antojitosCamera = Camera(glm::vec3(-.5f, 4.0f, -130.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	axesCamera = Camera(glm::vec3(.5f, 4.0f, -170.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	sodaCamera = Camera(glm::vec3(.5f, 4.0f, -220.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	battingCamera = Camera(glm::vec3(-5.f, 4.0f, -300.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	baloonCamera = Camera(glm::vec3(-5.f, 4.0f, -380.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	baloonCamera = Camera(glm::vec3(-5.f, 4.0f, -380.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
+	snoopyHouseCamera = Camera(glm::vec3(-5.f, 4.0f, -330.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	esquitesCamera = Camera(glm::vec3(-5.f, 4.0f, -300.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	diceCamera = Camera(glm::vec3(10.f, 4.0f, -250.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	pizzaCamera = Camera(glm::vec3(-5.f, 4.0f, -180.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	dartsCamera = Camera(glm::vec3(15.f, 4.0f, -130.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	breadCamera = Camera(glm::vec3(0.f, 4.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+	whackAMoleCamera = Camera(glm::vec3(0.f, 4.0f, -5.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.0f, 0.0f);
+
+	cameraList.push_back(&camera);
+	cameraList.push_back(&birdsEyeViewCamera);
+	cameraList.push_back(&bowlingCamera);
+	cameraList.push_back(&antojitosCamera);
+	cameraList.push_back(&axesCamera);
+	cameraList.push_back(&sodaCamera);
+	cameraList.push_back(&battingCamera);
+	cameraList.push_back(&baloonCamera);
+	cameraList.push_back(&snoopyHouseCamera);
+	cameraList.push_back(&esquitesCamera);
+	cameraList.push_back(&diceCamera);
+	cameraList.push_back(&pizzaCamera);
+	cameraList.push_back(&dartsCamera);
+	cameraList.push_back(&breadCamera);
+	cameraList.push_back(&whackAMoleCamera);
 
 	//Carga de texturas
 	brickTexture = Texture("Textures/calle.jpg");
@@ -387,9 +464,11 @@ int main()
 	battingFloor = Texture("Textures/floordecoration8b.png");
 	battingWalls = Texture("Textures/floorpattern2n.png");
 	lavaTexture = Texture("Textures/LavaSingle.png");
-
-
-
+	ultrakillFont = Texture("Textures/ultrakillFont.png");
+	
+	
+	
+	ultrakillFont.LoadTextureA();
 	lavaTexture.LoadTextureA();
 	battingWalls.LoadTextureA();
 	battingFloor.LoadTextureA();
@@ -416,12 +495,14 @@ int main()
 	alaIzquierdaWoodstock = Model();
 	snoopy = Model();
 	snoopyHouse = Model();
+	snoopySanta = Model();
 	banca = Model();
 	basura = Model();
 	lampara = Model();
 	minos = Model();
 	idol = Model();
-	feedbacker = Model();
+	feedbackerUpper = Model();
+	feedbackerLower = Model();
 	cerberus = Model();
 	venas = Model();
 	corazonMinos = Model();
@@ -448,6 +529,8 @@ int main()
 	squirtle = Model();
 	charmander = Model();
 	pichu = Model();
+	ash = Model();
+	brock = Model();
 
 	dardo = Model();
 	mesa = Model();
@@ -486,6 +569,11 @@ int main()
 	v2Ultrakill = Model();
 	ultrakillFountain = Model();
 
+	ultrakillArch = Model();
+	ultrakillDoor = Model();
+
+	ultrakillArch.LoadModel("Models/ultrakillArch.obj");
+	ultrakillDoor.LoadModel("Models/ultrakillDoor.obj");
 	ultrakillFountain.LoadModel("Models/ultrakillFountain.obj");
 	v2Ultrakill.LoadModel("Models/UltraV2.obj");
 	v1Ultrakill.LoadModel("Models/UltraV1.obj");
@@ -526,7 +614,8 @@ int main()
 	corazonMinos.LoadModel("Models/corazon.obj");
 	venas.LoadModel("Models/venas.obj");
 	cerberus.LoadModel("Models/cerberus.obj");
-	feedbacker.LoadModel("Models/feedbacker.obj");
+	feedbackerLower.LoadModel("Models/feedbackerLower.obj");
+	feedbackerUpper.LoadModel("Models/feedbackerUpper.obj");
 	idol.LoadModel("Models/idol.obj");
 	minos.LoadModel("Models/minos.obj");
 	maurice.LoadModel("Models/maurice.obj");
@@ -536,6 +625,7 @@ int main()
 	alaIzquierdaWoodstock.LoadModel("Models/alaIzquierdaWoodstock.obj");
 	snoopy.LoadModel("Models/snoopy.obj");
 	snoopyHouse.LoadModel("Models/snoopyHouse.obj");
+	snoopySanta.LoadModel("Models/snoopySanta.obj");
 	banca.LoadModel("Models/banca.obj");
 	basura.LoadModel("Models/basura.obj");
 	lampara.LoadModel("Models/lampara.obj");
@@ -551,6 +641,8 @@ int main()
 	squirtle.LoadModel("Models/squirtle.obj");
 	charmander.LoadModel("Models/charmander.obj");
 	pichu.LoadModel("Models/pichu.obj");
+	ash.LoadModel("Models/ash.obj");
+	brock.LoadModel("Models/brock.obj");
 	carpaPokemon.LoadModel("Models/carpaPokemon.obj");
 	puestoPan.LoadModel("Models/puestoPan.obj");
 	puestoRefrescos.LoadModel("Models/puestoRefrescos.obj");
@@ -643,10 +735,11 @@ int main()
 
 	battingModelsList.push_back(&cerberus);
 	battingModelsList.push_back(&cerberusOrb);
-	battingModelsList.push_back(&feedbacker);
+	battingModelsList.push_back(&feedbackerUpper);
 	battingModelsList.push_back(&terminal);
 	battingModelsList.push_back(&rejaBateo);
 	battingModelsList.push_back(&v1Ultrakill);
+	battingModelsList.push_back(&feedbackerLower);
 
 	diceModelsList.push_back(&charlieCarpa);
 	diceModelsList.push_back(&mesaDados);
@@ -661,6 +754,7 @@ int main()
 	dartsModelsList.push_back(&charmander);
 	dartsModelsList.push_back(&dardo);
 	dartsModelsList.push_back(&mesa);
+	dartsModelsList.push_back(&ash);
 
 	breadModelsList.push_back(&puestoPan);
 	breadModelsList.push_back(&snoopy);
@@ -669,6 +763,7 @@ int main()
 	sodaModelsList.push_back(&snoopy);
 
 	pokemonBalloonsModelsList.push_back(&globosPokemon);
+	pokemonBalloonsModelsList.push_back(&brock);
 
 	woodstockModelsList.push_back(&snoopyHouse);
 	woodstockModelsList.push_back(&snoopy);
@@ -696,44 +791,255 @@ int main()
 	//Point Lights
 	unsigned int pointLightCount = 0;
 
+	pointLights[0] = PointLight(0.0f, .7f, 0.7f,
+		0.0f, 1.0f,
+		-0.0f, 2.f, 1.5f,
+		0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 45.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[2] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 15.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[3] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -15.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[4] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -45.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[5] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, 0.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[6] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -40.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[7] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -75.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[8] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -100.0f,
+		0.5f, 0.2f, 0.0f);
+	pointLightCount++;
+
+	pointLights[9] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -155.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[10] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -210.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[11] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -245.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[12] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -285.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[13] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -335.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+	pointLights[14] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -375.0f,
+		0.5f, 0.15f, 0.0f);
+	pointLightCount++;
+
+
+	unsigned int contadorLucesPuntuales = 0;
+
+	lucesPuntuales[0] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 45.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[1] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, 15.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[2] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -15.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[3] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, -113.0f, -45.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[4] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, 0.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[5] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -40.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[6] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -75.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[7] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -100.0f,
+		0.5f, 0.2f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[8] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -155.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[9] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -210.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[10] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -245.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[11] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -285.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[12] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		8.0f, 8.0f, -335.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+
+	lucesPuntuales[13] = PointLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		-8.0f, 8.0f, -375.0f,
+		0.5f, 0.15f, 0.0f);
+	contadorLucesPuntuales++;
+	
+
 	//Spotlights
 	unsigned int spotLightCount = 0;
 
 	
-
-	//se crean mas luces puntuales y spotlight 
-	int contPointLights = pointLightCount;
-	int contSpotLights = spotLightCount;
+	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) battingAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) parryAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) battingReverse[i] = false;
+	for (int i = 0;i < 4;i++) parryReverse[i] = false;
 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
-		uniformSpecularIntensity = 0, uniformShininess = 0;
+		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0, signPosition = 0;
 	GLuint uniformColor = 0;
 
 
 	GLfloat anguloVaria = 0.0f;
 	//Variables del sol
-	GLfloat sunIntensity = 0.5f;
+	GLfloat sunIntensity = 0.2f;
 	GLfloat sunIntensityMax = 0.6f;
 	GLfloat sunIntensityMin = 0.1f;
 	GLfloat sunIncrement = 0.0001f;
 	GLfloat sunX = 0.3f;
 	GLfloat sunY = -1.0f;
+	GLfloat signFrameTime = 0.0;
 	GLboolean isMorning = true;
 	GLint activeSkybox = -1;
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
-	GLboolean testingBowling = false;
-
+	
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
+	glm::vec2 toffsetSign = glm::vec2(0.0f, 0.0f);
 
-	if (testingBowling) {
-		bowlingActive = true;
-		camera.teleport(glm::vec3(0.0f, -114.0f, 0.0f));
-	}
+
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
+
+
+	int activeCameraIndex = 0;
+	Camera* activeCamera = &camera;
+	float birdsEyeViewZPos = 0.0f;
+	GLboolean birdsEyeViewReverse = false;
+
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.6666f, -0.3333f)); //P
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.3333f)); //R
+	messageCoordinates.push_back(glm::vec2(0.5555f, -0.3333f)); //O
+	messageCoordinates.push_back(glm::vec2(0.6666f, -0.6666f)); //Y
+	messageCoordinates.push_back(glm::vec2(0.4444f, 0.0f)); //E
+	messageCoordinates.push_back(glm::vec2(0.2222f, 0.0f)); //C
+	messageCoordinates.push_back(glm::vec2(0.1111f, -0.6666f)); //T
+	messageCoordinates.push_back(glm::vec2(0.5555f, -0.3333f)); //O
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.2222f, 0.0f)); //C
+	messageCoordinates.push_back(glm::vec2(0.6666f, 0.0f)); //G
+	messageCoordinates.push_back(glm::vec2(0.4444f, 0.0f)); //E
+	messageCoordinates.push_back(glm::vec2(0.8888f, 0.0f)); //I
+	messageCoordinates.push_back(glm::vec2(0.7777f, 0.0f)); //H
+	messageCoordinates.push_back(glm::vec2(0.2222f, 0.0f)); //C
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); //
+	messageCoordinates.push_back(glm::vec2(0.5555f, 0.0f)); //F
+	messageCoordinates.push_back(glm::vec2(0.4444f, 0.0f)); //E
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.3333f)); //R
+	messageCoordinates.push_back(glm::vec2(0.8888f, 0.0f)); //I
+	messageCoordinates.push_back(glm::vec2(0.0f, 0.0f)); //A
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+
+	GLint messageCoordinatesArraySize = messageCoordinates.size() - 1;
 
 	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
@@ -744,14 +1050,24 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
-		
-		contPointLights = pointLightCount;
-		contSpotLights = spotLightCount;
-	
+		//Set Active Camera
+		activeCameraIndex = mainWindow.getCameraIndex();
+		activeCamera = cameraList[activeCameraIndex];
+
+		//Birds Eye View Camera Panning
+		if (activeCameraIndex == 1) {
+			glm::vec3 activeCameraPosition = activeCamera->getCameraPosition();
+			if (!birdsEyeViewReverse) birdsEyeViewZPos = activeCameraPosition.z - 0.5 * deltaTime;
+			else birdsEyeViewZPos = activeCameraPosition.z + 0.5 * deltaTime;
+			if (birdsEyeViewZPos < -430.0f && !birdsEyeViewReverse) birdsEyeViewReverse = !birdsEyeViewReverse;
+			else if (birdsEyeViewZPos > 130.0f && birdsEyeViewReverse) birdsEyeViewReverse = !birdsEyeViewReverse;
+			activeCamera->teleport(glm::vec3(activeCameraPosition.x, activeCameraPosition.y, birdsEyeViewZPos));
+		}
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		activeCamera->keyControl(mainWindow.getsKeys(), deltaTime);
+		activeCamera->mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 		cameraPos = camera.getCameraPosition();
 		cameraDir = camera.getCameraDirection();
@@ -759,7 +1075,8 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		skybox.DrawSkybox(activeCamera->calculateViewMatrix(), projection);
+		
 		shaderList[0].UseShader();
 
 		uniformModel = shaderList[0].GetModelLocation();
@@ -767,16 +1084,16 @@ int main()
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
+		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
-	
-		
 		//informaci�n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
-
+		
+		
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(activeCamera->calculateViewMatrix()));
+		glUniform3f(uniformEyePosition, activeCamera->getCameraPosition().x, activeCamera->getCameraPosition().y, activeCamera->getCameraPosition().z);
 
 		//Main Light y skybox
 		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
@@ -785,13 +1102,13 @@ int main()
 
 		if (isMorning==true) {
 			sunIntensity = sunIntensity + sunIncrement;
-			sunX = sunIntensity * 0.0000001f / sunIntensityMax;
+			sunX = sin(sunIntensity);
 			sunY = -sunIntensity / sunIntensityMax;
 			if (sunIntensity >= sunIntensityMax) isMorning = false;
 		}
 		else {
 			sunIntensity = sunIntensity - sunIncrement;
-			sunX = -sunIntensity / sunIntensityMax;
+			sunX = -sin(sunIntensity);
 			sunY = -sunIntensity / sunIntensityMax;
 			if (sunIntensity <= sunIntensityMin) isMorning = true;
 		}
@@ -825,22 +1142,30 @@ int main()
 			skybox = Skybox(skyboxFaces);
 		}
 
-		//Spotlights
-	
 		
-
-
-		//Point Lights
-	
-		
-		
-
 		//informaci�n al shader de fuentes de iluminaci�n
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetSpotLights(spotLights, contSpotLights);
-		shaderList[0].SetPointLights(pointLights, contPointLights);
 
-		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		if (mainWindow.getOrbLight()) {
+			if (sunIntensity < 0.2)
+				shaderList[0].SetPointLights(pointLights, pointLightCount);
+			else if (sunIntensity < 0.27)
+				shaderList[0].SetPointLights(pointLights, pointLightCount - 10);
+			else
+				shaderList[0].SetPointLights(pointLights, pointLightCount - 14);
+		}
+		else {
+			if (sunIntensity < 0.2)
+				shaderList[0].SetPointLights(lucesPuntuales, contadorLucesPuntuales);
+			else if (sunIntensity < 0.27)
+				shaderList[0].SetPointLights(lucesPuntuales, contadorLucesPuntuales - 10);
+			else
+				shaderList[0].SetPointLights(lucesPuntuales, contadorLucesPuntuales - 14);
+		}
+
+		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		
+		
 
 
 		//Matrices
@@ -848,6 +1173,14 @@ int main()
 		glm::mat4 modelaux(1.0);
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		float angulo = atan2(cameraDir.x, cameraDir.z);
+
+		float distanciaDetras = -7.0f;
+		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
+		posicionModelo.y = cameraPos.y - 1.0f;
+
+		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", posicionModelo.x, posicionModelo.y, posicionModelo.z);
 
 		//********************* Pisos *******************
 		//Piso
@@ -908,10 +1241,10 @@ int main()
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
     
 		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche);
+		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 				
 		// Juego de Dardos
-		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche);
+		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 		
 		// Puesto de Pan
 		renderPuestoPan(model, uniformModel, breadModelsList);
@@ -927,6 +1260,9 @@ int main()
 
 		// Pichu
 		renderPichu(model, uniformModel, pichu, deltaTime);
+
+		// Snoopy Santa
+		renderSnoopySanta(model, uniformModel, snoopySanta, deltaTime);
 
 			
 		//Barco
@@ -952,17 +1288,17 @@ int main()
 		//Boliche TP y Render
 		if ((cameraPos.x > 87.82 && cameraPos.x < 110.13 && cameraPos.z < 101.43 && cameraPos.z > -109.71) && cameraPos.y == 6.0) {
 			bowlingActive = true;
-			camera.teleport(glm::vec3(0.0f, -117.5f, 0.0f));
+			camera.teleport(glm::vec3(-45.0f, -117.5f, 40.0f));
 		}
 
-		if ((cameraPos.x < -42.0f || cameraPos.x > 63.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
+		if ((cameraPos.x < -50.0f || cameraPos.x > 45.0f && cameraPos.z > 57.0f || cameraPos.z < -53.0f) && cameraPos.y < 0.0) {
 			bowlingActive = false;
 			camera.teleport(glm::vec3(0.0f, 6.0f, 0.0f));
 		}
 
-		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList);
+		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList, mainWindow.getEPressed(),posicionModelo, bowlingAnimation, deltaTime);
 
-		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList);
+		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, battingReverse, parryAnimation, parryReverse);
 
 
 		
@@ -1067,14 +1403,80 @@ int main()
 		//************************************Transparentes **********************************
 		
 
-		float angulo = atan2(cameraDir.x, cameraDir.z);
-
-		float distanciaDetras = -7.0f;
-		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
-		posicionModelo.y = cameraPos.y-1.0f;
+		
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		//***************** Arco ********************
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-3.0f, -.0f, 130.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.8f, 1.8f, 1.8f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillArch.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 4.6f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillDoor.RenderModel();
+
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -7.5f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillDoor.RenderModel();
+
+
+		if (signFrameTime >= 40.0f) {
+			signPosition += 1;
+			signFrameTime = 0.0f;
+			if (signPosition == messageCoordinatesArraySize) signPosition = 0;
+		}
+		signFrameTime += deltaTime;
+
+		toffsetSign = messageCoordinates[signPosition];
+
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.7f, 12.0f, -0.5f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(.0f, .0f, 1.0f));
+		model = glm::scale(model, glm::vec3(1.6f, 1.0f, 3.f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		ultrakillFont.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+
+		toffsetSign = messageCoordinates[signPosition + 1];
+		if (signPosition + 1 > messageCoordinatesArraySize) toffsetSign = messageCoordinates[messageCoordinatesArraySize];
+		model = glm::translate(model, glm::vec3(.7f, .0f, .0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		meshList[4]->RenderMesh();
+
+
+		if (signPosition + 2 > messageCoordinatesArraySize) toffsetSign = messageCoordinates[messageCoordinatesArraySize];
+		else toffsetSign = messageCoordinates[signPosition + 2];
+		model = glm::translate(model, glm::vec3(.7f, .0f, .0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		meshList[4]->RenderMesh();
+
+
+		if (signPosition + 3 > messageCoordinatesArraySize) toffsetSign = messageCoordinates[messageCoordinatesArraySize];
+		else toffsetSign = messageCoordinates[signPosition + 3];
+		model = glm::translate(model, glm::vec3(.7f, .0f, .0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		meshList[4]->RenderMesh();
+		toffsetSign = glm::vec2(0.0f, 0.0f);
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
 		//puesto de pizza
@@ -1089,7 +1491,6 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		v2Ultrakill.RenderModel();
-
 
 		//Placeholder antojitos
 		model = modelaux;
@@ -1134,8 +1535,11 @@ int main()
 
 
 		//Minos Prime Avatar Animado
+		if(mainWindow.getOrbLight())
+			pointLights[0].MoveLight(glm::vec3(posicionModelo.x, posicionModelo.y + .5f, posicionModelo.z));
 		renderMinosVenas(model, modelaux, modelauxCuerpo, uniformModel, minosVeinsModelsList, posicionModelo, angulo, camera.anguloVaria);
 		renderMinos(model, modelaux, modelauxCuerpo, uniformModel, minosModelsList, posicionModelo, angulo, camera.anguloVaria);
+		
 
 		
 		glEnable(GL_BLEND);
@@ -1176,7 +1580,7 @@ int main()
 		//puesto de pizza zim
 		
 
-
+		
 		glDisable(GL_BLEND);
 		
 		

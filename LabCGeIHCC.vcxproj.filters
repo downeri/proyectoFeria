@@ -110,6 +110,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cerdoTOPO.h">
+       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="snoopySanta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -209,6 +215,12 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="cerdoTOPO.cpp">
+       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snoopySanta.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

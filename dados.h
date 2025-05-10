@@ -14,9 +14,12 @@
 #include "Texture.h"
 #include "Sphere.h"
 #include "Model.h"
+#include "Mesh.h"
+#include "Camera.h"
+#include "Window.h"
 
 #include "Material.h"
 
-void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura);
+void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura, float posicionX, float posicionZ, GLboolean getEPressed, float deltaTime);
 void renderMesaDados(glm::mat4 model, GLuint uniformModel, Model &mesaDados, glm::vec3 position, glm::vec3 translate);
-void renderDados(glm::mat4 model, GLuint uniformModel, Model& dados, glm::vec3 position, glm::vec3 translate);
+void renderDados(glm::mat4 model, GLuint uniformModel, Model& dados, glm::vec3 position, glm::vec3 translate, int mesa, float deltaTime);

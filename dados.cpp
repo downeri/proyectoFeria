@@ -1,6 +1,9 @@
 #include "dados.h"
 
-void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura) {
+int animacion = 0;
+float movimientoDados = 0.0f;
+
+void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, Mesh& piso, Texture& pisoTextura, float posicionX, float posicionZ, GLboolean getEPressed, float deltaTime) {
 	glm::vec3 posicion = glm::vec3(-20.0f, -1.0f, -250.0f);
 
 	model = glm::mat4(1.0);
@@ -29,10 +32,20 @@ void renderJuegoDados(glm::mat4 model, GLuint uniformModel, std::vector<Model*> 
 	renderMesaDados(model, uniformModel, *listaModelos[1], posicion, glm::vec3(0.0f, 0.0f, 5.0f));
 	renderMesaDados(model, uniformModel, *listaModelos[1], posicion, glm::vec3(0.0f, 0.0f, 15.0f));
 
-	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.5f, -15.0f));
-	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.5f, -5.0f));
-	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.5f, 5.0f));
-	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.5f, 15.0f));
+	if (animacion == 0 && getEPressed) {
+		if ((posicionX > -25.0f && posicionX < -10.0f) && (posicionZ > -270.0f && posicionZ < -260.0f))
+			animacion = 1;
+		if ((posicionX > -25.0f && posicionX < -10.0f) && (posicionZ > -260.0f && posicionZ < -250.0f))
+			animacion = 2;
+		if ((posicionX > -25.0f && posicionX < -10.0f) && (posicionZ > -250.0f && posicionZ < -240.0f))
+			animacion = 3;
+		if ((posicionX > -25.0f && posicionX < -10.0f) && (posicionZ > -240.0f && posicionZ < -230.0f))
+			animacion = 4;
+	}
+	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.3f, -15.0f), 1, deltaTime);
+	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.3f, -5.0f), 2, deltaTime);
+	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.3f, 5.0f), 3, deltaTime);
+	renderDados(model, uniformModel, *listaModelos[2], posicion, glm::vec3(0.0f, 2.3f, 15.0f), 4, deltaTime);
 
 }
 
@@ -45,15 +58,40 @@ void renderMesaDados(glm::mat4 model, GLuint uniformModel, Model &mesaDados, glm
 	mesaDados.RenderModel();
 }
 
-void renderDados(glm::mat4 model, GLuint uniformModel, Model& dados, glm::vec3 position, glm::vec3 translate) {
-	model = glm::mat4(1.0);
-	model = glm::translate(model, glm::vec3(position.x + translate.x + 0.5, position.y + translate.y, position.z + translate.z -0.5));
-	model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	dados.RenderModel();
-	model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 1.0f));
-	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	dados.RenderModel();
+void renderDados(glm::mat4 model, GLuint uniformModel, Model& dados, glm::vec3 position, glm::vec3 translate, int mesa, float deltaTime) {
+	if (animacion != mesa) {
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(position.x + translate.x + 0.5, position.y + translate.y, position.z + translate.z - 0.5));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		dados.RenderModel();
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		dados.RenderModel();
+	}
+	else {
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(position.x + translate.x + 0.5, position.y + translate.y + (5.0f * sin(glm::radians(movimientoDados))), position.z + translate.z - 0.5));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		model = glm::rotate(model, glm::radians(movimientoDados * 2.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		dados.RenderModel();
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(position.x + translate.x - 0.75, position.y + translate.y + (5.0f * sin(glm::radians(movimientoDados))), position.z + translate.z + 0.75));;
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(movimientoDados * 2.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		dados.RenderModel();
+
+		movimientoDados += 1.0f * deltaTime;
+		if (movimientoDados >= 180.0f) {
+			movimientoDados = 0;
+			animacion = 0;
+		}
+	}
+	
 }
