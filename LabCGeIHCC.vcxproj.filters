@@ -15,6 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <!-- HEADER FILES -->
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -63,8 +64,63 @@
     <ClInclude Include="Shader_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="boliche.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bateo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dados.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dardos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoGlobosZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoPizzaZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoHachaZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuestoToposZim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="puestoPan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="puestoRefrescos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minosPrime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="woodstock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="puestoGlobosPokemon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pichu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GirNPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cerdoTOPO.h">
+       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="snoopySanta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <!-- SOURCE FILES -->
     <ClCompile Include="Window.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -107,8 +163,69 @@
     <ClCompile Include="main.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="boliche.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bateo.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ambiente.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dados.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dardos.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoGlobosZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoPizzaZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoHachaZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuestoToposZim.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="puestoPan.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="puestoRefrescos.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minosPrime.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ambiente.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="woodstock.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="puestoGlobosPokemon.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pichu.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GirNPC.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cerdoTOPO.cpp">
+       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snoopySanta.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <!-- RESOURCE FILES (None type) -->
     <None Include="shaders\shader.frag" />
     <None Include="shaders\shader.vert" />
     <None Include="shaders\shadercolor.frag" />

@@ -16,13 +16,10 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	muevex = 2.0f;
 	mueveCofre = 0.0f;
 	flashlightOn = true;
-	farosFrontal = true;
-	orbLightOn = true;
-	orbLightCooldown = 0;
-	flashCooldown = 0;
-
-
-
+	orbLightOn = false;
+	cameraIndex = 0;
+	cPressed = false;
+	ePressed = false;
 	reverse = true;
 
 	for (size_t i = 0; i < 1024; i++)
@@ -47,7 +44,7 @@ int Window::Initialise()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	//CREAR VENTANA
-	mainWindow = glfwCreateWindow(width, height, "Practica08: Iluminacion 2", NULL, NULL);
+	mainWindow = glfwCreateWindow(width, height, "Proyecto Feria", NULL, NULL);
 
 	if (!mainWindow)
 	{
@@ -115,17 +112,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y) //Enfrente
-	{
-		theWindow-> muevex += 1.0;
-		theWindow->farosFrontal = true;
-
-	}
-	if (key == GLFW_KEY_U) //Reversa
-	{
-		theWindow-> muevex -= 1.0;
-		theWindow->farosFrontal = false;
-	}
+	
 	if (key == GLFW_KEY_F)
 	{
 		if (theWindow->mueveCofre == -45.0f) {
@@ -149,25 +136,49 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		}
 		
 	}
-	if (key == GLFW_KEY_H) {
-		if (theWindow->orbLightCooldown < 1) {
-			theWindow->orbLightCooldown++;
-		}
-		else {
-			theWindow->orbLightOn = !theWindow->orbLightOn;
-			theWindow->orbLightCooldown = 0;
-		}
-	}	
 
-	if (key == GLFW_KEY_G) {
-		if (theWindow->flashCooldown < 1) {
-			theWindow->flashCooldown++;
+
+	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+
+		theWindow->orbLightOn = !theWindow->orbLightOn;
+
+		/*if (action == GLFW_PRESS) {
+			theWindow->orbLightOn = !theWindow->orbLightOn;
 		}
-		else {
-			theWindow->flashlightOn = !theWindow->flashlightOn;
-			theWindow->flashCooldown = 0;
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->orbLightOn = !theWindow->orbLightOn;
+		}*/
+	}
+
+	if (key == GLFW_KEY_E) {
+
+		if (action == GLFW_PRESS) {
+			theWindow->ePressed = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->ePressed = false;
 		}
 	}
+
+	if (key == GLFW_KEY_C) {
+
+		if (action == GLFW_PRESS) {
+			if (!theWindow->cPressed) {
+				if (theWindow->cameraIndex < 2 || theWindow->cameraIndex >=14) theWindow->cameraIndex = 2;
+				else theWindow->cameraIndex += 1;
+			}
+			theWindow->cPressed = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow->cPressed = false;
+		}
+	}
+
+	if (key == GLFW_KEY_T) theWindow->cameraIndex = 0;
+	if (key == GLFW_KEY_B) theWindow->cameraIndex = 1;
 
 	if (key >= 0 && key < 1024)
 	{

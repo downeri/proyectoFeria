@@ -8,11 +8,23 @@ INGENIERÍA EN COMPUTACIÓN
 
 LABORATORIO DE COMPUTACIÓN GRÁFICA e INTERACCIÓN HUMANO COMPUTADORA
 
+Proyecto Feria
 
+EQUIPO: 
 
-NOMBRE COMPLETO: Carreño Limones André
+Carreño Limones André
 
-Nº DE CUENTA: 422067683
+Pineda Migranas Angel Uriel
+
+Trigueros López Héctor Adrían
+
+Nº DE CUENTAs: 
+
+422067683
+
+319260751
+
+318192046
 
 GRUPO DE LABORATORIO: 03
 

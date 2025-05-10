@@ -19,38 +19,76 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="snoopySanta.h" />
+    <ClInclude Include="bateo.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="cerdoTOPO.h" />
     <ClInclude Include="CommonValues.h" />
+    <ClInclude Include="dados.h" />
+    <ClInclude Include="dardos.h" />
     <ClInclude Include="definition.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="GirNPC.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="minosPrime.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="pichu.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="puestoGlobosPokemon.h" />
+    <ClInclude Include="PuestoGlobosZim.h" />
+    <ClInclude Include="PuestoPizzaZim.h" />
+    <ClInclude Include="PuestoToposZim.h" />
+    <ClInclude Include="puestoPan.h" />
+    <ClInclude Include="puestoRefrescos.h" />
     <ClInclude Include="Shader_light.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="boliche.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="PuestoHachaZim.h" />
+    <ClInclude Include="utilities.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="woodstock.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ambiente.cpp" />
+    <ClCompile Include="ambiente.h" />
+    <ClCompile Include="bateo.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="cerdoTOPO.cpp" />
+    <ClCompile Include="dados.cpp" />
+    <ClCompile Include="dardos.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="GirNPC.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh_tn.cpp" />
+    <ClCompile Include="minosPrime.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="pichu.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="puestoGlobosPokemon.cpp" />
+    <ClCompile Include="PuestoGlobosZim.cpp" />
+    <ClCompile Include="PuestoPizzaZim.cpp" />
+    <ClCompile Include="PuestoToposZim.cpp" />
+    <ClCompile Include="puestoPan.cpp" />
+    <ClCompile Include="puestoRefrescos.cpp" />
     <ClCompile Include="Shader_light.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="snoopySanta.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="boliche.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="PuestoHachaZim.cpp" />
+    <ClCompile Include="utilities.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="woodstock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\shader.frag" />
