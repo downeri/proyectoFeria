@@ -7,18 +7,16 @@
 #include "Model.h"
 #include "Texture.h"      
 
-//variables globales  
 extern float  anguloMartillo;
 extern const float angMin;
 
 extern Texture ojosNormales;
 extern Texture ojosGolpeado;
-extern Model CerditoOjosNorm_M;   // ojos normales
-extern Model CerditoOjosX_M;      // ojos con x
+extern Model CerditoOjosNorm_M;   
+extern Model CerditoOjosX_M;      
 
 
 
-// funciones
 void renderPuestoToposZim(glm::mat4 model, GLuint uniformModel, Model& puestoTopos);
 
 
