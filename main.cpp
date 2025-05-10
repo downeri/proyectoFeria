@@ -1330,7 +1330,7 @@ int main()
 		{
 			lanzarHacha = true;
 			lanzamientoEnProgreso = true;
-			std::cout << "¡LANZAMIENTO ACTIVADO!\n";
+			
 		}
 
 		ePresionada = eAhora;                   
