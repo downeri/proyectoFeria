@@ -57,7 +57,7 @@ std::vector<Mesh*> meshList;
 std::vector<Mesh*> bowlingMeshList;
 std::vector<Mesh*> battingMeshList;
 std::vector<Shader> shaderList;
-
+std::vector<glm::vec2> messageCoordinates;
 
 std::vector<Model*> diceModelsList;
 std::vector<Model*> dartsModelsList;
@@ -79,8 +79,12 @@ std::vector<Texture*> battingTextureList;
 
 std::vector<Camera*> cameraList;
 
+
 GLfloat bowlingAnimation[7];
 GLfloat battingAnimation[4];
+GLfloat parryAnimation[4];
+GLboolean battingReverse[4];
+GLboolean parryReverse[4];
 
 Camera camera;
 Camera birdsEyeViewCamera;
@@ -109,7 +113,7 @@ Texture blackTexture;
 Texture battingFloor;
 Texture battingWalls;
 Texture lavaTexture;
-
+Texture ultrakillFont;
 
 
 
@@ -190,6 +194,9 @@ Model rejaBateo;
 Model v1Ultrakill;
 Model v2Ultrakill;
 Model ultrakillFountain;
+
+Model ultrakillDoor;
+Model ultrakillArch;
 
 //Modelos zim
 Model Puestogloboszim_M;
@@ -299,6 +306,7 @@ void CreateObjects()
 		0, 2, 3
 	};
 
+
 	GLfloat floorVertices[] = {
 		-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
 		10.0f, 0.0f, -10.0f,	10.0f, 0.0f,	0.0f, -1.0f, 0.0f,
@@ -341,6 +349,14 @@ void CreateObjects()
 	10.0f, 0.0f, 10.0f,		2.0f, 1.0f,	0.0f, -1.0f, 0.0f
 	};
 
+	GLfloat signVertices[] = {
+		-0.5f, 0.0f, 0.5f,		0.01f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, 0.5f,		0.1f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.5f, 0.0f, -0.5f,		0.1f, .9f,		0.0f, -1.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,		0.01f, .9f,		0.0f, -1.0f, 0.0f,
+
+	};
+
 	Mesh *obj0 = new Mesh();
 	obj0->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj0);
@@ -360,7 +376,6 @@ void CreateObjects()
 	Mesh* obj4 = new Mesh();
 	obj4->CreateMesh(bowlingFloorVertices, floorIndices, 32, 6);
 	bowlingMeshList.push_back(obj4);
-	meshList.push_back(obj3);
 
 	Mesh* obj5 = new Mesh();
 	obj5->CreateMesh(bowlingWallsVertices, wallsIndices, 32, 6);
@@ -374,6 +389,10 @@ void CreateObjects()
 	Mesh* obj7 = new Mesh();
 	obj7->CreateMesh(lavaVertices, floorIndices, 32, 6);
 	battingMeshList.push_back(obj7);
+
+	Mesh* obj8 = new Mesh();
+	obj8->CreateMesh(signVertices, wallsIndices, 32, 6);
+	meshList.push_back(obj8);
 
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
 
@@ -397,8 +416,8 @@ int main()
 	CreateShaders();
 
 	//Camaras
-	camera = Camera(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.6f, 0.5f);
-	birdsEyeViewCamera = Camera(glm::vec3(0.0f, 200.0f, -150.0f), glm::vec3(.0f, 0.0f, -1.0f), 0.0f, -90.0f, 0.0f, 0.0f);
+	camera = Camera(glm::vec3(0.0f, 6.0f, 170.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.6f, 0.5f);
+	birdsEyeViewCamera = Camera(glm::vec3(0.0f, 200.0f, 130.0f), glm::vec3(.0f, 0.0f, -1.0f), 0.0f, -90.0f, 0.0f, 0.0f);
 	bowlingCamera = Camera(glm::vec3(-50.0f, 50.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
 	antojitosCamera = Camera(glm::vec3(-.5f, 4.0f, -130.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
 	axesCamera = Camera(glm::vec3(.5f, 4.0f, -170.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f);
@@ -438,9 +457,11 @@ int main()
 	battingFloor = Texture("Textures/floordecoration8b.png");
 	battingWalls = Texture("Textures/floorpattern2n.png");
 	lavaTexture = Texture("Textures/LavaSingle.png");
-
-
-
+	ultrakillFont = Texture("Textures/ultrakillFont.png");
+	
+	
+	
+	ultrakillFont.LoadTextureA();
 	lavaTexture.LoadTextureA();
 	battingWalls.LoadTextureA();
 	battingFloor.LoadTextureA();
@@ -541,7 +562,11 @@ int main()
 	v2Ultrakill = Model();
 	ultrakillFountain = Model();
 
-	
+	ultrakillArch = Model();
+	ultrakillDoor = Model();
+
+	ultrakillArch.LoadModel("Models/ultrakillArch.obj");
+	ultrakillDoor.LoadModel("Models/ultrakillDoor.obj");
 	ultrakillFountain.LoadModel("Models/ultrakillFountain.obj");
 	v2Ultrakill.LoadModel("Models/UltraV2.obj");
 	v1Ultrakill.LoadModel("Models/UltraV1.obj");
@@ -936,10 +961,13 @@ int main()
 	
 	for (int i = 0;i < 7;i++) bowlingAnimation[i] = 0.0f;
 	for (int i = 0;i < 4;i++) battingAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) parryAnimation[i] = 0.0f;
+	for (int i = 0;i < 4;i++) battingReverse[i] = false;
+	for (int i = 0;i < 4;i++) parryReverse[i] = false;
 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
-		uniformSpecularIntensity = 0, uniformShininess = 0;
+		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0, signPosition = 0;
 	GLuint uniformColor = 0;
 
 
@@ -951,13 +979,15 @@ int main()
 	GLfloat sunIncrement = 0.0001f;
 	GLfloat sunX = 0.3f;
 	GLfloat sunY = -1.0f;
+	GLfloat signFrameTime = 0.0;
 	GLboolean isMorning = true;
 	GLint activeSkybox = -1;
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
-	GLboolean battingReverse = false;
+	
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
+	glm::vec2 toffsetSign = glm::vec2(0.0f, 0.0f);
 
 
 
@@ -967,6 +997,34 @@ int main()
 	Camera* activeCamera = &camera;
 	float birdsEyeViewZPos = 0.0f;
 	GLboolean birdsEyeViewReverse = false;
+
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.6666f, -0.3333f)); //P
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.3333f)); //R
+	messageCoordinates.push_back(glm::vec2(0.5555f, -0.3333f)); //O
+	messageCoordinates.push_back(glm::vec2(0.6666f, -0.6666f)); //Y
+	messageCoordinates.push_back(glm::vec2(0.4444f, 0.0f)); //E
+	messageCoordinates.push_back(glm::vec2(0.2222f, 0.0f)); //C
+	messageCoordinates.push_back(glm::vec2(0.1111f, -0.6666f)); //T
+	messageCoordinates.push_back(glm::vec2(0.5555f, -0.3333f)); //O
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.2222f, 0.0f)); //C
+	messageCoordinates.push_back(glm::vec2(0.6666f, 0.0f)); //G
+	messageCoordinates.push_back(glm::vec2(0.4444f, 0.0f)); //E
+	messageCoordinates.push_back(glm::vec2(0.8888f, 0.0f)); //I
+	messageCoordinates.push_back(glm::vec2(0.7777f, 0.0f)); //H
+	messageCoordinates.push_back(glm::vec2(0.2222f, 0.0f)); //C
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); //
+	messageCoordinates.push_back(glm::vec2(0.5555f, 0.0f)); //F
+	messageCoordinates.push_back(glm::vec2(0.4444f, 0.0f)); //E
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.3333f)); //R
+	messageCoordinates.push_back(glm::vec2(0.8888f, 0.0f)); //I
+	messageCoordinates.push_back(glm::vec2(0.0f, 0.0f)); //A
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+	messageCoordinates.push_back(glm::vec2(0.8888f, -0.6666f)); // 
+
+	GLint messageCoordinatesArraySize = messageCoordinates.size() - 1;
 	////*****************Loop mientras no se cierra la ventana**************************
 	while (!mainWindow.getShouldClose())
 	{
@@ -1010,6 +1068,7 @@ int main()
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
+		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
 		//informaci�n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
@@ -1223,7 +1282,7 @@ int main()
 
 		if(bowlingActive) renderBoliche(model, uniformModel, bowlingModelsList, bowlingMeshList, bowlingTextureList, mainWindow.getEPressed(),posicionModelo, bowlingAnimation, deltaTime);
 
-		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, &battingReverse);
+		renderBatting(model, uniformModel, battingModelsList, battingMeshList, battingTextureList, battingAnimation, deltaTime, mainWindow.getEPressed(), posicionModelo, battingReverse, parryAnimation, parryReverse);
 
 
 		
@@ -1297,6 +1356,76 @@ int main()
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+
+		//***************** Arco ********************
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-3.0f, -.0f, 130.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.8f, 1.8f, 1.8f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillArch.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 4.6f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillDoor.RenderModel();
+
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -7.5f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ultrakillDoor.RenderModel();
+
+
+		if (signFrameTime >= 40.0f) {
+			signPosition += 1;
+			signFrameTime = 0.0f;
+			if (signPosition == messageCoordinatesArraySize) signPosition = 0;
+		}
+		signFrameTime += deltaTime;
+
+		toffsetSign = messageCoordinates[signPosition];
+
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.7f, 12.0f, -0.5f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(.0f, .0f, 1.0f));
+		model = glm::scale(model, glm::vec3(1.6f, 1.0f, 3.f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		ultrakillFont.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+
+		toffsetSign = messageCoordinates[signPosition + 1];
+		if (signPosition + 1 > messageCoordinatesArraySize) toffsetSign = messageCoordinates[messageCoordinatesArraySize];
+		model = glm::translate(model, glm::vec3(.7f, .0f, .0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		meshList[4]->RenderMesh();
+
+
+		if (signPosition + 2 > messageCoordinatesArraySize) toffsetSign = messageCoordinates[messageCoordinatesArraySize];
+		else toffsetSign = messageCoordinates[signPosition + 2];
+		model = glm::translate(model, glm::vec3(.7f, .0f, .0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		meshList[4]->RenderMesh();
+
+
+		if (signPosition + 3 > messageCoordinatesArraySize) toffsetSign = messageCoordinates[messageCoordinatesArraySize];
+		else toffsetSign = messageCoordinates[signPosition + 3];
+		model = glm::translate(model, glm::vec3(.7f, .0f, .0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		meshList[4]->RenderMesh();
+		toffsetSign = glm::vec2(0.0f, 0.0f);
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffsetSign));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 
 		//puesto de pizza
@@ -1400,7 +1529,7 @@ int main()
 		//puesto de pizza zim
 		
 
-
+		
 		glDisable(GL_BLEND);
 		
 		

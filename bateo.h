@@ -17,7 +17,7 @@
 #include "Sphere.h"
 #include"Model.h"
 
-void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> MeshList, std::vector<Texture*> listaTexturas, GLfloat *battingAnimationLane, GLfloat deltaTime, GLboolean ePressed, glm::vec3 modelPosition, GLboolean* battingReverse);
+void renderBatting(glm::mat4 model, GLuint uniformModel, std::vector<Model*> listaModelos, std::vector<Mesh*> MeshList, std::vector<Texture*> listaTexturas, GLfloat *battingAnimationLane, GLfloat deltaTime, GLboolean ePressed, glm::vec3 modelPosition, GLboolean* battingReverse, GLfloat* parryAnimation, GLboolean* parryReverse);
 void renderBattingBuilding(glm::mat4 model, GLuint uniformModel, std::vector<Mesh*> MeshList, std::vector<Texture*> listaTexturas, glm::vec3 position);
 void renderFeedbacker(glm::mat4 model, GLuint uniformModel, Model& feedbackerUpper, Model& feedbackerLower, glm::vec3 position, GLfloat animationVariable);
 void renderOrbBall(glm::mat4 model, GLuint uniformModel, Model& cerberusOrb, glm::vec3 position);
