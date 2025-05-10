@@ -1225,7 +1225,7 @@ int main()
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
     
 		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche);
+		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 				
 		// Juego de Dardos
 		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
