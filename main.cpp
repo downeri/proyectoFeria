@@ -1302,14 +1302,13 @@ int main()
 
 
 		
-		// PUESTO GLOBOS ------------------------------
+		// PUESTO GLOBOS 
 		renderPuestoGlobosZim(model, uniformModel, Puestogloboszim_M);
 
-		// base común del personaje y sus partes
 		glm::mat4 modelauxGlobos = glm::mat4(1.0f);
-		modelauxGlobos = glm::translate(modelauxGlobos, glm::vec3(15.0f, 0.0f, -370.0f)); // posición del NPC
-		modelauxGlobos = glm::scale(modelauxGlobos, glm::vec3(1.5f, 1.5f, 1.5f));         // escala
-		modelauxGlobos = glm::rotate(modelauxGlobos, glm::radians(0.0f), glm::vec3(0, 1, 0)); // rotación Y
+		modelauxGlobos = glm::translate(modelauxGlobos, glm::vec3(15.0f, 0.0f, -370.0f)); 
+		modelauxGlobos = glm::scale(modelauxGlobos, glm::vec3(1.5f, 1.5f, 1.5f));        
+		modelauxGlobos = glm::rotate(modelauxGlobos, glm::radians(0.0f), glm::vec3(0, 1, 0)); 
 
 		// cuerpo del NPC
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelauxGlobos));
@@ -1320,11 +1319,11 @@ int main()
 
 
 		// --- DETECCIÓN ÚNICA DE TECLA E ---
-		static bool ePresionada = false;          // recuerda si la E estaba hundida
+		static bool ePresionada = false;         
 
 		bool eAhora = mainWindow.getsKeys()[GLFW_KEY_E];
 
-		if (eAhora && !ePresionada &&            // se acaba de presionar
+		if (eAhora && !ePresionada &&           
 			cameraPos.x > 15.0f && cameraPos.x < 100.0f &&
 			cameraPos.z > -192.0f && cameraPos.z < -148.0f &&
 			!lanzarHacha && !lanzamientoEnProgreso)
@@ -1334,8 +1333,8 @@ int main()
 			std::cout << "¡LANZAMIENTO ACTIVADO!\n";
 		}
 
-		ePresionada = eAhora;                     // actualiza estado
-		// -----------------------------------
+		ePresionada = eAhora;                   
+	
 
 
 
@@ -1384,7 +1383,7 @@ int main()
 		renderNPCBrazo1PuestoPizzaZim(model, uniformModel, NPCBrazo1pizza_M, now);
 
 
-		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   // posición que quieras
+		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   
 			uniformModel,
 			deltaTime,
 			now);
@@ -1396,9 +1395,7 @@ int main()
 		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, 1.1f), uniformModel, now, 0.6f);
 		
 		renderCerdoTOPO(glm::vec3(-19.0f, 3.0f, 1.1f), uniformModel, now, 0.9f);
-		/*
-		renderCerdoTOPO(glm::vec3(32.0f, 0.0f, -240.0f), uniformModel, now, 1.2f);
-		*/
+		
 
 		//************************************Transparentes **********************************
 		
