@@ -39,6 +39,7 @@
 #include "PuestoPizzaZim.h"
 #include "PuestoHachaZim.h"
 #include "PuestoToposZim.h"
+#include "GIRZIM.h"
 #include "GirNPC.h"
 #include "cerdoTOPO.h"
 
@@ -222,10 +223,17 @@ Model NPCbrazoglobos_M;
 Model CasaZim_M;
 Model Hachacasazim_M;
 Model Hacha2casazim_M;
+Model tronco_M;
+Model cabeza_M;
+Model brazo1_M;
+Model brazo2_M;
+Model pierna1_M;
+Model pierna2_M;
 Model troncoZIM_M;
 Model cabezaZIM_M;
 Model brazo1ZIM_M;
 Model cerdoTOPO_M;
+
 
 Skybox skybox;
 
@@ -712,6 +720,18 @@ int main()
 	CasaZim_M.LoadModel("Models/casazimhachas.obj");
 	Hachacasazim_M = Model();
 	Hachacasazim_M.LoadModel("Models/hachacasazim1.obj");
+	tronco_M = Model();
+	tronco_M.LoadModel("Models/troncoZIM.obj");
+	cabeza_M = Model();
+	cabeza_M.LoadModel("Models/cabezaZIM.obj"); 
+	brazo1_M = Model();
+	brazo1_M.LoadModel("Models/brazo1ZIM.obj");
+	brazo2_M = Model();
+	brazo2_M.LoadModel("Models/brazo2ZIM.obj");
+	pierna1_M = Model();
+	pierna1_M.LoadModel("Models/pierna1ZIM.obj");
+	pierna2_M = Model();
+	pierna2_M.LoadModel("Models/pierna2ZIM.obj");
 	troncoZIM_M = Model();
 	troncoZIM_M.LoadModel("Models/troncoZIM.obj");
 	cabezaZIM_M = Model();
@@ -1382,6 +1402,21 @@ int main()
 		//NPC brazo1 puesto de pizza(animado)
 		renderNPCBrazo1PuestoPizzaZim(model, uniformModel, NPCBrazo1pizza_M, now);
 
+
+		//NPC OFICIAL DEL ZIM ANIMACION
+		glm::mat4 modelGir = glm::mat4(1.0f);
+		modelGir = glm::rotate(modelGir, glm::radians(-90.0f), glm::vec3(0, 1, 0));
+		modelGir = glm::translate(modelGir, glm::vec3(5.0f, -5.0f, -15.0f));
+		modelGir = glm::scale(modelGir, glm::vec3(12.5f));
+
+
+		renderGirZim(modelGir, uniformModel,
+			tronco_M,
+			cabeza_M,A
+			brazo1_M,
+			brazo2_M,
+			pierna1_M,
+			pierna2_M,  now);
 
 		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   
 			uniformModel,

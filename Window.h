@@ -23,6 +23,10 @@ public:
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
 	void swapBuffers() { return glfwSwapBuffers(mainWindow); }
+	bool getLanzarHacha() const { return lanzarHacha; }
+	void resetLanzarHacha() { lanzarHacha = false; }
+
+
 	
 	~Window();
 private: 

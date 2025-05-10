@@ -8,6 +8,8 @@ Window::Window()
 	{
 		keys[i] = 0;
 	}
+	lanzarHacha = false;
+
 }
 Window::Window(GLint windowWidth, GLint windowHeight)
 {
@@ -17,6 +19,12 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	mueveCofre = 0.0f;
 	flashlightOn = true;
 	orbLightOn = false;
+	orbLightCooldown = 0;
+	flashCooldown = 0;
+	lanzarHacha = false;
+
+
+
 	cameraIndex = 0;
 	cPressed = false;
 	ePressed = false;
@@ -192,6 +200,12 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 			theWindow->keys[key] = false;
 			//printf("se solto la tecla %d'\n", key);
 		}
+
+		if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+			theWindow->lanzarHacha = true;
+		}
+
+
 	}
 }
 
