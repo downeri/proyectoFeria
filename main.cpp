@@ -1243,10 +1243,10 @@ int main()
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
     
 		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
+		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[2], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 				
 		// Juego de Dardos
-		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
+		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[2], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 		
 		// Puesto de Pan
 		renderPuestoPan(model, uniformModel, breadModelsList);
