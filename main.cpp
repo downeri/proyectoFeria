@@ -226,6 +226,12 @@ Model troncoZIM_M;
 Model cabezaZIM_M;
 Model brazo1ZIM_M;
 Model cerdoTOPO_M;
+Model NPCMartilloplus_M;
+bool activarCerdos = false;
+float tiempoActivacion = 0.0f;  // tiempo en segundos desde que se activaron
+const float duracionCerdos = 5.0f; // tiempo que permanecen activos
+bool martilloActivo = false;
+
 
 Skybox skybox;
 
@@ -720,7 +726,8 @@ int main()
 	brazo1ZIM_M.LoadModel("Models/brazo1ZIM.obj");
 	cerdoTOPO_M = Model();
 	cerdoTOPO_M.LoadModel("Models/cerdoTOPO.obj");
-
+	NPCMartilloplus_M = Model();
+	NPCMartilloplus_M.LoadModel("Models/martilloplus.obj");
 
 	bowlingModelsList.push_back(&idol);
 	bowlingModelsList.push_back(&maurice);
@@ -1052,6 +1059,22 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+
+	
+		//MARTILLO Y CERDOS
+		if (mainWindow.getEPressed() && !activarCerdos &&
+			camera.getCameraPosition().z >= -10.0f && camera.getCameraPosition().z <= 50.0f &&
+			camera.getCameraPosition().x >= -20.0f && camera.getCameraPosition().x <= -5.0f)
+		{
+			activarCerdos = true;
+			martilloActivo = true;
+			tiempoActivacion = now;
+		}
+		if (activarCerdos && (now - tiempoActivacion > duracionCerdos)) {
+			activarCerdos = false;
+			martilloActivo = false;
+		}
+
 
 		//Set Active Camera
 		activeCameraIndex = mainWindow.getCameraIndex();
@@ -1389,13 +1412,42 @@ int main()
 			deltaTime,
 			now);
 		//cerditotopo
-		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, -0.02f), uniformModel, now, 0.0f);
-		
-		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, -1.3f), uniformModel, now, 0.3f);
-		
-		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, 1.1f), uniformModel, now, 0.6f);
-		
-		renderCerdoTOPO(glm::vec3(-19.0f, 3.0f, 1.1f), uniformModel, now, 0.9f);
+		if (activarCerdos) {
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, -10.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, -5.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 0.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 5.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 10.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 15.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 20.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 25.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 30.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 35.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 40.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 45.0f), uniformModel, now);
+		}
+		if (martilloActivo) {
+			glm::vec3 frente = camera.getCameraPosition() + camera.getCameraDirection() * 2.0f;
+			frente.y -= 0.0f;
+
+			float anguloMartilleo = sin(now * 10.0f) * glm::radians(30.0f);
+
+			glm::mat4 modelMartillo = glm::mat4(1.0f);
+
+			modelMartillo = glm::translate(modelMartillo, frente);
+
+			modelMartillo = glm::rotate(modelMartillo, anguloMartilleo, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			modelMartillo = glm::rotate(modelMartillo, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+			modelMartillo = glm::scale(modelMartillo, glm::vec3(0.7f));
+
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelMartillo));
+			NPCMartillotoposzim_M.RenderModel();
+		}
+
+
+
 		
 
 		//************************************Transparentes **********************************

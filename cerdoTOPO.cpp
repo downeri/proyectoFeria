@@ -21,3 +21,10 @@ void renderCerdoTOPO(glm::vec3 posicionBase, GLuint uniformModel, float tiempoGl
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
     cerdoTOPO_M.RenderModel();
 }
+void renderGrupoCerdos(glm::vec3 basePos, GLuint uniformModel, float now) {
+    renderCerdoTOPO(basePos + glm::vec3(0.0f, 0.0f, -0.02f), uniformModel, now, 0.0f);
+    renderCerdoTOPO(basePos + glm::vec3(0.0f, 0.0f, -1.3f), uniformModel, now, 0.3f);
+    renderCerdoTOPO(basePos + glm::vec3(0.0f, 0.0f, 1.1f), uniformModel, now, 0.6f);
+    renderCerdoTOPO(basePos + glm::vec3(1.0f, 0.0f, 0.5f), uniformModel, now, 0.9f);
+    renderCerdoTOPO(basePos + glm::vec3(1.0f, 0.0f, -0.65f), uniformModel, now, 0.9f);
+}
