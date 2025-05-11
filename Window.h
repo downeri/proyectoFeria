@@ -23,7 +23,8 @@ public:
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
 	void swapBuffers() { return glfwSwapBuffers(mainWindow); }
-	
+	bool isEPressed() const { return ePressed; }
+
 	~Window();
 private: 
 	GLFWwindow *mainWindow;

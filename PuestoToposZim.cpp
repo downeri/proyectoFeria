@@ -10,13 +10,11 @@
 #include "Model.h"              
                
 
-//  variables globales definidas aquí 
 float       anguloMartillo = 0.0f;
 const float angMin = -90.0f;
 
 
 
-// Puesto de Topos (jaulas) 
 void renderPuestoToposZim(glm::mat4 model, GLuint uniformModel, Model& puestoTopos)
 {
     float z = -10.0f;
@@ -33,21 +31,17 @@ void renderPuestoToposZim(glm::mat4 model, GLuint uniformModel, Model& puestoTop
     }
 }
 
-//  Cerdito (cuerpo + ojos, controlados por tiempo)
 void renderNPCPuestoToposZim(glm::mat4 model,
     GLuint uniformModel,
     Model& npcToposCuerpo)
 {
-    // ---------- Transformación común ----------
     model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(-20.0f, 0.0f, -17.0f));
     model = glm::scale(model, glm::vec3(5.5f));
     glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-    // ---------- 1) cuerpo ----------
     npcToposCuerpo.RenderModel();
 
-    // ---------- 2) ojos sincronizados con el martillo ----------
     bool fueGolpeado = (anguloMartillo <= angMin + 5.0f);
     if (fueGolpeado)
         CerditoOjosX_M.RenderModel();
@@ -58,7 +52,6 @@ void renderNPCPuestoToposZim(glm::mat4 model,
 
 
 
-// Martillo animado 
 void renderNPCMartilloPuestoToposZim(glm::mat4 model,
     GLuint uniformModel,
     Model& npcMartilloTopos)

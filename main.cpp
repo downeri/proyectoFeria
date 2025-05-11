@@ -226,6 +226,12 @@ Model troncoZIM_M;
 Model cabezaZIM_M;
 Model brazo1ZIM_M;
 Model cerdoTOPO_M;
+Model NPCMartilloplus_M;
+bool activarCerdos = false;
+float tiempoActivacion = 0.0f;  // tiempo en segundos desde que se activaron
+const float duracionCerdos = 5.0f; // tiempo que permanecen activos
+bool martilloActivo = false;
+
 
 Skybox skybox;
 
@@ -720,7 +726,8 @@ int main()
 	brazo1ZIM_M.LoadModel("Models/brazo1ZIM.obj");
 	cerdoTOPO_M = Model();
 	cerdoTOPO_M.LoadModel("Models/cerdoTOPO.obj");
-
+	NPCMartilloplus_M = Model();
+	NPCMartilloplus_M.LoadModel("Models/martilloplus.obj");
 
 	bowlingModelsList.push_back(&idol);
 	bowlingModelsList.push_back(&maurice);
@@ -998,6 +1005,9 @@ int main()
 	GLint activeSkybox = -1;
 	GLfloat now = 0.0f;
 	GLboolean bowlingActive = false;
+	GLboolean door = false;
+	GLboolean doorMovement = false;
+	GLfloat doorAngle = 0.0f;
 	
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
@@ -1049,6 +1059,22 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+
+	
+		//MARTILLO Y CERDOS
+		if (mainWindow.getEPressed() && !activarCerdos &&
+			camera.getCameraPosition().z >= -10.0f && camera.getCameraPosition().z <= 50.0f &&
+			camera.getCameraPosition().x >= -20.0f && camera.getCameraPosition().x <= -5.0f)
+		{
+			activarCerdos = true;
+			martilloActivo = true;
+			tiempoActivacion = now;
+		}
+		if (activarCerdos && (now - tiempoActivacion > duracionCerdos)) {
+			activarCerdos = false;
+			martilloActivo = false;
+		}
+
 
 		//Set Active Camera
 		activeCameraIndex = mainWindow.getCameraIndex();
@@ -1171,6 +1197,7 @@ int main()
 		//Matrices
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
+		glm::mat4 modelaux2(1.0);
 		glm::mat4 modelauxCuerpo(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -1179,8 +1206,6 @@ int main()
 		float distanciaDetras = -7.0f;
 		glm::vec3 posicionModelo = cameraPos - cameraDir * distanciaDetras;
 		posicionModelo.y = cameraPos.y - 1.0f;
-
-		if (mainWindow.getOrbLight()) printf("x: %f y: %f z: %f\n", posicionModelo.x, posicionModelo.y, posicionModelo.z);
 
 		//********************* Pisos *******************
 		//Piso
@@ -1241,10 +1266,10 @@ int main()
 		elementosAmbiente(model, uniformModel, banca, basura, lampara, arbol, pino);
     
 		// Juego de Dados
-		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
+		renderJuegoDados(model, uniformModel, diceModelsList, *meshList[2], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 				
 		// Juego de Dardos
-		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[4], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
+		renderJuegoDardos(model, uniformModel, dartsModelsList, *meshList[2], pisoBoliche, posicionModelo.x, posicionModelo.z, mainWindow.getEPressed(), deltaTime);
 		
 		// Puesto de Pan
 		renderPuestoPan(model, uniformModel, breadModelsList);
@@ -1319,22 +1344,20 @@ int main()
 		renderBrazoNPCGlobos(modelauxGlobos, uniformModel, NPCbrazoglobos_M, now);
 
 
-		// --- DETECCIÓN ÚNICA DE TECLA E ---
-		static bool ePresionada = false;          // recuerda si la E estaba hundida
+		static bool ePresionada = false;          
 
 		bool eAhora = mainWindow.getsKeys()[GLFW_KEY_E];
 
-		if (eAhora && !ePresionada &&            // se acaba de presionar
+		if (eAhora && !ePresionada &&            
 			cameraPos.x > 15.0f && cameraPos.x < 100.0f &&
 			cameraPos.z > -192.0f && cameraPos.z < -148.0f &&
 			!lanzarHacha && !lanzamientoEnProgreso)
 		{
 			lanzarHacha = true;
 			lanzamientoEnProgreso = true;
-			std::cout << "¡LANZAMIENTO ACTIVADO!\n";
 		}
 
-		ePresionada = eAhora;                     // actualiza estado
+		ePresionada = eAhora;                    
 		// -----------------------------------
 
 
@@ -1350,7 +1373,7 @@ int main()
 		modelauxzim = glm::scale(modelauxzim, glm::vec3(2.5f, 2.5f, 2.5f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelauxzim));
-		NPChachazim_M.RenderModel(); // cuerpo Dib
+		NPChachazim_M.RenderModel(); 
 		float factorLanzamiento = (sin(now * 2.0f) + 1.0f) / 2.0f;
 		//NPC brazo
 		renderNPCBrazoDib(modelauxzim, uniformModel, NPCDibbrazo_M, factorLanzamiento);
@@ -1384,21 +1407,48 @@ int main()
 		renderNPCBrazo1PuestoPizzaZim(model, uniformModel, NPCBrazo1pizza_M, now);
 
 
-		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   // posición que quieras
+		renderGirNPC(glm::vec3(15.0f, 0.0f, -8.0f),   
 			uniformModel,
 			deltaTime,
 			now);
 		//cerditotopo
-		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, -0.02f), uniformModel, now, 0.0f);
+		if (activarCerdos) {
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, -10.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, -5.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 0.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 5.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 10.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 15.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 20.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 25.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 30.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 35.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 40.0f), uniformModel, now);
+			renderGrupoCerdos(glm::vec3(-20.0f, 3.0f, 45.0f), uniformModel, now);
+		}
+		if (martilloActivo) {
+			glm::vec3 frente = camera.getCameraPosition() + camera.getCameraDirection() * 2.0f;
+			frente.y -= 0.0f;
+
+			float anguloMartilleo = sin(now * 10.0f) * glm::radians(30.0f);
+
+			glm::mat4 modelMartillo = glm::mat4(1.0f);
+
+			modelMartillo = glm::translate(modelMartillo, frente);
+
+			modelMartillo = glm::rotate(modelMartillo, anguloMartilleo, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			modelMartillo = glm::rotate(modelMartillo, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+			modelMartillo = glm::scale(modelMartillo, glm::vec3(0.7f));
+
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelMartillo));
+			NPCMartillotoposzim_M.RenderModel();
+		}
+
+
+
 		
-		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, -1.3f), uniformModel, now, 0.3f);
-		
-		renderCerdoTOPO(glm::vec3(-20.0f, 3.0f, 1.1f), uniformModel, now, 0.6f);
-		
-		renderCerdoTOPO(glm::vec3(-19.0f, 3.0f, 1.1f), uniformModel, now, 0.9f);
-		/*
-		renderCerdoTOPO(glm::vec3(32.0f, 0.0f, -240.0f), uniformModel, now, 1.2f);
-		*/
 
 		//************************************Transparentes **********************************
 		
@@ -1418,15 +1468,32 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultrakillArch.RenderModel();
 
+		if (!doorMovement && mainWindow.getEPressed() && (posicionModelo.x > -8.0f && posicionModelo.x < 8.0f) && (posicionModelo.z > 100.0f && posicionModelo.z < 150.0f)) {
+			doorMovement = true;
+			door = !door;
+		}			
+
+		if (door && doorAngle < 90.0f)
+			doorAngle += 1.0f * deltaTime;
+		else if (!door && doorAngle > 0.0f)
+			doorAngle -= 1.0f * deltaTime;
+		else
+			doorMovement = false;
+
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 4.6f));
+		modelaux2 = model;
+		model = glm::rotate(model, glm::radians(-doorAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultrakillDoor.RenderModel();
-
+		model = modelaux2;
 
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -7.5f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelaux2 = model;
+		model = glm::rotate(model, glm::radians(doorAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ultrakillDoor.RenderModel();
+		model = modelaux2;
 
 
 		if (signFrameTime >= 40.0f) {
